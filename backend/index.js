@@ -9,5 +9,14 @@ require('./db/RetrieveData/user.js')
 
 const http = require('http')
 const server = http.createServer(app)
+var cors = require('cors') 
+app.use(cors())
+app.use(express.json())
 
-server.listen(port,()=>console.log('server running at port = '+port))
+
+// Available Routes
+//app.use('/api/auth', require('./routes/auth'))
+
+app.listen(port, () => {
+    console.log(`iNotebook backend listening at http://localhost:${port}`)
+})
