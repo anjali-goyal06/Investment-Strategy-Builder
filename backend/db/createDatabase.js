@@ -1,5 +1,5 @@
-var config = require('./dbconnect.js');
-var connection= config.connection
+//var config = require('./dbconnect.js');
+var connection= require('./dbconnect.js');
 
 // created database
 connection.query("create database if not exists sample2",(err,res)=>{
