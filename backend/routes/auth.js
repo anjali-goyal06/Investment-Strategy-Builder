@@ -32,18 +32,21 @@ router.post('/register' ,[
         password
     } = req.body;
     
-    id = 56718;
+    id = 26718;
 
     // passing hashing 
     const salt = await bcrypt.genSalt(10);
     const secPass = await bcrypt.hash(password, salt);
 
     connection.query(sql, [id , name , email , secPass], function (err, result) {
-    if (err) console.log("duplicate rows " + err.message);
+    if (err){ 
+      console.log("duplicate rows " + err.message);
+      return res.send(err.message);
+    }
     else{
         console.log("user created successfully !!");
         console.log(result);
-        res.send("done");
+        res.send(result);
     }
     });
 
