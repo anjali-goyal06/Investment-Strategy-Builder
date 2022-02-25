@@ -3,7 +3,8 @@ const router = express.Router();
 var connection = require('../db/dbconnect');
 const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
-const mysql = require('mysql')
+const mysql = require('mysql');
+const UserRepository = require('../Repository/UserRepository');
 
 router.get('/' , (req,res)=>{
     console.log("Hello World||");
@@ -24,31 +25,22 @@ router.post('/register' ,[
       return res.status(400).json({ errors: errors.array() });
     }
 
-    var sql = "INSERT INTO user (id,name,email,password) VALUES (?,?,?,?)";
-   
-    var {
-        name,
-        email,
-        password
-    } = req.body;
+    id = Math.floor(Math.random() * (10000000));
+    name = req.body.name;
+    email = req.body.email;
     
-    id = 26718;
 
     // passing hashing 
     const salt = await bcrypt.genSalt(10);
-    const secPass = await bcrypt.hash(password, salt);
-
-    connection.query(sql, [id , name , email , secPass], function (err, result) {
-    if (err){ 
-      console.log("duplicate rows " + err.message);
-      return res.send(err.message);
-    }
-    else{
-        console.log("user created successfully !!");
-        console.log(result);
-        res.send(result);
-    }
-    });
+    secPass = await bcrypt.hash(req.body.password, salt);
+    
+    var user = {id,name,email,secPass}
+    var userRepository = new UserRepository(user);
+    var result = await userRepository.AddUser();
+    console.log("ans...")
+    console.log(result)
+    console.log("ans end..")
+    return res.send(result);
 
 })
 
@@ -71,30 +63,9 @@ router.post('/login', [
 
         const { email, password } = req.body;
         
-        var sql = "Select  * from user where email = " + mysql.escape(email);
+        
 
-        connection.query(sql, async function (err, result) {
-            if (err) console.log(err.message);
-            else{
-
-                // find noumber of results get
-                var cnt = Object.keys(result).length; 
-                
-                
-                if(cnt==0){ 
-                    return res.status(400).json({ success, error: "Please try to login with correct credentials" });
-                }
-                
-                // password matching 
-                const passwordCompare = await bcrypt.compare(password, result[0].password);
-                if (!passwordCompare) {
-                    success = false
-                    return res.status(400).json({ success, error: "Please try to login with correct credentials" });
-                }
-                console.log(result);
-                return res.send(result);
-            }
-            });
+        
       
     } catch (error) {
         console.error(error.message);
