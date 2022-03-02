@@ -6,23 +6,35 @@ class UserRepository{
         this.user = user
     }
 
-    AddUser(){
+    async AddUser(){
         console.log("values..........");
         console.log(this.user);
+        
         var sql = "INSERT INTO user (id,name,email,password) VALUES (?,?,?,?)";
         var {id,name,email,secPass} = this.user
-        connection.query(sql, [id , name , email , secPass],  async function (err, result) {
-            if (err){ 
-              console.log("duplicate rows " + err.message);
-              return err.message;
-            }
-            else{
-                console.log("user created successfully !!");
-                console.log(result);
-                return await result;
-            }
-            });
-   
+
+        try{
+        var response = await connection.query(sql, [id , name , email , secPass] ) ; //,  function (err, result) {
+          
+        var arr = response.values; 
+        console.log(arr[1]); 
+        return response.values;
+        }catch(err){
+            console.log(err);
+            return err;
+        }
+
+        //     if (err){ 
+        //       console.log("duplicate rows " + err.message);
+        //       return err.message;
+        //     }
+        //     else{
+        //         console.log("user created successfully !!");
+        //         console.log(result);
+        //         return  result;
+        //     }
+        // });
+        
     }
 
     GetUserByEmailId(){
