@@ -1,20 +1,20 @@
-var mysql = require('mysql');
+const { sanitize } = require('express-validator');
+var mysql = require('promise-mysql');
 
 var config = {
   host: "localhost",
   user: "root",
   password: "password",
-  port : "3306" 
+  port : "3306",
+  database : "sample"
 }
 
-var connection = mysql.createConnection(config);
+const getDbConnection = async () => {
+  return await mysql.createConnection(config);
+}
 
-connection.connect(function(err) {
-  if (err) throw err;
-  console.log("Connected!");
-});
-
-module.exports = connection;
+module.exports = getDbConnection
+//module.exports = connection;
 
 
 

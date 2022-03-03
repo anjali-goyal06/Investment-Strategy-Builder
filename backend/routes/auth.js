@@ -3,8 +3,7 @@ const router = express.Router();
 var connection = require('../db/dbconnect');
 const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
-const mysql = require('mysql');
-const UserRepository = require('../Repository/UserRepository');
+const UserRepository = require('../DataBaseQueries/User');
 
 router.get('/' , (req,res)=>{
     console.log("Hello World||");
@@ -61,15 +60,28 @@ router.post('/login', [
 
     try{
 
-        const { email, password } = req.body;
+        const user = req.body;
+        var userRepository = new UserRepository(user);
+        var result = await userRepository.GetUserByEmailId();
+
+        var cnt = Object.keys(result).length;  
+        if(cnt==0 || cnt>1){ 
+            return res.status(400).json({ success, error: "Please try to login with correct credentials" });
+        }
+
+        // password matching 
+        const passwordCompare = await bcrypt.compare(req.body.password, result[0].password);
+        if (!passwordCompare) {
+            success = false
+            return res.status(400).json({ success, error: "Please try to login with correct credentials" });
+        }
+        console.log(result);
+        return res.send(result);
         
-      
-      
     } catch (error) {
         console.error(error.message);
         res.status(500).send("Internal Server Error");
     }
-  
   
   });
 
