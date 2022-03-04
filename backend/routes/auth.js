@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
-var connection = require('../db/dbconnect');
+var getDbConnection = require('../db/dbconnect');
 const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
-const UserRepository = require('../DataBaseQueries/User');
+const User = require('../DataBaseQueries/User');
 
 router.get('/' , (req,res)=>{
     console.log("Hello World||");
@@ -34,8 +34,8 @@ router.post('/register' ,[
     secPass = await bcrypt.hash(req.body.password, salt);
     
     var user = {id,name,email,secPass}
-    var userRepository = new UserRepository(user);
-    var result = await userRepository.AddUser();
+    var user= new User(user);
+    var result = await user.AddUser();
     console.log("ans...")
     console.log(result)
     console.log("ans end..")
@@ -61,8 +61,8 @@ router.post('/login', [
     try{
 
         const user = req.body;
-        var userRepository = new UserRepository(user);
-        var result = await userRepository.GetUserByEmailId();
+        var newuser = new User(user);
+        var result = await newuser.GetUserByemailId();
 
         var cnt = Object.keys(result).length;  
         if(cnt==0 || cnt>1){ 

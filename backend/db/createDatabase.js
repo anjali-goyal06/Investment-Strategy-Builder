@@ -1,22 +1,13 @@
-//var config = require('./dbconnect.js');
-var connection= require('./dbconnect.js');
-const mysql = require('mysql')
+var getDbConnection =require('./dbconnect.js');
 
 
-// created database
-connection.query("create database if not exists sample",(err,res)=>{
-    if(err){
-      console.log(err);
-    }else{
-      console.log(res);
-    }
-  })
+const DatabaseCreation = async () =>{
   
+    const connection = await getDbConnection()
+    await connection.query("create database if not exists InvestmentStretegyBuilder") ; 
+    await connection.query("use investmentstretegybuilder");
+    connection.end()
+}
 
-connection.query("use sample" , (err,res)=>{
-    if(err){
-      console.log(err);
-    }else{
-      console.log(res);
-    }
-  });
+DatabaseCreation()
+module.exports = DatabaseCreation
