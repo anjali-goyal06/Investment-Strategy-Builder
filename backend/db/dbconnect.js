@@ -6,7 +6,7 @@ var config = {
   user: "root",
   password: "password",
   port : "3306",
-  database : "investmentstretegybuilder"
+ // database : "investmentstretegybuilder"
 }
 
 const getDbConnection = async () => {
