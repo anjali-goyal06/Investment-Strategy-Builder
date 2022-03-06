@@ -1,5 +1,5 @@
 
-interface InstrumentSkeleton{
+interface IInstrumentSkeleton{
     id : number;
     side : string;
 

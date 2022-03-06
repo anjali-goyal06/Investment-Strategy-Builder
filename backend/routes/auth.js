@@ -3,7 +3,7 @@ const router = express.Router();
 var getDbConnection = require('../db/dbconnect');
 const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
-const User = require('../DataBaseQueries/User');
+const User = require('../Model/User');
 
 router.get('/' , (req,res)=>{
     console.log("Hello World||");
@@ -24,17 +24,9 @@ router.post('/register' ,[
       return res.status(400).json({ errors: errors.array() });
     }
 
-    id = Math.floor(Math.random() * (10000000));
-    name = req.body.name;
-    email = req.body.email;
     
 
-    // passing hashing 
-    const salt = await bcrypt.genSalt(10);
-    secPass = await bcrypt.hash(req.body.password, salt);
-    
-    var user = {id,name,email,secPass}
-    var user= new User(user);
+    var user= new User(req.body.name,req.body.email,req.body.password);
     var result = await user.AddUser();
     console.log("ans...")
     console.log(result)
