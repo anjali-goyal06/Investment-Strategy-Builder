@@ -1,5 +1,8 @@
+import StrategyPlot from './StrategyPlot';
+import IInstrumentSkeleton from './IInstrumentSkeleton';
+import IInstrument from './IInstrument'
 
-class Future implements IInstrument{
+export default class Future implements IInstrument{
     id : number;
     quantity : number;
     instrumentSkeleon : IInstrumentSkeleton;

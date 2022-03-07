@@ -1,4 +1,6 @@
-
+import StrategyPlot from './StrategyPlot';
+import IInstrumentSkeleton from './IInstrumentSkeleton';
+import IInstrument from './IInstrument';
 class Options implements IInstrument{
     id : number;
     quantity : number;
@@ -7,6 +9,15 @@ class Options implements IInstrument{
     premium : number;
     side : string;
     plot : StrategyPlot;
+
+
+    constructor(){
+
+    }
+
+    Add(){
+
+    }
 
     fetchPremiumFromMarketData(){
 

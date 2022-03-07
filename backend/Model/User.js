@@ -49,7 +49,7 @@ var User = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        sql = "INSERT INTO user (id,name,email,password) VALUES (?,?,?,?)";
+                        sql = "INSERT INTO users (id,name,email,password) VALUES (?,?,?,?)";
                         this.id = Math.floor(Math.random() * (10000000));
                         return [4 /*yield*/, bcrypt.genSalt(10)];
                     case 1:
