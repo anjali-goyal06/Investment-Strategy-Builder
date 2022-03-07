@@ -28,8 +28,8 @@ export default class InvestmentStrategy{
     }
 
     combinedPlot(){
-        let i : keyof IInstrument
-        for(i in this.instruments){
+       // let i : keyof IInstrument
+        for(let i in this.instruments){
             let tempPlot:StrategyPlot = this.instruments[i].getPlot();
             console.log(tempPlot);
         }
