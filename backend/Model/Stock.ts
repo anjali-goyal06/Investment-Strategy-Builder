@@ -2,7 +2,7 @@ import StrategyPlot from './StrategyPlot';
 import IInstrumentSkeleton from './IInstrumentSkeleton';
 import IInstrument from './IInstrument';
 
-class Stock implements IInstrument{
+export default class Stock implements IInstrument{
     id : number;
     quantity : number;
     instrumentSkeleon : IInstrumentSkeleton;

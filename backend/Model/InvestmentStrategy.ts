@@ -29,9 +29,15 @@ export default class InvestmentStrategy{
 
     combinedPlot(){
        // let i : keyof IInstrument
-        for(let i in this.instruments){
-            let tempPlot:StrategyPlot = this.instruments[i].getPlot();
-            console.log(tempPlot);
+        for(let k in this.instruments){
+            let tempPlot:StrategyPlot = this.instruments[k].getPlot();
+            
+            let tempX = tempPlot.xCoords;
+            let tempY = tempPlot.yCoords;
+
+            for(let i in this.plot.xCoords){
+                this.plot.yCoords[i] += tempY[i];
+            }
         }
     }
 

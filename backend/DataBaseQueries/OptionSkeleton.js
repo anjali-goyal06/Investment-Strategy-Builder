@@ -10,7 +10,7 @@ class OptionSkeleton{
     async AddData(){
         
         console.log(this.FutureSkeleton);
-        
+        // id : table table cnt and add one 
         var sql = "INSERT INTO OptionSkeleton (Id, Type , Side, StrategySkeletonId) VALUES (?,?,?,?)";
         var {Id, Type, Side, StrategySkeletonId} = this.OptionSkeleton
 

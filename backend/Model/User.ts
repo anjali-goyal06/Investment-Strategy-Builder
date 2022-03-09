@@ -17,7 +17,8 @@ class User{
     async AddUser(){
           
         var sql = "INSERT INTO user (id,name,email,password) VALUES (?,?,?,?)";
-        this.id = Math.floor(Math.random() * (10000000));
+        //this.id = Math.floor(Math.random() * (10000000));
+        this.id=1;
         const salt = await bcrypt.genSalt(10);
         var secPass = await bcrypt.hash(this.password, salt);
 

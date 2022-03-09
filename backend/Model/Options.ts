@@ -8,6 +8,7 @@ class Options implements IInstrument{
     strikePrice : number;
     premium : number;
     side : string;
+    type : string;
     plot : StrategyPlot;
 
 
@@ -27,8 +28,8 @@ class Options implements IInstrument{
 
         var x = Math.floor(this.strikePrice-50);
         var y;
-
-        switch(this.side){
+        var str = this.side + " " + this.type;
+        switch(str){
 
             case "BUY CALL" : {
 
