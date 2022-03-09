@@ -3,6 +3,10 @@ const mysql = require('mysql');
 
 class DbManager{
 
+    constructor(){
+
+    }
+
     async GetUserDetailsFromUserId(id){
 
         var sql = "Select  * from  User where Id = " + mysql.escape(id);
@@ -48,6 +52,18 @@ class DbManager{
         
     }
 
+    async GetCountOfRecordsInDb(tableName){
+        
+        var sql = "Select  count(*) as count from " +  mysql.escape(tableName);
+
+        const connection = await getDbConnection();
+        var response = await connection.query(sql) ; 
+        connection.end()
+        //let result = JSON.parse(JSON.stringify(response));
+
+        return response;
+    }
+
     async GetStrategySkeletonFromStrategyName(name){
 
         var OptionSql = "select * from OptionSkeleton where InvestmentStrategySkeletonId = (select Id from InvestmentStrategySkeleton where StrategyName = " + mysql.escape(name) + ")";
@@ -72,4 +88,4 @@ class DbManager{
 }
 
 
-module.exports = DbManager
+module.exports = DbManager;

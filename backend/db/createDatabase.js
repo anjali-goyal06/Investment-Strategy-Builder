@@ -4,8 +4,8 @@ var getDbConnection =require('./dbconnect.js');
 const DatabaseCreation = async () =>{
   
     const connection = await getDbConnection()
-    await connection.query("create database if not exists InvestmentStretegyBuilder") ; 
-    await connection.query("use investmentstretegybuilder");
+    await connection.query("create database if not exists InvestmentStrategyBuilder") ; 
+    await connection.query("use investmentstrategybuilder");
     connection.end()
 }
 

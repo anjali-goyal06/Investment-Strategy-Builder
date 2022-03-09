@@ -1,5 +1,9 @@
+import { IInstrumentSkeleton } from "./IInstrumentSkeleton";
+import { StrategyPlot } from "./StrategyPlot";
+import { IInstrument } from "./IInstrument";
 
 class Future implements IInstrument{
+    static count : number = 0;
     id : number;
     quantity : number;
     instrumentSkeleon : IInstrumentSkeleton;

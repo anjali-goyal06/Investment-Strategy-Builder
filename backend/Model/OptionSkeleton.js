@@ -36,23 +36,23 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
+var validationResult = require("express-validator").validationResult;
 var getDbConnection = require('../db/dbconnect');
-var mysql = require('mysql');
-var bcrypt = require('bcryptjs');
-var User = /** @class */ (function () {
-    function User(id, name, email, password) {
+//const mysql = require('mysql');
+var OptionSkeleton = /** @class */ (function () {
+    function OptionSkeleton(id, side, type, skeletonId) {
         this.id = id;
-        this.name = name;
-        this.email = email;
-        this.password = password;
+        this.side = side;
+        this.type = type;
+        this.investmentStrategySkeletonId = skeletonId;
     }
-    User.prototype.setId = function () {
+    OptionSkeleton.prototype.setId = function () {
         return __awaiter(this, void 0, void 0, function () {
             var sql, connection, response;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        sql = "Select  count(*) as count from user";
+                        sql = "Select  count(*) as count from OptionSkeleton";
                         return [4 /*yield*/, getDbConnection()];
                     case 1:
                         connection = _a.sent();
@@ -67,9 +67,9 @@ var User = /** @class */ (function () {
             });
         });
     };
-    User.prototype.AddUser = function () {
+    OptionSkeleton.prototype.AddDataToDb = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var sql, salt, secPass, connection, response, err_1;
+            var sql, connection, response, err_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -79,54 +79,29 @@ var User = /** @class */ (function () {
                         _a.sent();
                         _a.label = 2;
                     case 2:
-                        sql = "INSERT INTO user (id,name,email,password) VALUES (?,?,?,?)";
-                        return [4 /*yield*/, bcrypt.genSalt(10)];
+                        sql = "INSERT INTO OptionSkeleton (Id, Type , Side, InvestmentStrategySkeletonId) VALUES (?,?,?,?)";
+                        _a.label = 3;
                     case 3:
-                        salt = _a.sent();
-                        return [4 /*yield*/, bcrypt.hash(this.password, salt)];
-                    case 4:
-                        secPass = _a.sent();
-                        _a.label = 5;
-                    case 5:
-                        _a.trys.push([5, 8, , 9]);
+                        _a.trys.push([3, 6, , 7]);
                         return [4 /*yield*/, getDbConnection()];
-                    case 6:
+                    case 4:
                         connection = _a.sent();
-                        return [4 /*yield*/, connection.query(sql, [this.id, this.name, this.email, secPass])];
-                    case 7:
+                        return [4 /*yield*/, connection.query(sql, [this.id, this.type, this.side, this.investmentStrategySkeletonId])];
+                    case 5:
                         response = _a.sent();
                         connection.end();
                         return [2 /*return*/, response];
-                    case 8:
+                    case 6:
                         err_1 = _a.sent();
                         console.log(err_1);
                         return [2 /*return*/, err_1];
-                    case 9: return [2 /*return*/];
+                    case 7: return [2 /*return*/];
                 }
             });
         });
     };
-    User.prototype.LoginUser = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var sql, connection, response;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        sql = "Select  * from user where email = " + mysql.escape(this.email);
-                        return [4 /*yield*/, getDbConnection()];
-                    case 1:
-                        connection = _a.sent();
-                        return [4 /*yield*/, connection.query(sql)];
-                    case 2:
-                        response = _a.sent();
-                        connection.end();
-                        console.log(response);
-                        return [2 /*return*/, response];
-                }
-            });
-        });
-    };
-    User.count = 0;
-    return User;
+    OptionSkeleton.count = 0;
+    return OptionSkeleton;
 }());
-module.exports = User;
+
+module.exports = OptionSkeleton;

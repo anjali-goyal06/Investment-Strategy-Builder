@@ -1,4 +1,4 @@
-class StrategyPlot{
+export class StrategyPlot{
     xCoords : number[];
     yCoords : number[];
 }

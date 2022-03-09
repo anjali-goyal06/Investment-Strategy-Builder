@@ -1,5 +1,8 @@
+import { StrategyPlot } from "./StrategyPlot";
+import { IInstrument } from "./IInstrument";
 
 class InvestmentStrategy{
+    static count : number = 0;
     id : number;
     stockName : string;
     ticker : string;
