@@ -1,9 +1,8 @@
-import { IInstrumentSkeleton } from "./IInstrumentSkeleton";
-import { StrategyPlot } from "./StrategyPlot";
-import { IInstrument } from "./IInstrument";
+import StrategyPlot from './StrategyPlot';
+import IInstrumentSkeleton from './IInstrumentSkeleton';
+import IInstrument from './IInstrument';
 
-class Stock implements IInstrument{
-    static count : number = 0;
+export default class Stock implements IInstrument{
     id : number;
     quantity : number;
     instrumentSkeleon : IInstrumentSkeleton;

@@ -1,6 +1,6 @@
-import { IInstrumentSkeleton } from "./IInstrumentSkeleton";
-import { StrategyPlot } from "./StrategyPlot";
-import { IInstrument } from "./IInstrument";
+import StrategyPlot from './StrategyPlot';
+import IInstrumentSkeleton from './IInstrumentSkeleton';
+import IInstrument from './IInstrument';
 
 class Options implements IInstrument{
     static count : number = 0;
@@ -10,7 +10,17 @@ class Options implements IInstrument{
     strikePrice : number;
     premium : number;
     side : string;
+    type : string;
     plot : StrategyPlot;
+
+
+    constructor(){
+
+    }
+
+    Add(){
+
+    }
 
     fetchPremiumFromMarketData(){
 
@@ -20,8 +30,8 @@ class Options implements IInstrument{
 
         var x = Math.floor(this.strikePrice-50);
         var y;
-
-        switch(this.side){
+        var str = this.side + " " + this.type;
+        switch(str){
 
             case "BUY CALL" : {
 

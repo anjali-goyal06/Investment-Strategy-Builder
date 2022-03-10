@@ -5,19 +5,27 @@ const mysql = require('mysql');
 
 class InvestmentStrategySkeleton{
 
-    AddData(){
+    constructor(ele){
+        this.Id = ele.Id;
+        this.StrategyName = ele.StrategyName;
+        this.Description = ele.Description;
+        this.UserId = ele.UserId;
+    }
+    async AddData(){
         var sql = "INSERT INTO InvestmentStrategySkeleton (Id, StrategyName , Description, UserId) VALUES (?,?,?,?)";
-        var {Id, StrategyName , Description, UserId } = this.OptionSkeleton
+        var {Id, StrategyName , Description, UserId } = this
 
         try{
-            var response = await connection.query(sql, [Id ,StrategyName , Description, UserId ] ) ; 
+            const connection = await getDbConnection()
+            var response = await connection.query(sql, [Id ,StrategyName , Description, UserId ] ) ;
+            connection.end() 
             return response;
-            }catch(err){
+        }catch(err){
                 console.log(err);
                 return err;
-            }
+        }
     }
-    getValuesByUserId(id){
+    async getValuesByUserId(id){
         var sql = "Select  * from  InvestmentStrategySkeleton where UserId = " + mysql.escape(this.user.email);
 
         try{
@@ -29,6 +37,15 @@ class InvestmentStrategySkeleton{
         }catch(err){
             return err;
         }
+    }
+
+    async AddHardCodeValues(){
+        // {
+        //     "Id" : "2" ,
+        //     "StrategyName" : "Butterfly",
+        //     "Description" : "ABCD",
+        //     "UserId" : "1"
+        // }
     }
 }
 

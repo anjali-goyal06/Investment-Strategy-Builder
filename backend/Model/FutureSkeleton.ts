@@ -1,8 +1,8 @@
-import { IInstrumentSkeleton } from "./IInstrumentSkeleton";
 var getDbConnection = require('../db/dbconnect');
 
-class FutureSkeleton implements IInstrumentSkeleton{
-    static count : number = 0;
+import IInstrumentSkeleton from './IInstrumentSkeleton';
+
+class FututreSkeleton implements IInstrumentSkeleton{
     id: number;
     side: string;
     investmentStrategySkeletonId: number;
