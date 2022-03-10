@@ -1,7 +1,9 @@
 import StrategyPlot from './StrategyPlot';
 import IInstrumentSkeleton from './IInstrumentSkeleton';
 import IInstrument from './IInstrument';
+
 class Options implements IInstrument{
+    static count : number = 0;
     id : number;
     quantity : number;
     instrumentSkeleon : IInstrumentSkeleton;

@@ -1,7 +1,9 @@
+
 import StrategyPlot from './StrategyPlot';
 import IInstrument from './IInstrument';
 
 export default class InvestmentStrategy{
+
     id : number;
     stockName : string;
     ticker : string;
