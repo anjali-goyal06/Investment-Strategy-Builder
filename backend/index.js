@@ -18,7 +18,8 @@ app.use(express.json())
 
 
 // Available Routes
-app.use('/api/auth', require('./routes/auth'))
+app.use('/api/auth', require('./routes/auth'));
+app.use('/api/strategy', require('./routes/fetchDescription'))
 
 
 //Testing Purpose

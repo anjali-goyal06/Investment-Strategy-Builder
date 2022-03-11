@@ -1,8 +1,10 @@
-import { IInstrumentSkeleton } from "./IInstrumentSkeleton";
+
 var getDbConnection = require('../db/dbconnect');
 
-class StockSkeleton implements IInstrumentSkeleton{
-    static count : number = 0;
+import IInstrumentSkeleton from './IInstrumentSkeleton';
+
+export default class StockSkeleton implements IInstrumentSkeleton{
+
     id: number;
     side: string;
     investmentStrategySkeletonId: number;

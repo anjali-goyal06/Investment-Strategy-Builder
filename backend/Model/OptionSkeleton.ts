@@ -1,10 +1,13 @@
-import { IInstrumentSkeleton } from "./IInstrumentSkeleton";
+
 const { validationResult } = require("express-validator");
 var getDbConnection = require('../db/dbconnect');
 //const mysql = require('mysql');
 
+import IInstrumentSkeleton from './IInstrumentSkeleton';
+
+
 class OptionSkeleton implements IInstrumentSkeleton{
-    static count : number = 0;
+   
     id: number;
     side: string;
     type : string;

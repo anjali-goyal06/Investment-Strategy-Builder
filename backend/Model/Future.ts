@@ -1,15 +1,18 @@
-import { IInstrumentSkeleton } from "./IInstrumentSkeleton";
-import { StrategyPlot } from "./StrategyPlot";
-import { IInstrument } from "./IInstrument";
+
 var getDbConnection = require('../db/dbconnect');
 
-class Future implements IInstrument{
-    static count : number = 0;
+import StrategyPlot from './StrategyPlot';
+import IInstrumentSkeleton from './IInstrumentSkeleton';
+import IInstrument from './IInstrument'
+
+
+export default class Future implements IInstrument{
     id : number;
     quantity : number;
     instrumentSkeleton : IInstrumentSkeleton;
     instrumentSkeletonId : number;
     strategyId:number;
+    side:string;
     price : number;
     plot : StrategyPlot;
     currentPrice : number;
@@ -64,7 +67,7 @@ class Future implements IInstrument{
 
     makePlot() {
         
-        if(this.instrumentSkeleton.side=="BUY"){
+        if(this.side=="BUY"){
 
             var x = Math.floor(this.price-50);
             var y;

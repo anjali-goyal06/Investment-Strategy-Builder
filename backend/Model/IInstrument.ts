@@ -1,11 +1,15 @@
-import { StrategyPlot } from "./StrategyPlot";
-import { IInstrumentSkeleton } from "./IInstrumentSkeleton";
-export interface IInstrument{
+import StrategyPlot from './StrategyPlot';
+import IInstrumentSkeleton from './IInstrumentSkeleton';
+
+export default interface IInstrument{
+
     id : number;
     quantity : number;
-    plot : StrategyPlot;
-    instrumentSkeleton : IInstrumentSkeleton;
-
+    side : string
+    plot :  StrategyPlot;
+    instrumentSkeleton :  IInstrumentSkeleton;
     makePlot()
-    getPlot() : StrategyPlot
+    getPlot() :  StrategyPlot;
 }
+
+//module.exports = IInstrument

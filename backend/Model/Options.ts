@@ -1,7 +1,10 @@
-import { IInstrumentSkeleton } from "./IInstrumentSkeleton";
-import { StrategyPlot } from "./StrategyPlot";
-import { IInstrument } from "./IInstrument";
+
 var getDbConnection = require('../db/dbconnect');
+
+import StrategyPlot from './StrategyPlot';
+import IInstrumentSkeleton from './IInstrumentSkeleton';
+import IInstrument from './IInstrument';
+
 
 class Options implements IInstrument{
     static count : number = 0;
@@ -12,6 +15,8 @@ class Options implements IInstrument{
     strikePrice : number;
     strategyId:number;
     premium : number;
+    side : string;
+    type : string;
     plot : StrategyPlot;
 
     constructor(id:number, quantity:number, strikePrice:number, skeletonId:number, strategyId:number){
@@ -23,6 +28,7 @@ class Options implements IInstrument{
         this.strategyId = strategyId;
         this.premium = 5;
     }
+    
 
     async setId(){
 
@@ -61,18 +67,24 @@ class Options implements IInstrument{
             console.log(err);
             return err;
         }
+
     }
 
     fetchPremiumFromMarketData(){
 
     }
-    makePlot() {
+
+    makePlot(){
       //  var i = this.strikePrice - 30;
 
         var x = Math.floor(this.strikePrice-50);
         var y;
 
-        switch(this.instrumentSkeleton.side){
+        var str = this.side + " " + this.type;
+
+       
+        switch(str){
+
 
             case "BUY CALL" : {
 

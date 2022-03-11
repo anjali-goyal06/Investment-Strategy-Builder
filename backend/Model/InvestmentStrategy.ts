@@ -1,9 +1,10 @@
-import { StrategyPlot } from "./StrategyPlot";
-import { IInstrument } from "./IInstrument";
 var getDbConnection = require('../db/dbconnect');
 
-class InvestmentStrategy{
-    static count : number = 0;
+import StrategyPlot from './StrategyPlot';
+import IInstrument from './IInstrument';
+
+export default class InvestmentStrategy{
+
     id : number;
     stockName : string;
     ticker : string;
@@ -28,9 +29,16 @@ class InvestmentStrategy{
     }
 
     combinedPlot(){
-        var tempPlot; 
-        for(var i in this.instruments){
-        //    tempPlot  = i.getPlot();
+       // let i : keyof IInstrument
+        for(let k in this.instruments){
+            let tempPlot:StrategyPlot = this.instruments[k].getPlot();
+            
+            let tempX = tempPlot.xCoords;
+            let tempY = tempPlot.yCoords;
+
+            for(let i in this.plot.xCoords){
+                this.plot.yCoords[i] += tempY[i];
+            }
         }
     }
 
