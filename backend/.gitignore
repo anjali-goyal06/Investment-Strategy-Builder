@@ -2,12 +2,16 @@ node_modules/
 /.env
 Model/Future.js
 Model/FutureSkeleton.js
+Model/IInstrument.js
+Model/IInstrumentSkeleton.js
 Model/InvestmentStrategy.js
 Model/InvestmentStrategySkeleton.js
 Model/OptionSkeleton.js
 Model/Options.js
 Model/Stock.js
 Model/StockSkeleton.js
+Model/StrategyPlot.js
 Model/User.js
+
 
 
