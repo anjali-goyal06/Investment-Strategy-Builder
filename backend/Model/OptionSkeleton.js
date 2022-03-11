@@ -46,6 +46,9 @@ var OptionSkeleton = /** @class */ (function () {
         this.type = type;
         this.investmentStrategySkeletonId = skeletonId;
     }
+    OptionSkeleton.prototype.getId = function () {
+        return this.id;
+    };
     OptionSkeleton.prototype.setId = function () {
         return __awaiter(this, void 0, void 0, function () {
             var sql, connection, response;
@@ -103,5 +106,4 @@ var OptionSkeleton = /** @class */ (function () {
     OptionSkeleton.count = 0;
     return OptionSkeleton;
 }());
-
 module.exports = OptionSkeleton;

@@ -3,9 +3,8 @@ import { IInstrumentSkeleton } from "./IInstrumentSkeleton";
 export interface IInstrument{
     id : number;
     quantity : number;
-    side : string
     plot : StrategyPlot;
-    instrumentSkeleon : IInstrumentSkeleton;
+    instrumentSkeleton : IInstrumentSkeleton;
 
     makePlot()
     getPlot() : StrategyPlot

@@ -37,22 +37,22 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 var getDbConnection = require('../db/dbconnect');
-var FutureSkeleton = /** @class */ (function () {
-    function FutureSkeleton(id, side, skeletonId) {
+var Options = /** @class */ (function () {
+    function Options(id, quantity, strikePrice, skeletonId, strategyId) {
         this.id = id;
-        this.side = side;
-        this.investmentStrategySkeletonId = skeletonId;
+        this.quantity = quantity;
+        this.strikePrice = strikePrice;
+        this.instrumentSkeletonId = skeletonId;
+        this.strategyId = strategyId;
+        this.premium = 5;
     }
-    FutureSkeleton.prototype.getId = function () {
-        return this.id;
-    };
-    FutureSkeleton.prototype.setId = function () {
+    Options.prototype.setId = function () {
         return __awaiter(this, void 0, void 0, function () {
             var sql, connection, response;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        sql = "Select  count(*) as count from FutureSkeleton";
+                        sql = "Select  count(*) as count from Options";
                         return [4 /*yield*/, getDbConnection()];
                     case 1:
                         connection = _a.sent();
@@ -61,12 +61,13 @@ var FutureSkeleton = /** @class */ (function () {
                         response = _a.sent();
                         connection.end();
                         this.id = response[0].count + 1;
+                        console.log(this.id);
                         return [2 /*return*/];
                 }
             });
         });
     };
-    FutureSkeleton.prototype.AddDataToDb = function () {
+    Options.prototype.AddDataToDb = function () {
         return __awaiter(this, void 0, void 0, function () {
             var sql, connection, response, err_1;
             return __generator(this, function (_a) {
@@ -78,14 +79,14 @@ var FutureSkeleton = /** @class */ (function () {
                         _a.sent();
                         _a.label = 2;
                     case 2:
-                        sql = "INSERT INTO FutureSkeleton (Id, Side, InvestmentStrategySkeletonId) VALUES (?,?,?)";
+                        sql = "INSERT INTO Options (Id, StrikePrice , Premium, Quantity, OptionSkeletonId, InvestmentStrategyId) VALUES (?,?,?,?,?,?)";
                         _a.label = 3;
                     case 3:
                         _a.trys.push([3, 6, , 7]);
                         return [4 /*yield*/, getDbConnection()];
                     case 4:
                         connection = _a.sent();
-                        return [4 /*yield*/, connection.query(sql, [this.id, this.side, this.investmentStrategySkeletonId])];
+                        return [4 /*yield*/, connection.query(sql, [this.id, this.strikePrice, this.premium, this.quantity, this.instrumentSkeletonId, this.strategyId])];
                     case 5:
                         response = _a.sent();
                         connection.end();
@@ -99,7 +100,71 @@ var FutureSkeleton = /** @class */ (function () {
             });
         });
     };
-    FutureSkeleton.count = 0;
-    return FutureSkeleton;
+    Options.prototype.fetchPremiumFromMarketData = function () {
+    };
+    Options.prototype.makePlot = function () {
+        //  var i = this.strikePrice - 30;
+        var x = Math.floor(this.strikePrice - 50);
+        var y;
+        switch (this.instrumentSkeleton.side) {
+            case "BUY CALL": {
+                for (var i = 0; i < 100; i++) {
+                    if (x <= this.strikePrice) {
+                        this.plot.xCoords.push(x);
+                        y = -(this.quantity * this.premium);
+                        this.plot.yCoords.push(y);
+                    }
+                    else {
+                        y = this.quantity * ((x - this.strikePrice) - this.premium);
+                        this.plot.yCoords.push(y);
+                    }
+                }
+            }
+            case "BUY PUT": {
+                for (var i = 0; i < 100; i++) {
+                    if (x <= this.strikePrice) {
+                        this.plot.xCoords.push(x);
+                        y = this.quantity * ((this.strikePrice - x) - this.premium);
+                        this.plot.yCoords.push(y);
+                    }
+                    else {
+                        y = -this.quantity * (this.premium);
+                        this.plot.yCoords.push(y);
+                    }
+                }
+            }
+            case "SELL CALL": {
+                for (var i = 0; i < 100; i++) {
+                    if (x <= this.strikePrice) {
+                        this.plot.xCoords.push(x);
+                        y = (this.quantity * this.premium);
+                        this.plot.yCoords.push(y);
+                    }
+                    else {
+                        y = -1 * this.quantity * ((x - this.strikePrice) - this.premium);
+                        this.plot.yCoords.push(y);
+                    }
+                }
+            }
+            case "SELL PUT": {
+                for (var i = 0; i < 100; i++) {
+                    if (x <= this.strikePrice) {
+                        this.plot.xCoords.push(x);
+                        y = -1 * this.quantity * ((this.strikePrice - x) - this.premium);
+                        this.plot.yCoords.push(y);
+                    }
+                    else {
+                        y = this.quantity * (this.premium);
+                        this.plot.yCoords.push(y);
+                    }
+                }
+            }
+        }
+    };
+    Options.prototype.getPlot = function () {
+        return this.plot;
+    };
+    Options.count = 0;
+    return Options;
 }());
-module.exports = FutureSkeleton;
+module.exports = Options;

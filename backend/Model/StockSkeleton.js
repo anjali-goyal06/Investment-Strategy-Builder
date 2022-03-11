@@ -43,6 +43,9 @@ var StockSkeleton = /** @class */ (function () {
         this.side = side;
         this.investmentStrategySkeletonId = skeletonId;
     }
+    StockSkeleton.prototype.getId = function () {
+        return this.id;
+    };
     StockSkeleton.prototype.setId = function () {
         return __awaiter(this, void 0, void 0, function () {
             var sql, connection, response;

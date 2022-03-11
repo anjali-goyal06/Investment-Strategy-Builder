@@ -37,22 +37,35 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 var getDbConnection = require('../db/dbconnect');
-var FutureSkeleton = /** @class */ (function () {
-    function FutureSkeleton(id, side, skeletonId) {
+var InvestmentStrategy = /** @class */ (function () {
+    function InvestmentStrategy(id, stockName, ticker, userId, expiryDate, name, strategySkeletonId, description) {
         this.id = id;
-        this.side = side;
-        this.investmentStrategySkeletonId = skeletonId;
+        this.stockName = stockName;
+        this.ticker = ticker;
+        this.userId = userId;
+        this.expiryDate = expiryDate;
+        this.name = name;
+        this.strategySkeletonId = strategySkeletonId;
+        this.description = description;
     }
-    FutureSkeleton.prototype.getId = function () {
+    InvestmentStrategy.prototype.combinedPlot = function () {
+        var tempPlot;
+        for (var i in this.instruments) {
+            //    tempPlot  = i.getPlot();
+        }
+    };
+    InvestmentStrategy.prototype.getStrategySkeleton = function () {
+    };
+    InvestmentStrategy.prototype.getId = function () {
         return this.id;
     };
-    FutureSkeleton.prototype.setId = function () {
+    InvestmentStrategy.prototype.setId = function () {
         return __awaiter(this, void 0, void 0, function () {
             var sql, connection, response;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        sql = "Select  count(*) as count from FutureSkeleton";
+                        sql = "Select  count(*) as count from InvestmentStrategy";
                         return [4 /*yield*/, getDbConnection()];
                     case 1:
                         connection = _a.sent();
@@ -61,12 +74,13 @@ var FutureSkeleton = /** @class */ (function () {
                         response = _a.sent();
                         connection.end();
                         this.id = response[0].count + 1;
+                        console.log(this.id);
                         return [2 /*return*/];
                 }
             });
         });
     };
-    FutureSkeleton.prototype.AddDataToDb = function () {
+    InvestmentStrategy.prototype.AddDataToDb = function () {
         return __awaiter(this, void 0, void 0, function () {
             var sql, connection, response, err_1;
             return __generator(this, function (_a) {
@@ -78,14 +92,14 @@ var FutureSkeleton = /** @class */ (function () {
                         _a.sent();
                         _a.label = 2;
                     case 2:
-                        sql = "INSERT INTO FutureSkeleton (Id, Side, InvestmentStrategySkeletonId) VALUES (?,?,?)";
+                        sql = "INSERT INTO InvestmentStrategy (Id, Name , StockName, Ticker, ExpiryDate, UserId, Description, InvestmentStrategySkeletonId) VALUES (?,?,?,?,?,?,?,?)";
                         _a.label = 3;
                     case 3:
                         _a.trys.push([3, 6, , 7]);
                         return [4 /*yield*/, getDbConnection()];
                     case 4:
                         connection = _a.sent();
-                        return [4 /*yield*/, connection.query(sql, [this.id, this.side, this.investmentStrategySkeletonId])];
+                        return [4 /*yield*/, connection.query(sql, [this.id, this.name, this.stockName, this.ticker, this.expiryDate, this.userId, this.description, this.strategySkeletonId])];
                     case 5:
                         response = _a.sent();
                         connection.end();
@@ -99,7 +113,7 @@ var FutureSkeleton = /** @class */ (function () {
             });
         });
     };
-    FutureSkeleton.count = 0;
-    return FutureSkeleton;
+    InvestmentStrategy.count = 0;
+    return InvestmentStrategy;
 }());
-module.exports = FutureSkeleton;
+module.exports = InvestmentStrategy;

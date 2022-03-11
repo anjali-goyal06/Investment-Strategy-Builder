@@ -106,6 +106,4 @@ var InvestmentStrategySkeleton = /** @class */ (function () {
     InvestmentStrategySkeleton.count = 0;
     return InvestmentStrategySkeleton;
 }());
-
-
 module.exports = InvestmentStrategySkeleton;

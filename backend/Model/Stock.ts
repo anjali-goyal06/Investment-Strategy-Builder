@@ -1,20 +1,70 @@
 import { IInstrumentSkeleton } from "./IInstrumentSkeleton";
 import { StrategyPlot } from "./StrategyPlot";
 import { IInstrument } from "./IInstrument";
+var getDbConnection = require('../db/dbconnect');
 
 class Stock implements IInstrument{
     static count : number = 0;
     id : number;
     quantity : number;
-    instrumentSkeleon : IInstrumentSkeleton;
+    instrumentSkeleton : IInstrumentSkeleton;
+    instrumentSkeletonId:number;
+    strategyId:number;
     price : number;
-    side : string;
     plot : StrategyPlot;
     currentPrice:number
 
+    constructor(id:number, quantity:number, price:number, skeletonId:number, strategyId:number){
+        
+        this.id = id;
+        this.quantity = quantity;
+        this.price = price;
+        this.instrumentSkeletonId = skeletonId;
+        this.strategyId = strategyId;
+    }
+
+    async setId(){
+
+        //var Db = new DbManager();
+       // var result = Db.GetCountOfRecordsInDb("user");
+       var sql = "Select  count(*) as count from Stock";
+
+       const connection = await getDbConnection();
+       var response = await connection.query(sql) ; 
+       connection.end()
+        
+        this.id = response[0].count + 1;
+        console.log(this.id);
+
+    }
+    
+   
+    async AddDataToDb(){
+
+        if(this.id == -1){
+            await this.setId();
+        }
+        
+        //console.log(this.OptionSkeleton);
+        
+        var sql = "INSERT INTO Stock (Id, Price, Quantity, StockSkeletonId, InvestmentStrategyId) VALUES (?,?,?,?,?)";
+        //var {Id, Type, Side, StrategySkeletonId} = {this.id, 
+
+        try{
+            const connection = await getDbConnection()
+            var response = await connection.query(sql, [this.id ,this.price, this.quantity, this.instrumentSkeletonId, this.strategyId]); 
+            connection.end()
+            return response;
+
+        }catch(err){
+            console.log(err);
+            return err;
+        }
+    }
+
     makePlot() {
         
-        if(this.side=="BUY"){
+        if(this.instrumentSkeleton.side=="BUY"){
 
             var x = Math.floor(this.price-50);
             var y;
