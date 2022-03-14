@@ -2,11 +2,11 @@ const { sanitize } = require('express-validator');
 var mysql = require('promise-mysql');
 
 var config = {
-  host: "localhost",
+  host: "database-1.ctvblfobct2i.ap-south-1.rds.amazonaws.com",
   user: "root",
-  password: "password",
-  port : "3306",
-  database : "investmentstrategybuilder"
+  password: "strategy",
+  port : "3304",
+  database : "InvestmentStrategyBuilder"
 }
 
 const getDbConnection = async () => {
