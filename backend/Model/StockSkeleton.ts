@@ -16,6 +16,10 @@ export default class StockSkeleton implements IInstrumentSkeleton{
         this.investmentStrategySkeletonId = skeletonId;
     }
 
+    getId() : number {
+        return this.id;
+    }
+
     async setId(){
 
         //var Db = new DbManager();

@@ -7,8 +7,7 @@ export default interface IInstrument{
     quantity : number;
     side : string
     plot :  StrategyPlot;
-    instrumentSkeleon :  IInstrumentSkeleton;
-
+    instrumentSkeleton :  IInstrumentSkeleton;
     makePlot()
     getPlot() :  StrategyPlot;
 }

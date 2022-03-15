@@ -20,6 +20,10 @@ class OptionSkeleton implements IInstrumentSkeleton{
         this.type = type;
         this.investmentStrategySkeletonId = skeletonId;
     }
+    
+    getId() : number {
+        return this.id;
+    }
 
     async setId(){
 
