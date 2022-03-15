@@ -22,6 +22,60 @@ class DbManager{
         
     }
 
+    async GetInstrumentsFromStrategySkeletonId(id){
+        var response;
+        var sqlOptions = "select * from OptionSkeleton where InvestmentStrategySkeletonId = id";
+        var sqlFutures = "select * from FutureSkeleton where InvestmentStrategySkeletonId = id";
+        var sqlStocks = "select * from StockSkeleton where InvestmentStrategySkeletonId = id";
+
+        var arr;
+        const connection = await getDbConnection()
+        
+        arr = await connection.query(sqlOptions) ; 
+        for(let i in arr){
+             arr[i].segment = "option";
+             response.push(arr[i]);
+        }
+
+        arr = await connection.query(sqlFutures) ; 
+        for(let i in arr){
+            arr[i].segment = " future";
+            response.push(arr[i]);
+        }
+
+        arr = await connection.query(sqlStocks) ; 
+        for(let i in arr){
+            arr[i].segment = "stock"
+            response.push(arr[i]);
+        }
+
+        connection.end()
+        return response;
+
+
+    }
+
+    async getUserInputFromStrategySkeletonIdAndStrategyId(segment,InstrumentId,StrategyId){
+        
+        if(segment=="option"){
+            var sql = "select * from Options where OptionSkeletonId=" + mysql.escape(InstrumentId) + "AND InvestmentStrategyId=" + mysql.escape(StrategyId);
+        }else if(segment=="future"){
+            var sql = "select * from Future where FutureSkeletonId=" + mysql.escape(InstrumentId) + "AND InvestmentStrategyId=" + mysql.escape(StrategyId);
+        }else{
+            var sql = "select * from Stock where StockSkeletonId=" + mysql.escape(InstrumentId) + "AND InvestmentStrategyId=" + mysql.escape(StrategyId);
+        }
+         
+
+        try{
+            const connection = await getDbConnection()
+            var response = await connection.query(sql) ; 
+            connection.end()
+            return response;
+        }catch(err){
+            return err;
+        }
+    }
+
     async GetStrategySkeletonsFromUserId(id){
 
         var sql = "select Id, StrategyName from InvestmentStrategySkeleton where UserId = " + mysql.escape(id);
@@ -36,10 +90,9 @@ class DbManager{
         }
         
     }
-
     async GetSavedStrategiesFromUserId(id){
 
-        var sql = "select InvestmentStrategy.Id as StrategyId, Name, InvestmentStrategySkeletonId as StrategySkeletonId, StrategyName as Strategy from InvestmentStrategy, InvestmentStrategySkeleton where (InvestmentStrategy.InvestmentStrategySkeletonId = InvestmentStrategySkeleton.Id) AND (InvestmentStrategy.UserId =  " + mysql.escape(id) + ")";
+        var sql = "select InvestmentStrategy.Id as StrategyId, Name, InvestmentStrategySkeletonId as StrategySkeletonId from InvestmentStrategy where InvestmentStrategy.UserId =  " + mysql.escape(id);
 
         try{
             const connection = await getDbConnection()
@@ -51,6 +104,21 @@ class DbManager{
         }
         
     }
+
+    // async GetSavedStrategiesFromUserId(id){
+
+    //     var sql = "select InvestmentStrategy.Id as StrategyId, Name, InvestmentStrategySkeletonId as StrategySkeletonId, StrategyName as Strategy from InvestmentStrategy, InvestmentStrategySkeleton where (InvestmentStrategy.InvestmentStrategySkeletonId = InvestmentStrategySkeleton.Id) AND (InvestmentStrategy.UserId =  " + mysql.escape(id) + ")";
+
+    //     try{
+    //         const connection = await getDbConnection()
+    //         var response = await connection.query(sql) ; 
+    //         connection.end()
+    //         return response;
+    //     }catch(err){
+    //         return err;
+    //     }
+        
+    // }
 
     async GetCountOfRecordsInDb(tableName){
         

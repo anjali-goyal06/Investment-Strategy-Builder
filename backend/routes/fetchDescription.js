@@ -6,13 +6,16 @@ const { body, validationResult } = require('express-validator');
 const InvestmentStrategySkeleton = require('../DataBaseQueries/InvestmentStrategySkeleton')
 
 router.get('/' , async (req,res)=>{
+
+    // get all the strategySkeleton for the user (popular + custom made by that user  + blank)
     console.log("sample check")
     try{
-            var sql = "Select  * from  InvestmentStrategySkeleton";
-            const connection = await getDbConnection()
-            var response = await connection.query(sql) ; //,  function (err, result) {
-            connection.end()
-            return res.send(response);
+        var db = new DbManager();
+        var userId;
+        // get userId from db
+
+        var arrStrategySkeleton =  await db.GetStrategySkeletonsFromUserId(userId);
+        return arrStrategySkeleton;
     }catch(err){
         return res.send(err);
     }
