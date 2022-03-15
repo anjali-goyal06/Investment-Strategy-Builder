@@ -1,15 +1,69 @@
+
+var getDbConnection = require('../db/dbconnect');
+
 import StrategyPlot from './StrategyPlot';
 import IInstrumentSkeleton from './IInstrumentSkeleton';
 import IInstrument from './IInstrument'
 
+
 export default class Future implements IInstrument{
     id : number;
     quantity : number;
-    instrumentSkeleon : IInstrumentSkeleton;
+    instrumentSkeleton : IInstrumentSkeleton;
+    instrumentSkeletonId : number;
+    strategyId:number;
+    side:string;
     price : number;
-    side : string;
     plot : StrategyPlot;
     currentPrice : number;
+
+    constructor(id:number, quantity:number, price:number, skeletonId:number, strategyId:number){
+        
+        this.id = id;
+        this.quantity = quantity;
+        this.price = price;
+        this.instrumentSkeletonId = skeletonId;
+        this.strategyId = strategyId;
+    }
+
+    async setId(){
+
+        //var Db = new DbManager();
+       // var result = Db.GetCountOfRecordsInDb("user");
+       var sql = "Select  count(*) as count from Future";
+
+       const connection = await getDbConnection();
+       var response = await connection.query(sql); 
+       connection.end()
+        
+        this.id = response[0].count + 1;
+        console.log(this.id);
+
+    }
+    
+   
+    async AddDataToDb(){
+
+        if(this.id == -1){
+            await this.setId();
+        }
+        
+     
+        
+        var sql = "INSERT INTO Future (Id, Price, Quantity, FutureSkeletonId, InvestmentStrategyId) VALUES (?,?,?,?,?)";
+        //var {Id, Type, Side, StrategySkeletonId} = {this.id, 
+
+        try{
+            const connection = await getDbConnection()
+            var response = await connection.query(sql, [this.id ,this.price, this.quantity, this.instrumentSkeletonId, this.strategyId]); 
+            connection.end()
+            return response;
+
+        }catch(err){
+            console.log(err);
+            return err;
+        }
+    }
 
     makePlot() {
         
