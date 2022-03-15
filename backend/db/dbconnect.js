@@ -3,9 +3,9 @@ var mysql = require('promise-mysql');
 
 var config = {
   host: "database-1.ctvblfobct2i.ap-south-1.rds.amazonaws.com",
-  user: "root",
+  user: "admin",
   password: "strategy",
-  port : "3304",
+  port : "3306",
   database : "InvestmentStrategyBuilder"
 }
 
