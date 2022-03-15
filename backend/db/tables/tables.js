@@ -19,7 +19,7 @@ const tableCreation = async () =>{
     await connection.query(FutureSkeletonTable);
     await connection.query(StockSkeletonTable);
     await connection.query(OptionSkeletonTable);
-    await connection.query(InvestmentStrategySkeletonTable); 
+    //await connection.query(InvestmentStrategySkeletonTable); 
     await connection.query(InvestmentStrategyTable); 
     await connection.query(StockTable);
     await connection.query(OptionsTable);
