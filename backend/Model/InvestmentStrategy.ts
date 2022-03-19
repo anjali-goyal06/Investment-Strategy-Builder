@@ -29,6 +29,10 @@ export default class InvestmentStrategy{
         this.description = description;
     }
 
+    getPlot() : StrategyPlot{
+        return this.plot;
+    }
+
     combinedPlot(){
        // let i : keyof IInstrument
         for(let k in this.instruments){

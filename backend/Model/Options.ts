@@ -4,29 +4,31 @@ var getDbConnection = require('../db/dbconnect');
 import StrategyPlot from './StrategyPlot';
 import IInstrumentSkeleton from './IInstrumentSkeleton';
 import IInstrument from './IInstrument';
+import { Instrument } from './Instrument';
 
-
-class Options implements IInstrument{
+export class Options extends Instrument{
     static count : number = 0;
-    id : number;
-    quantity : number;
-    instrumentSkeleton : IInstrumentSkeleton;
+    //id : number;
+    //quantity : number;
+    //instrumentSkeleton : IInstrumentSkeleton;
     instrumentSkeletonId:number;
     strikePrice : number;
     strategyId:number;
     premium : number;
-    side : string;
+    //side : string;
     type : string;
-    plot : StrategyPlot;
+    //plot : StrategyPlot;
 
-    constructor(id:number, quantity:number, strikePrice:number, skeletonId:number, strategyId:number){
-        
+    constructor(id:number, quantity:number, strikePrice:number, skeletonId:number, strategyId:number, type:string, side:string){
+        super()
         this.id = id;
         this.quantity = quantity;
         this.strikePrice = strikePrice;
         this.instrumentSkeletonId = skeletonId;
         this.strategyId = strategyId;
         this.premium = 5;
+        this.side = side;
+        this.type = type;
     }
     
 
