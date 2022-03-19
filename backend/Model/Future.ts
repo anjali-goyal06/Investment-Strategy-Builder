@@ -4,24 +4,26 @@ var getDbConnection = require('../db/dbconnect');
 import StrategyPlot from './StrategyPlot';
 import IInstrumentSkeleton from './IInstrumentSkeleton';
 import IInstrument from './IInstrument'
+import { Instrument } from './Instrument';
 
 
-export default class Future implements IInstrument{
-    id : number;
-    quantity : number;
-    instrumentSkeleton : IInstrumentSkeleton;
+export default class Future extends Instrument{
+    //id : number;
+    //quantity : number;
+    //instrumentSkeleton : IInstrumentSkeleton;
     instrumentSkeletonId : number;
     strategyId:number;
-    side:string;
+    //side:string;
     price : number;
-    plot : StrategyPlot;
+    //plot : StrategyPlot;
     currentPrice : number;
 
-    constructor(id:number, quantity:number, price:number, skeletonId:number, strategyId:number){
-        
+    constructor(id:number, quantity:number, price:number, skeletonId:number, strategyId:number, side:string){
+        super()
         this.id = id;
         this.quantity = quantity;
         this.price = price;
+        this.side = side;
         this.instrumentSkeletonId = skeletonId;
         this.strategyId = strategyId;
     }

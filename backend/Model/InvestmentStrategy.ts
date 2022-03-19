@@ -36,7 +36,17 @@ export default class InvestmentStrategy implements IInstrumentStrategy{
     description : string;
     instruments : IInstrument[];
 
-    constructor();
+    constructor(id:number, stockName:string, ticker:string, userId:number, expiryDate:Date, name:string, strategySkeletonId:number, description:string){
+        this.id = id;
+        this.stockName = stockName;
+        this.ticker = ticker;
+        this.userId = userId;
+        this.expiryDate = expiryDate;
+        this.name = name;
+        this.strategySkeletonId = strategySkeletonId;
+        this.description = description;
+    }
+  /*  constructor();
     constructor(obj: IInstrumentStrategy);
     constructor(obj? : IInstrumentStrategy){
         console.log("inside class strategy")
@@ -51,6 +61,7 @@ export default class InvestmentStrategy implements IInstrumentStrategy{
         console.log("cons value = ");
         console.log(this)
     }
+    */
 
     setValues(obj: IInstrumentStrategy){
         this.id = obj?.id ?? -1;
@@ -74,36 +85,13 @@ export default class InvestmentStrategy implements IInstrumentStrategy{
         console.log(this.description);
     }
 
-    /*
-   constructor(args){
-        console.log("inside class strategy")
-        if(args.length >0){
-            this.id = args[0];
-            this.stockName = args[1]; 
-            this.ticker  = args[2];
-            this.userId  = args[3];
-            this.expiryDate = args[4]; 
-            this.name = args[5]; 
-            this.strategySkeletonId = args[6];
-            this.description = "aaplws"; 
-            console.log("cons value = ");
-            console.log(this)
-        }
-    }
-    */
-    
 
- /*   constructor(id:number, stockName:string, ticker:string, userId:number, expiryDate:Date, name:string, strategySkeletonId:number, description:string){
-        this.id = id;
-        this.stockName = stockName;
-        this.ticker = ticker;
-        this.userId = userId;
-        this.expiryDate = expiryDate;
-        this.name = name;
-        this.strategySkeletonId = strategySkeletonId;
-        this.description = description;
+
+
+    getPlot() : StrategyPlot{
+        return this.plot;
     }
-*/
+
     combinedPlot(){
        // let i : keyof IInstrument
         for(let k in this.instruments){
@@ -191,14 +179,11 @@ export default class InvestmentStrategy implements IInstrumentStrategy{
             var temp = listInstrumentSkeleton[j];
               
             if(listInstrumentSkeleton[j].segment == "option"){
-                var options = new Options(input.Id , input.Quantity , input.StrikePrice , input.OptionSkeletonId , input.InvestmentStrategyId);
-                var optionSkeleton = new OptionSkeleton(temp.Id,temp.Side , temp.Type,temp.InvestmentStrategySkeletonId);
-                options.setSkeleton(optionSkeleton);
-                this.instruments.push(options);
+               
             }else if(listInstrumentSkeleton[j].segment=="future"){
-                var future = new Future();
+               
             }else{
-                var stock = new Stock();
+                
             }
         }
 

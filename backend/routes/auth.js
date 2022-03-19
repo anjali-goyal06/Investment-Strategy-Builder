@@ -13,12 +13,33 @@ const FutureSkeleton = require('../Model/FutureSkeleton');
 const Future = require('../Model/Future');
 const StockSkeleton = require('../Model/StockSkeleton');
 const Stock = require('../Model/Stock');
+const InstrumentManager = require('../Model/InstrumentManager');
 
 
 router.get('/' , (req,res)=>{
     console.log("Hello World||");
     res.send("hello!!");
 })
+
+router.post('/MakePlot', async(req, res)=>{
+  
+  var investmentStrategy = await new InvestmentStrategy(-1, req.body.stockName, req.body.ticker, -1, req.body.expiryDate, req.body.name, -1, req.body.descriptionStrategy);
+  var InstrumentManager = await new InstrumentManager();
+  for(var i=0; i<req.body.instruments.length; i++){
+    var instrument = req.body.instruments[i];
+    const Instrument = await InstrumentManager.createInstrument(instrument.segment, instrument.quantity, instrument.strikePrice, instrument.price, instrument.type, instrument.side);
+    await investmentStrategy.instruments.push(Instrument);
+  }
+
+  await investmentStrategy.combinedPlot();
+  var plot = await investmentStrategy.getPlot();
+  var response;
+  response.x = plot.xCoords;
+  response.y = plot.yCoords;
+  
+  res.send(response);
+
+});
 
 
 router.post('/SaveStrategy' , async (req,res)=>{
@@ -72,7 +93,7 @@ router.post('/SaveStrategy' , async (req,res)=>{
                               }
 
                             try{
-                              var option = await new Options(-1, instrument.quantity , instrument.strikePrice, skeletonId, strategyId);
+                              var option = await new Options(-1, instrument.quantity , instrument.strikePrice, skeletonId, strategyId, instrument.type, instrument.side);
                               var result4 = await option.AddDataToDb();
                             }catch(err){
                               console.log(err)
@@ -96,7 +117,7 @@ router.post('/SaveStrategy' , async (req,res)=>{
                               }
                               
                               try{
-                                var future = await new Future(-1, instrument.quantity , instrument.price, skeletonId, strategyId);
+                                var future = await new Future(-1, instrument.quantity , instrument.price, skeletonId, strategyId, instrument.side);
                                 var result6 = await future.AddDataToDb();
                               }catch(err){
                                 console.log(err)
@@ -117,7 +138,7 @@ router.post('/SaveStrategy' , async (req,res)=>{
                             }
                             
                             try{
-                              var stock = await new Stock(-1, instrument.quantity , instrument.price, skeletonId, strategyId);
+                              var stock = await new Stock(-1, instrument.quantity , instrument.price, skeletonId, strategyId, instrument.side);
                               var result8 = await stock.AddDataToDb();
                             }catch(err){
                               console.log(err)
