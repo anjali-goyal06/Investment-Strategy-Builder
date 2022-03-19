@@ -2,7 +2,7 @@ var getDbConnection = require('../db/dbconnect');
 
 import IInstrumentSkeleton from './IInstrumentSkeleton';
 
-class FututreSkeleton implements IInstrumentSkeleton{
+export default class FututreSkeleton implements IInstrumentSkeleton{
     id: number;
     side: string;
     investmentStrategySkeletonId: number;
@@ -57,3 +57,5 @@ class FututreSkeleton implements IInstrumentSkeleton{
     }
        
 }
+
+module.exports = FututreSkeleton;

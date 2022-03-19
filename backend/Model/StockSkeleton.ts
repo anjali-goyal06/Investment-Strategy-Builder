@@ -57,3 +57,5 @@ export default class StockSkeleton implements IInstrumentSkeleton{
         }
     }
 }
+
+module.exports = StockSkeleton;

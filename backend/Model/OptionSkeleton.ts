@@ -6,7 +6,7 @@ var getDbConnection = require('../db/dbconnect');
 import IInstrumentSkeleton from './IInstrumentSkeleton';
 
 
-class OptionSkeleton implements IInstrumentSkeleton{
+export default class OptionSkeleton implements IInstrumentSkeleton{
    
     id: number;
     side: string;
@@ -64,3 +64,5 @@ class OptionSkeleton implements IInstrumentSkeleton{
     }
    
 }
+
+module.exports = OptionSkeleton

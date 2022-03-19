@@ -100,3 +100,5 @@ export default class Future implements IInstrument{
         return this.plot;
     }
 }
+
+module.exports = Future

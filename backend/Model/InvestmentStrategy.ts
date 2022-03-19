@@ -2,9 +2,27 @@ var getDbConnection = require('../db/dbconnect');
 
 import StrategyPlot from './StrategyPlot';
 import IInstrument from './IInstrument';
-import DbManager from './DbManager'
+const Future =  require('./Future');
+const Stock  = require('./Stock');
+const Options = require('./Options');
+const OptionSkeleton = require('./OptionSkeleton');
+const FutureSkeleton = require('./FutureSkeleton');
+const StockSkeleton = require('./StockSkeleton');
+//import DbManager from './DbManager'
+const DbManager = require('./DbManager');
 
-export default class InvestmentStrategy{
+interface IInstrumentStrategy{
+    id : number;
+    stockName : string;
+    ticker : string;
+    userId : number;
+    expiryDate : Date;
+    name:string;
+    strategySkeletonId:number;
+    description : string;
+}
+
+export default class InvestmentStrategy implements IInstrumentStrategy{
 
     id : number;
     stockName : string;
@@ -18,7 +36,64 @@ export default class InvestmentStrategy{
     description : string;
     instruments : IInstrument[];
 
-    constructor(id:number, stockName:string, ticker:string, userId:number, expiryDate:Date, name:string, strategySkeletonId:number, description:string){
+    constructor();
+    constructor(obj: IInstrumentStrategy);
+    constructor(obj? : IInstrumentStrategy){
+        console.log("inside class strategy")
+        this.id = obj?.id ?? -1;
+        this.stockName = obj?.stockName ?? "";
+        this.ticker  = obj?.ticker ?? "";
+        this.userId  = obj?.userId ?? -1;
+        this.expiryDate =  obj?.expiryDate? new Date(obj.expiryDate) : new Date("2022-03-31");
+        this.name = obj?.name ?? "";
+        this.strategySkeletonId = obj?.strategySkeletonId ?? -1;
+        this.description =  obj?.description ?? ""; 
+        console.log("cons value = ");
+        console.log(this)
+    }
+
+    setValues(obj: IInstrumentStrategy){
+        this.id = obj?.id ?? -1;
+        this.stockName = obj?.stockName ?? "";
+        this.ticker  = obj?.ticker ?? "";
+        this.userId  = obj?.userId ?? -1;
+        this.expiryDate =  obj?.expiryDate? new Date(obj.expiryDate) : new Date("2022-03-31");
+        this.name = obj?.name ?? "";
+        this.strategySkeletonId = obj?.strategySkeletonId ?? -1;
+        this.description =  obj?.description ?? ""; 
+    }
+
+    printValues(){
+        console.log(this.id);
+        console.log(this.stockName);
+        console.log(this.ticker);
+        console.log(this.userId);
+        console.log(this.expiryDate);
+        console.log(this.name);
+        console.log(this.strategySkeletonId);
+        console.log(this.description);
+    }
+
+    /*
+   constructor(args){
+        console.log("inside class strategy")
+        if(args.length >0){
+            this.id = args[0];
+            this.stockName = args[1]; 
+            this.ticker  = args[2];
+            this.userId  = args[3];
+            this.expiryDate = args[4]; 
+            this.name = args[5]; 
+            this.strategySkeletonId = args[6];
+            this.description = "aaplws"; 
+            console.log("cons value = ");
+            console.log(this)
+        }
+    }
+    */
+    
+
+ /*   constructor(id:number, stockName:string, ticker:string, userId:number, expiryDate:Date, name:string, strategySkeletonId:number, description:string){
         this.id = id;
         this.stockName = stockName;
         this.ticker = ticker;
@@ -28,7 +103,7 @@ export default class InvestmentStrategy{
         this.strategySkeletonId = strategySkeletonId;
         this.description = description;
     }
-
+*/
     combinedPlot(){
        // let i : keyof IInstrument
         for(let k in this.instruments){
@@ -88,32 +163,69 @@ export default class InvestmentStrategy{
             return err;
         }
     }
+
+    async fetchAllStrategyImplementationFromDBForUser(userId){
+        var db = await new DbManager();
+        var arrStrategy =  await db.GetSavedStrategiesFromUserId(userId);
+
+        console.log("arrastrateg")
+        console.log(arrStrategy);
+       
+        return arrStrategy;
+    }
+
     
-    async fetchStrategyWithValuesFromDb(){
 
-        var db = new DbManager();
-        var userId;
-        // get userId from db
+    async fetchDetailedStrategyImplementationFromDbForUser(strategyId){
+        var db = await new DbManager();
+        var strategy = await db.fetchStrategyFromStrategyId(strategyId);
+       // var investmentStrategy = new InvestmentStrategy({id: strategy.Id, name : strategy.Name,stockName : strategy.StockName,ticker : strategy.Ticker, expiryDate : strategy.ExpiryDate, userId : strategy.userId,description : strategy.Description, strategySkeletonId : strategy.InvestmentStrategySkeletonId});
+          this.setValues({id: strategy.Id, name : strategy.Name,stockName : strategy.StockName,ticker : strategy.Ticker, expiryDate : strategy.ExpiryDate, userId : strategy.userId,description : strategy.Description, strategySkeletonId : strategy.InvestmentStrategySkeletonId});
 
-        var arrStrategy =  await db.GetSavedStrategiesFromUserId;
-        var response;
+        var listInstrumentSkeleton = await db.GetInstrumentsFromStrategySkeletonId(strategy.InvestmentStrategySkeletonId);
+
+        for(let j in listInstrumentSkeleton){
+            var input = await db.getUserInputFromStrategySkeletonIdAndStrategyId(listInstrumentSkeleton[j].segment,listInstrumentSkeleton[j].Id,strategyId)
+            
+            // instruments = [];
+            var temp = listInstrumentSkeleton[j];
+              
+            if(listInstrumentSkeleton[j].segment == "option"){
+                var options = new Options(input.Id , input.Quantity , input.StrikePrice , input.OptionSkeletonId , input.InvestmentStrategyId);
+                var optionSkeleton = new OptionSkeleton(temp.Id,temp.Side , temp.Type,temp.InvestmentStrategySkeletonId);
+                options.setSkeleton(optionSkeleton);
+                this.instruments.push(options);
+            }else if(listInstrumentSkeleton[j].segment=="future"){
+                var future = new Future();
+            }else{
+                var stock = new Stock();
+            }
+        }
+
+    }
+    
+    async fetchStrategyWithValuesFromDb(userId){
+
+        var db = await new DbManager();
+        var arrStrategy =  await db.GetSavedStrategiesFromUserId(userId);
+        console.log("arrastrateg")
+        console.log(arrStrategy);
+          var response;
 
         for(var i in arrStrategy){
             var strategy = arrStrategy[i];
+            console.log(strategy)
+            var investmentStrategy = new InvestmentStrategy({id: strategy.Id, name : strategy.Name,stockName : strategy.StockName,ticker : strategy.Ticker, expiryDate : strategy.ExpiryDate, userId : strategy.userId,description : strategy.Description, strategySkeletonId : strategy.InvestmentStrategySkeletonId});
+            return;
+            var strategySkeletonId = strategy.InvestmentStrategySkeletonId;
+            console.log(strategySkeletonId)
 
-            var strategyId = strategy.InvestmentStrategySkeletonId;
+            var listInstrumentSkeleton = await db.GetInstrumentsFromStrategySkeletonId(strategySkeletonId);
 
-            var listInstrumentSkeleton = await db.GetInstrumentsFromStrategySkeletonId(strategyId);
-
+            console.log(listInstrumentSkeleton)
+        
             for(let j in listInstrumentSkeleton){
-
-                var input = await db.getUserInputFromStrategySkeletonIdAndStrategyId(listInstrumentSkeleton[i].segment,listInstrumentSkeleton[i].Id,listInstrumentSkeleton[i].InvestmentStrategySkeletonId)
-                
-                console.log("\n\n");
-                console.log(strategy);
-                console.log(listInstrumentSkeleton[i]);
-                console.log(input)
-                
+                var input = await db.getUserInputFromStrategySkeletonIdAndStrategyId(listInstrumentSkeleton[j].segment,listInstrumentSkeleton[j].Id,strategy.StrategyId)
             }
         }
 
@@ -121,3 +233,5 @@ export default class InvestmentStrategy{
     }
 
 }
+
+module.exports = InvestmentStrategy;

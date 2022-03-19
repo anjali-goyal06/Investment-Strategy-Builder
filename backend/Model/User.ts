@@ -4,7 +4,7 @@ var getDbConnection = require('../db/dbconnect');
 const mysql = require('mysql');
 const bcrypt = require('bcryptjs');
 
-class User{
+export default class User{
     static count : number = 0;
     id : number;
     name : string;
@@ -68,4 +68,4 @@ class User{
     }
 }
 
-module.exports = User
+ module.exports = User

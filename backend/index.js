@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 const port = process.env.PORT ||  8000
 require('./db/dbconnect.js');
-require('./db/createDatabase.js')
+//require('./db/createDatabase.js')
 require('./db/tables/tables.js')
 
 const DbManager = require('./Model/DbManager'); //Testing Purpose

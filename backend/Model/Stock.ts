@@ -99,3 +99,5 @@ export default class Stock implements IInstrument{
         return this.plot;
     }
 }
+
+module.exports = Stock;

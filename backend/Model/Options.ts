@@ -4,9 +4,9 @@ var getDbConnection = require('../db/dbconnect');
 import StrategyPlot from './StrategyPlot';
 import IInstrumentSkeleton from './IInstrumentSkeleton';
 import IInstrument from './IInstrument';
+import OptionSkeleton from './OptionSkeleton';
 
-
-class Options implements IInstrument{
+export default class Options implements IInstrument{
     static count : number = 0;
     id : number;
     quantity : number;
@@ -28,7 +28,22 @@ class Options implements IInstrument{
         this.strategyId = strategyId;
         this.premium = 5;
     }
+
+    printValues(){
+        console.log(this.id);
+        console.log(this.quantity);
+        console.log(this.strikePrice);
+        console.log(this.strategyId);
+        console.log(this.side);
+        console.log(this.type);
+        console.log(this.premium);
+
+    }
     
+    setSkeleton(obj : OptionSkeleton){
+        this.instrumentSkeleton = obj;
+        this.instrumentSkeletonId = obj.id;
+    }
 
     async setId(){
 
@@ -155,3 +170,5 @@ class Options implements IInstrument{
     }
 
 }
+
+module.exports = Options;

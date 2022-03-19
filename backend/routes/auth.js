@@ -196,6 +196,12 @@ router.post('/SaveStrategySkeleton' , async (req,res)=>{
 })
 
 
+router.get("/savedImplementation" , async (req,res) => {
+  // var user = new User();
+  var investmentStrategy = await new InvestmentStrategy();
+  investmentStrategy.fetchDetailedStrategyImplementationFromDbForUser(1);
+})
+
 
 // register a new user
 router.post('/register' ,[
