@@ -12,6 +12,7 @@ Model/Stock.js
 Model/StockSkeleton.js
 Model/StrategyPlot.js
 Model/User.js
+Model/DbManager.js
 
 
 
