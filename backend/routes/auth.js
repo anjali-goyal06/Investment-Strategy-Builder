@@ -220,7 +220,8 @@ router.post('/SaveStrategySkeleton' , async (req,res)=>{
 router.get("/savedImplementation" , async (req,res) => {
   // var user = new User();
   var investmentStrategy = await new InvestmentStrategy();
-  investmentStrategy.fetchDetailedStrategyImplementationFromDbForUser(1);
+  var response = await investmentStrategy.fetchDetailedStrategyImplementationFromDbForUser(3);
+   res.send(response);
 })
 
 

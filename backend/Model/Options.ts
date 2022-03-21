@@ -98,7 +98,7 @@ export class Options extends Instrument{
         var x = Math.floor(this.strikePrice-50);
         var y;
 
-        var str = this..side + " " + this.type;
+        var str = this.side + " " + this.type;
 
        
         switch(str){

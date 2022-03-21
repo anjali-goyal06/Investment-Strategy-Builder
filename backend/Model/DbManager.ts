@@ -33,9 +33,11 @@ export default class DbManager{
         const connection = await getDbConnection()
         
         arr = await connection.query(sqlOptions) ; 
+        console.log(sqlOptions);
+        console.log(arr);
         for(let i in arr){
              arr[i].segment = "option";
-             response.push(arr[i]);
+             response.push(arr[i]);             
         }
 
         arr = await connection.query(sqlFutures) ; 
