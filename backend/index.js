@@ -20,6 +20,8 @@ app.use(express.json())
 // Available Routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/strategy', require('./routes/fetchDescription'))
+app.use('/api/fetch', require('./routes/fetchData'));
+app.use('/api/send', require('./routes/sendData'));
 
 
 //Testing Purpose
