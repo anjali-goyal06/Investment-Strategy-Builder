@@ -1,10 +1,16 @@
-import Future from "./Future";
+var Future = require("./Future");
 import IInstrument from "./IInstrument";
-import {Options} from "./Options";
-import Stock from "./Stock";
+var Options  = require("./Options");
+var Stock = require("./Stock");
 
-export class InstrumentManager{
-    static createInstrument(instrumentType: string, quantity:number, strikePrice:number, price:number, type:string, side:string) : IInstrument{
+
+export default class InstrumentManager{
+
+    constructor(){
+
+    }
+
+    createInstrument(instrumentType: string, quantity:number, strikePrice:number, price:number, type:string, side:string) : IInstrument{
        if(instrumentType == 'option'){
            return new Options(-1, quantity, strikePrice, -1, -1, type, side);
        }else if(instrumentType == 'future'){
@@ -14,3 +20,5 @@ export class InstrumentManager{
        }
     }
 }
+
+module.exports = InstrumentManager;

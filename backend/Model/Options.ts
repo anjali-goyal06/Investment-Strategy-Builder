@@ -2,23 +2,25 @@
 var getDbConnection = require('../db/dbconnect');
 
 import StrategyPlot from './StrategyPlot';
+var StrategyPlot_ = require('./StrategyPlot')
 import IInstrumentSkeleton from './IInstrumentSkeleton';
 import IInstrument from './IInstrument';
 import OptionSkeleton from './OptionSkeleton';
-import { Instrument } from './Instrument';
+//import { Instrument } from './Instrument';
+var Instrument = require('./Instrument');
 
-export class Options extends Instrument{
+export default class Options extends Instrument{
     static count : number = 0;
-    //id : number;
-    //quantity : number;
-    //instrumentSkeleton : IInstrumentSkeleton;
+    id : number;
+    quantity : number;
+    instrumentSkeleton : IInstrumentSkeleton;
     instrumentSkeletonId:number;
     strikePrice : number;
     strategyId:number;
     premium : number;
-    //side : string;
+    side : string;
     type : string;
-    //plot : StrategyPlot;
+    plot : StrategyPlot;
 
     constructor(id:number, quantity:number, strikePrice:number, skeletonId:number, strategyId:number, type:string, side:string){
         super()
@@ -92,15 +94,20 @@ export class Options extends Instrument{
 
     }
 
-    makePlot(){
+    makePlot(xStart){
       //  var i = this.strikePrice - 30;
 
-        var x = Math.floor(this.strikePrice-50);
+        var x = Math.floor(xStart);
         var y;
 
-        var str = this.side + " " + this.type;
+        this.plot = new StrategyPlot_();
 
-       
+        var str = this.side + " " + this.type;
+        if(this.strikePrice==910) this.premium = 370;
+        else this.premium = 390;
+       console.log(str)
+       console.log(this.premium)
+       console.log(this.quantity)
         switch(str){
 
 
@@ -110,13 +117,19 @@ export class Options extends Instrument{
 
                     if(x<=this.strikePrice){
                         this.plot.xCoords.push(x);
+                        
                         y = -(this.quantity*this.premium);
                         this.plot.yCoords.push(y);
                     }else{
+                        this.plot.xCoords.push(x);
                         y = this.quantity*((x-this.strikePrice) - this.premium);
                         this.plot.yCoords.push(y);
                     }
+                    console.log(x);
+                    x++;
                 }
+                console.log(this.plot)
+                break;
             }
 
             case "BUY PUT" : {
@@ -127,10 +140,13 @@ export class Options extends Instrument{
                         y = this.quantity*((this.strikePrice -x) - this.premium);
                         this.plot.yCoords.push(y);
                     }else{
+                        this.plot.xCoords.push(x);
                         y = -this.quantity*(this.premium);
                         this.plot.yCoords.push(y);
                     }
+                    x++;
                 }
+                break;
             }
 
             case "SELL CALL" : {
@@ -141,10 +157,13 @@ export class Options extends Instrument{
                         y = (this.quantity*this.premium);
                         this.plot.yCoords.push(y);
                     }else{
+                        this.plot.xCoords.push(x);
                         y = -1*this.quantity*((x-this.strikePrice) - this.premium);
                         this.plot.yCoords.push(y);
                     }
+                    x++;
                 }
+                break;
             }
 
             case "SELL PUT":{
@@ -155,16 +174,18 @@ export class Options extends Instrument{
                         y = -1*this.quantity*((this.strikePrice -x) - this.premium);
                         this.plot.yCoords.push(y);
                     }else{
+                        this.plot.xCoords.push(x);
                         y = this.quantity*(this.premium);
                         this.plot.yCoords.push(y);
                     }
+                    x++;
                 }
             }
 
 
 
         }
-
+        return this.plot;
         
     }
 

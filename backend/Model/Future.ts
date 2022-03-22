@@ -4,18 +4,18 @@ var getDbConnection = require('../db/dbconnect');
 import StrategyPlot from './StrategyPlot';
 import IInstrumentSkeleton from './IInstrumentSkeleton';
 import IInstrument from './IInstrument'
-import { Instrument } from './Instrument';
+var Instrument = require('./Instrument');
 
 
 export default class Future extends Instrument{
-    //id : number;
-    //quantity : number;
-    //instrumentSkeleton : IInstrumentSkeleton;
+    id : number;
+    quantity : number;
+    instrumentSkeleton : IInstrumentSkeleton;
     instrumentSkeletonId : number;
     strategyId:number;
-    //side:string;
+    side:string;
     price : number;
-    //plot : StrategyPlot;
+    plot : StrategyPlot;
     currentPrice : number;
 
     constructor(id:number, quantity:number, price:number, skeletonId:number, strategyId:number, side:string){
@@ -67,11 +67,11 @@ export default class Future extends Instrument{
         }
     }
 
-    makePlot() {
+    makePlot(xStart) {
         
         if(this.side=="BUY"){
 
-            var x = Math.floor(this.price-50);
+            var x = Math.floor(xStart);
             var y;
 
             for(var i=0;i<100;i++){
@@ -81,9 +81,11 @@ export default class Future extends Instrument{
                     y = -1*this.quantity*(this.currentPrice - this.price);
                     this.plot.yCoords.push(y);
                 }else{
+                    this.plot.xCoords.push(x);
                     y = this.quantity*(this.currentPrice - this.price);
                     this.plot.yCoords.push(y);
                 }
+                x++;
             }
         }else{
             if(x<=this.price){
@@ -91,10 +93,13 @@ export default class Future extends Instrument{
                 y = this.quantity*(this.currentPrice - this.price);
                 this.plot.yCoords.push(y);
             }else{
+                this.plot.xCoords.push(x);
                 y = -1*this.quantity*(this.currentPrice - this.price);
                 this.plot.yCoords.push(y);
             }
+            x++;
         }
+        return this.plot;
 
     }
 

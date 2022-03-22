@@ -2,12 +2,14 @@ import IInstrument from "./IInstrument";
 import StrategyPlot from "./StrategyPlot";
 import IInstrumentSkeleton from "./IInstrumentSkeleton";
 
-export class Instrument implements IInstrument{
+export default class Instrument implements IInstrument{
     id;
     quantity;
     side;
     plot;
     instrumentSkeleton;
-    makePlot() {}
+    makePlot(x) {}
     getPlot() :  StrategyPlot {return this.plot;};
 }
+
+module.exports = Instrument;

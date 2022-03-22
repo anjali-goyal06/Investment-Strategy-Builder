@@ -15,24 +15,43 @@ const StockSkeleton = require('../Model/StockSkeleton');
 const Stock = require('../Model/Stock');
 const InstrumentManager = require('../Model/InstrumentManager');
 
-
+/*
+{
+    "StockName" : "XYZ",
+    "Ticker" : "TICKER",
+    "ExpiryDate" : "2022-04-05",
+    "Name" : "XYZ Implementation" , 
+    "Description" : "With stock XYZ make strategy",
+    "listInstruments" : [
+        {
+            "segment" : "option",
+            "Quantity" : "1",
+            "StrikePrice" : "70",
+            "Price" : "80",
+            "Type" : "CALL",
+            "Side" : "BUY"
+        }
+    ]
+}
+*/
 
 router.post('/MakePlot', async(req, res)=>{
-  
-    var investmentStrategy = await new InvestmentStrategy(-1, req.body.stockName, req.body.ticker, -1, req.body.expiryDate, req.body.name, -1, req.body.descriptionStrategy);
-    var InstrumentManager = await new InstrumentManager();
-    for(var i=0; i<req.body.instruments.length; i++){
-      var instrument = req.body.instruments[i];
-      const Instrument = await InstrumentManager.createInstrument(instrument.segment, instrument.quantity, instrument.strikePrice, instrument.price, instrument.type, instrument.side);
-      await investmentStrategy.instruments.push(Instrument);
+
+  console.log(req.body);
+    var investmentStrategy = await new InvestmentStrategy(-1, req.body.StockName, req.body.Ticker, -1, req.body.ExpiryDate, req.body.Name, -1, req.body.Description);
+    var instrumentManager = await new InstrumentManager();
+    //console.log(req.body.instruments);
+    for(var i=0; i<req.body.listInstruments.length; i++){
+      var instrument = req.body.listInstruments[i];
+      var _instrument = await instrumentManager.createInstrument(instrument.segment, instrument.Quantity, instrument.StrikePrice, instrument.Price, instrument.Type, instrument.Side);
+      console.log(investmentStrategy.instruments)
+      investmentStrategy.instruments.push(_instrument);
     }
   
-    await investmentStrategy.combinedPlot();
-    var plot = await investmentStrategy.getPlot();
-    var response;
-    response.x = plot.xCoords;
-    response.y = plot.yCoords;
-    
+    var plot = await investmentStrategy.combinedPlot();
+    // = await investmentStrategy.getPlot();
+    var response = plot
+    console.log(response)
     res.send(response);
   
   });
@@ -48,10 +67,10 @@ router.post('/SaveStrategy' , async (req,res)=>{
    // }
       var userId = 1;
   
-      var strategySkeletonId = req.body.strategySkeletonId;
+      var strategySkeletonId = req.body.InvestmentStrategySkeletonId;
       if(!req.body.isSkeletonSaved){
         try{
-          var investmentStrategySkeleton = await new InvestmentStrategySkeleton(-1, req.body.strategyName, userId, req.body.descriptionSkeleton);
+          var investmentStrategySkeleton = await new InvestmentStrategySkeleton(-1, req.body.StrategyName, userId, req.body.DescriptionSkeleton);
           var result1 = await investmentStrategySkeleton.AddDataToDb();
           console.log(result1);
         }catch(err){
@@ -63,7 +82,7 @@ router.post('/SaveStrategy' , async (req,res)=>{
   
   
         try{
-          var investmentStrategy = await new InvestmentStrategy(-1, req.body.stockName, req.body.ticker, userId, req.body.expiryDate, req.body.name, strategySkeletonId, req.body.descriptionStrategy);
+          var investmentStrategy = await new InvestmentStrategy(-1, req.body.StockName, req.body.Ticker, userId, req.body.ExpiryDate, req.body.Name, strategySkeletonId, req.body.Description);
           var result2 = await investmentStrategy.AddDataToDb();
           console.log(result2);
         }catch(err){
@@ -73,15 +92,15 @@ router.post('/SaveStrategy' , async (req,res)=>{
       
         var strategyId = investmentStrategy.getId();
   
-        for(var i=0; i<req.body.instruments.length; i++){
-          var instrument = req.body.instruments[i];
-          var skeletonId = instrument.skeletonId;
-            switch(req.body.instruments[i].segment){   
+        for(var i=0; i<req.body.listInstruments.length; i++){
+          var instrument = req.body.listInstruments[i];
+          var skeletonId = instrument.SkeletonId;
+            switch(req.body.listInstruments[i].segment){   
               case "option": { 
                                 
                                 if(!req.body.isSkeletonSaved){
                                   try{
-                                    var optionSkeleton = await new OptionSkeleton(-1, instrument.side, instrument.type, strategySkeletonId);
+                                    var optionSkeleton = await new OptionSkeleton(-1, instrument.Side, instrument.Type, strategySkeletonId);
                                     var result3 = await optionSkeleton.AddDataToDb();
                                   }catch(err){
                                     console.log(err)
@@ -91,7 +110,7 @@ router.post('/SaveStrategy' , async (req,res)=>{
                                 }
   
                               try{
-                                var option = await new Options(-1, instrument.quantity , instrument.strikePrice, skeletonId, strategyId, instrument.type, instrument.side);
+                                var option = await new Options(-1, instrument.Quantity , instrument.StrikePrice, skeletonId, strategyId, instrument.Type, instrument.Side);
                                 var result4 = await option.AddDataToDb();
                               }catch(err){
                                 console.log(err)
@@ -105,7 +124,7 @@ router.post('/SaveStrategy' , async (req,res)=>{
                 
                                 if(!req.body.isSkeletonSaved){
                                   try{
-                                    var futureSkeleton = await new FutureSkeleton(-1, instrument.side, strategySkeletonId);
+                                    var futureSkeleton = await new FutureSkeleton(-1, instrument.Side, strategySkeletonId);
                                     var result5 = await futureSkeleton.AddDataToDb();
                                   }catch(err){
                                     console.log(err)
@@ -115,7 +134,7 @@ router.post('/SaveStrategy' , async (req,res)=>{
                                 }
                                 
                                 try{
-                                  var future = await new Future(-1, instrument.quantity , instrument.price, skeletonId, strategyId, instrument.side);
+                                  var future = await new Future(-1, instrument.Quantity , instrument.Price, skeletonId, strategyId, instrument.Side);
                                   var result6 = await future.AddDataToDb();
                                 }catch(err){
                                   console.log(err)
@@ -126,7 +145,7 @@ router.post('/SaveStrategy' , async (req,res)=>{
               case "stock": { 
                               if(!req.body.isSkeletonSaved){
                                 try{
-                                  var stockSkeleton = await new StockSkeleton(-1, instrument.side, strategySkeletonId);
+                                  var stockSkeleton = await new StockSkeleton(-1, instrument.Side, strategySkeletonId);
                                   var result7 = await stockSkeleton.AddDataToDb();
                                 }catch(err){
                                   console.log(err)
@@ -136,7 +155,7 @@ router.post('/SaveStrategy' , async (req,res)=>{
                               }
                               
                               try{
-                                var stock = await new Stock(-1, instrument.quantity , instrument.price, skeletonId, strategyId, instrument.side);
+                                var stock = await new Stock(-1, instrument.Quantity , instrument.Price, skeletonId, strategyId, instrument.Side);
                                 var result8 = await stock.AddDataToDb();
                               }catch(err){
                                 console.log(err)
@@ -164,7 +183,7 @@ router.post('/SaveStrategy' , async (req,res)=>{
       var userId = 1;
   
       try{
-        var investmentStrategySkeleton = await new InvestmentStrategySkeleton(-1, req.body.name, userId, req.body.desc);
+        var investmentStrategySkeleton = await new InvestmentStrategySkeleton(-1, req.body.Name, userId, req.body.DescriptionSkeleton);
         var result1 = await investmentStrategySkeleton.AddDataToDb();
         console.log(result1);
       }catch(err){
@@ -174,10 +193,10 @@ router.post('/SaveStrategy' , async (req,res)=>{
     
       var strategySkeletonId = investmentStrategySkeleton.getId();
   
-      for(var i=0; i<req.body.instruments.length; i++){
-          switch(req.body.instruments[i][0]){
+      for(var i=0; i<req.body.listInstruments.length; i++){
+          switch(req.body.listInstruments[i].segment){
             case "Option": { try{
-                              var optionSkeleton = await new OptionSkeleton(-1, req.body.instruments[i][1], req.body.instruments[i][2], strategySkeletonId);
+                              var optionSkeleton = await new OptionSkeleton(-1, req.body.listInstruments[i].Side, req.body.listInstruments[i].Type, strategySkeletonId);
                               var result2 = await optionSkeleton.AddDataToDb();
                              }catch(err){
                               //console.log(err);
@@ -187,7 +206,7 @@ router.post('/SaveStrategy' , async (req,res)=>{
                             }
   
             case "Future": { try{
-                              var futureSkeleton = await new FutureSkeleton(-1, req.body.instruments[i][1], strategySkeletonId);
+                              var futureSkeleton = await new FutureSkeleton(-1, req.body.instruments[i].Side, strategySkeletonId);
                               var result3 = await futureSkeleton.AddDataToDb();
                             }catch(err){
                               //console.log(err)
@@ -196,7 +215,7 @@ router.post('/SaveStrategy' , async (req,res)=>{
                             break;
                           }
             case "Stock": {  try{
-                              var stockSkeleton = await new StockSkeleton(-1, req.body.instruments[i][1], strategySkeletonId);
+                              var stockSkeleton = await new StockSkeleton(-1, req.body.instruments[i].Side, strategySkeletonId);
                               var result4 = await stockSkeleton.AddDataToDb();
                             }catch(err){
                              // console.log(err);

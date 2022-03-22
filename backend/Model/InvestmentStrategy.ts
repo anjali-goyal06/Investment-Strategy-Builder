@@ -1,6 +1,7 @@
 var getDbConnection = require('../db/dbconnect');
 
 import StrategyPlot from './StrategyPlot';
+var StrategyPlot_ = require('./StrategyPlot');
 import IInstrument from './IInstrument';
 const Future =  require('./Future');
 const Stock  = require('./Stock');
@@ -35,6 +36,7 @@ export default class InvestmentStrategy implements IInstrumentStrategy{
     strategySkeletonId:number;
     description : string;
     instruments : IInstrument[];
+    xStart : number;
 
     constructor(id:number, stockName:string, ticker:string, userId:number, expiryDate:Date, name:string, strategySkeletonId:number, description:string){
         this.id = id;
@@ -45,6 +47,13 @@ export default class InvestmentStrategy implements IInstrumentStrategy{
         this.name = name;
         this.strategySkeletonId = strategySkeletonId;
         this.description = description;
+        this.instruments = [];
+        console.log(this.instruments)
+        this.plot = new StrategyPlot_();
+        this.plot.xCoords = [];
+        this.plot.yCoords = [];
+
+        this.xStart = (870);
     }
   /*  constructor();
     constructor(obj: IInstrumentStrategy);
@@ -94,22 +103,34 @@ export default class InvestmentStrategy implements IInstrumentStrategy{
 
     combinedPlot(){
        // let i : keyof IInstrument
+       var flag = true;
         for(let k in this.instruments){
-            let tempPlot:StrategyPlot = this.instruments[k].getPlot();
+            console.log("val = ")
+            console.log(this.instruments[k]);
+            let tempPlot= this.instruments[k].makePlot(this.xStart);
+            console.log("nowwwwww")
+            console.log(tempPlot);
+            console.log("nowwwwww..")
             
-           // let tempX = tempPlot.xCoords;
-            let tempY = tempPlot.yCoords;
-
-            for(let i in this.plot.xCoords){
-                this.plot.yCoords[i] += tempY[i];
+            if(flag){
+                for(let i in tempPlot.xCoords){
+                    this.plot.yCoords.push(0)
+                    this.plot.xCoords.push(0)
+                    }
             }
+           // let tempX = tempPlot.xCoords;
+            
+           
+            for(let i in tempPlot.xCoords){
+                this.plot.xCoords[i] = tempPlot.xCoords[i]
+                this.plot.yCoords[i] += tempPlot.yCoords[i];
+            }
+            flag = false;
         }
+        return this.plot;
     }
 
-    getStrategySkeleton(){
-
-    }
-
+    
     getId() : number {
         return this.id;
     }
@@ -248,3 +269,44 @@ export default class InvestmentStrategy implements IInstrumentStrategy{
 }
 
 module.exports = InvestmentStrategy;
+
+/*
+{
+    "Id": 3,
+    "Name": "Minimum Loss AARTI IND",
+    "StockName": "NSE",
+    "Ticker": "AARTIIND",
+    "ExpiryDate": "2022-04-01T18:30:00.000Z",
+    "userId": 2,
+    "Description": "Buying Call and Put at almost same strike price",
+    "InvestmentStrategySkeletonId": 5,
+    "listInstruments": [
+        {
+            "Id": 3,
+            "StrikePrice": 900,
+            "Premium": 390,
+            "Quantity": 4,
+            "OptionSkeletonId": 5,
+            "InvestmentStrategyId": 3,
+            "Side": "BUY",
+            "Type": "CALL",
+            "InstrumentSkeletonId": 5,
+            "segment": "option",
+            "SkeletonId": 5
+        },
+         {
+            "Id": 4,
+            "StrikePrice": 910,
+            "Premium": 370,
+            "Quantity": 4,
+            "OptionSkeletonId": 6,
+            "InvestmentStrategyId": 3,
+            "Side": "BUY",
+            "Type": "PUT",
+            "InstrumentSkeletonId": 6,
+            "segment": "option",
+            "SkeletonId": 6
+        }
+    ]
+}
+*/
