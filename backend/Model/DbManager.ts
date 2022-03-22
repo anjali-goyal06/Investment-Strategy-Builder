@@ -95,10 +95,26 @@ console.log(sql);
         
     }
 
+    async GetStrategySkeletonsFromSkeletonId(id){
+
+        var sql = "select Id, StrategyName,Description from InvestmentStrategySkeleton where Id = " + mysql.escape(id);
+        console.log(sql);
+        try{
+            const connection = await getDbConnection()
+            var response = await connection.query(sql) ; 
+            connection.end()
+            
+            console.log(response);
+            return response;
+        }catch(err){
+            return err;
+        }
+        
+    }
+
     async fetchStrategyFromStrategyId(strategyId){
         var sql = "select Id, Name,StockName,Ticker,ExpiryDate,userId,Description, InvestmentStrategySkeletonId from InvestmentStrategy where InvestmentStrategy.Id =  " + mysql.escape(strategyId);
-
-        try{
+         try{
             const connection = await getDbConnection()
             var response = await connection.query(sql) ; 
             connection.end()
@@ -156,6 +172,10 @@ console.log(sql);
         }
         
     }  
+
+
+   
+
 }
 
 

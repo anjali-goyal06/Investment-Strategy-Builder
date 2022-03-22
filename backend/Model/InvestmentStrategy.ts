@@ -162,7 +162,16 @@ export default class InvestmentStrategy implements IInstrumentStrategy{
         return arrStrategy;
     }
 
-    
+    async fetchDetailedStrategySkeletonFromDbForUser(strategySkeletonId){
+        var db = await new DbManager();
+        var skeleton = await db.GetStrategySkeletonsFromSkeletonId(strategySkeletonId)
+        var listInstrumentSkeleton = await db.GetInstrumentsFromStrategySkeletonId(strategySkeletonId);
+        var response = skeleton[0];
+        console.log(listInstrumentSkeleton);
+        console.log(response);
+        response.listInstrumentSkeleton = listInstrumentSkeleton;
+        return response;
+    }
 
     async fetchDetailedStrategyImplementationFromDbForUser(strategyId){
         var db = await new DbManager();
