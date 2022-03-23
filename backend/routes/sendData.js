@@ -13,7 +13,6 @@ const FutureSkeleton = require('../Model/FutureSkeleton');
 const Future = require('../Model/Future');
 const StockSkeleton = require('../Model/StockSkeleton');
 const Stock = require('../Model/Stock');
-const InstrumentManager = require('../Model/InstrumentManager');
 const DbManager = require('../Model/DbManager');
 
 
