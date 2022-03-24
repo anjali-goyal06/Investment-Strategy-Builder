@@ -7,7 +7,7 @@ var Stock = require("./Stock");
 export default class InstrumentManager{
 
     constructor(){
-
+        // constructor implementation
     }
 
     createInstrument(instrumentType: string, quantity:number, strikePrice:number, price:number, type:string, side:string) : IInstrument{

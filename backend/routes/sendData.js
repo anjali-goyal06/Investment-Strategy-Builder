@@ -17,7 +17,7 @@ const InstrumentManager = require('../Model/InstrumentManager');
 const DbManager = require('../Model/DbManager');
 
 
-
+// For a particular strategy, its fetch its impementation
 router.get("/savedImplementation" , async (req,res) => {
     // var user = new User();
     var investmentStrategy = await new InvestmentStrategy();
@@ -27,15 +27,16 @@ router.get("/savedImplementation" , async (req,res) => {
 
 
   router.get("/savedSkeleton" , async (req,res) => {
-    // var user = new User();
+    var skeletonId = (req.body.skeletonId) ? req.body.skeletonId : 5;
     var investmentStrategy = await new InvestmentStrategy();
-    var response = await investmentStrategy.fetchDetailedStrategySkeletonFromDbForUser(5);
+    var response = await investmentStrategy.fetchDetailedStrategySkeletonFromDbForUser(skeletonId);
     res.send(response);
   })
 
   router.get("/popularStrategy" , async(req,res) =>{
+    userId = 1;
     var db = await new DbManager();
-    var popularStrategies = await db.GetStrategySkeletonsFromUserId(1);
+    var popularStrategies = await db.GetStrategySkeletonsFromUserId(userId);
     res.send(popularStrategies);
   })
 
@@ -46,4 +47,11 @@ router.get("/savedImplementation" , async (req,res) => {
     res.send(customStrategies);
   })
 
+  router.get("/allSavedImplemenations" , async (req,res) =>{
+      var userId = 2;
+      var db = await new DbManager();
+      var response = await db.GetSavedStrategiesFromUserId(userId);
+      return res.send(response);
+
+  })
   module.exports = router

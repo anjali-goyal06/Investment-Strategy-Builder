@@ -41,9 +41,9 @@ router.post('/register' ,[
 
     var user = await new User(-1, req.body.name,req.body.email,req.body.password);
     var result = await user.AddUser();
-    console.log("ans...")
+  
     console.log(result)
-    console.log("ans end..")
+   
     return res.send(result);
 
 })

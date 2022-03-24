@@ -24,26 +24,6 @@ app.use('/api/fetch', require('./routes/fetchData'));
 app.use('/api/send', require('./routes/sendData'));
 
 
-//Testing Purpose
-const Test = async () =>{
-    var db = new DbManager()
-    var result = await db.GetStrategySkeletonFromStrategyName('married put');
-    console.log("ans...")
-    console.log(result)
-    console.log("ans end..")
-
-    var a = {
-        "name" : "abc"
-    }
-
-    console.log(a.name);
-    a.password = "123";
-    console.log(a);
-
-}
-
-Test()
-
 app.listen(port, () => {
     console.log(`http://localhost:${port}`)
 })

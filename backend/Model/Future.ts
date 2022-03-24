@@ -30,16 +30,19 @@ export default class Future extends Instrument{
 
     async setId(){
 
-        //var Db = new DbManager();
-       // var result = Db.GetCountOfRecordsInDb("user");
-       var sql = "Select  count(*) as count from Future";
+        try{
+            var sql = "Select  count(*) as count from Future";
 
-       const connection = await getDbConnection();
-       var response = await connection.query(sql); 
-       connection.end()
-        
-        this.id = response[0].count + 1;
-        console.log(this.id);
+            const connection = await getDbConnection();
+            var response = await connection.query(sql); 
+            connection.end()
+                
+            this.id = response[0].count + 1;
+            console.log(this.id);
+        }catch(err){
+            console.log(err);
+            return err;
+        }
 
     }
     
@@ -49,12 +52,9 @@ export default class Future extends Instrument{
         if(this.id == -1){
             await this.setId();
         }
-        
-     
-        
+                
         var sql = "INSERT INTO Future (Id, Price, Quantity, FutureSkeletonId, InvestmentStrategyId) VALUES (?,?,?,?,?)";
-        //var {Id, Type, Side, StrategySkeletonId} = {this.id, 
-
+       
         try{
             const connection = await getDbConnection()
             var response = await connection.query(sql, [this.id ,this.price, this.quantity, this.instrumentSkeletonId, this.strategyId]); 
@@ -67,6 +67,7 @@ export default class Future extends Instrument{
         }
     }
 
+    
     makePlot(xStart) {
         
         if(this.side=="BUY"){

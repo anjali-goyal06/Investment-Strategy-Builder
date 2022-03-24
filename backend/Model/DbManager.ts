@@ -3,10 +3,7 @@ const mysql = require('mysql');
 
 export default class DbManager{
 
-    // constructor(){
-
-    // }
-
+   
     async GetUserDetailsFromUserId(id){
 
         var sql = "Select  * from  User where Id = " + mysql.escape(id);
@@ -68,7 +65,7 @@ export default class DbManager{
             var sql = "select * from Stock where StockSkeletonId=" + mysql.escape(InstrumentId) + " AND InvestmentStrategyId=" + mysql.escape(StrategyId);
         }
          
-console.log(sql);
+        console.log(sql);
         try{
             const connection = await getDbConnection()
             var response = await connection.query(sql) ; 

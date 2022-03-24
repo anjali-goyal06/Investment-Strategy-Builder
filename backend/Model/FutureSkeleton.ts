@@ -20,16 +20,16 @@ export default class FututreSkeleton implements IInstrumentSkeleton{
     
     async setId(){
 
-        //var Db = new DbManager();
-       // var result = Db.GetCountOfRecordsInDb("user");
        var sql = "Select  count(*) as count from FutureSkeleton";
-
-       const connection = await getDbConnection();
-       var response = await connection.query(sql) ; 
-       connection.end()
-        
-        this.id = response[0].count + 1;
-        //console.log(this.id);
+        try{
+            const connection = await getDbConnection();
+            var response = await connection.query(sql) ; 
+            connection.end()
+                
+            this.id = response[0].count + 1;
+        }catch(err){
+            console.log(err)
+        }
 
     }
     
@@ -38,11 +38,8 @@ export default class FututreSkeleton implements IInstrumentSkeleton{
         if(this.id == -1){
             await this.setId();
         }
-        
-
-        
+                
         var sql = "INSERT INTO FutureSkeleton (Id, Side, InvestmentStrategySkeletonId) VALUES (?,?,?)";
-       
 
         try{
             const connection = await getDbConnection()
