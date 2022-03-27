@@ -10,17 +10,17 @@ import OptionSkeleton from './OptionSkeleton';
 var Instrument = require('./Instrument');
 
 export default class Options extends Instrument{
-    static count : number = 0;
-    id : number;
-    quantity : number;
-    instrumentSkeleton : IInstrumentSkeleton;
+   // static count : number = 0;
+   // id : number;
+   // quantity : number;
+   // instrumentSkeleton : IInstrumentSkeleton;
     instrumentSkeletonId:number;
     strikePrice : number;
     strategyId:number;
     premium : number;
-    side : string;
+    //side : string;
     type : string;
-    plot : StrategyPlot;
+    //plot : StrategyPlot;
 
     constructor(id:number, quantity:number, strikePrice:number, skeletonId:number, strategyId:number, type:string, side:string){
         super()
@@ -66,7 +66,7 @@ export default class Options extends Instrument{
     }
     
    
-    async AddDataToDb(){
+    async AddDataToDb(instrumentSkeletonId: number, strategyId: number){
 
         if(this.id == -1){
             await this.setId();
@@ -79,7 +79,7 @@ export default class Options extends Instrument{
 
         try{
             const connection = await getDbConnection()
-            var response = await connection.query(sql, [this.id ,this.strikePrice, this.premium, this.quantity, this.instrumentSkeletonId, this.strategyId]); 
+            var response = await connection.query(sql, [this.id ,this.strikePrice, this.premium, this.quantity, instrumentSkeletonId, strategyId]); 
             connection.end()
             return response;
 

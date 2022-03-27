@@ -7,14 +7,14 @@ var Instrument =  require('./Instrument');
 
 
 export default class Stock extends Instrument{
-    id : number;
-    quantity : number;
-    instrumentSkeleton : IInstrumentSkeleton;
+    //id : number;
+    //quantity : number;
+    //instrumentSkeleton : IInstrumentSkeleton;
     instrumentSkeletonId:number;
     strategyId:number;
     price : number;
-    side:string;
-    plot : StrategyPlot;
+    //side:string;
+    //plot : StrategyPlot;
     currentPrice:number
 
     constructor(id:number, quantity:number, price:number, skeletonId:number, strategyId:number, side:string){
@@ -43,7 +43,7 @@ export default class Stock extends Instrument{
     }
     
    
-    async AddDataToDb(){
+    async AddDataToDb(instrumentSkeletonId: number, strategyId: number){
 
         if(this.id == -1){
             await this.setId();
@@ -56,7 +56,7 @@ export default class Stock extends Instrument{
 
         try{
             const connection = await getDbConnection()
-            var response = await connection.query(sql, [this.id ,this.price, this.quantity, this.instrumentSkeletonId, this.strategyId]); 
+            var response = await connection.query(sql, [this.id ,this.price, this.quantity, instrumentSkeletonId, strategyId]); 
             connection.end()
             return response;
 

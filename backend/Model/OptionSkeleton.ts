@@ -4,17 +4,18 @@ var getDbConnection = require('../db/dbconnect');
 //const mysql = require('mysql');
 
 import IInstrumentSkeleton from './IInstrumentSkeleton';
+import InstrumentSkeleton from './InstrumentSkeleton';
 
 
-export default class OptionSkeleton implements IInstrumentSkeleton{
+export default class OptionSkeleton extends InstrumentSkeleton{
    
-    id: number;
-    side: string;
+    //id: number;
+    //side: string;
     type : string;
     investmentStrategySkeletonId: number;
 
     constructor(id:number, side:string, type:string, skeletonId:number){
-        
+        super();
         this.id = id;
         this.side = side;
         this.type = type;
@@ -40,7 +41,7 @@ export default class OptionSkeleton implements IInstrumentSkeleton{
 
     }
     
-    async AddDataToDb(){
+    async AddDataToDb(StrategySkeletonId:number){
 
         if(this.id == -1){
             await this.setId();
@@ -53,7 +54,7 @@ export default class OptionSkeleton implements IInstrumentSkeleton{
 
         try{
             const connection = await getDbConnection()
-            var response = await connection.query(sql, [this.id ,this.type, this.side, this.investmentStrategySkeletonId]) ; 
+            var response = await connection.query(sql, [this.id ,this.type, this.side, StrategySkeletonId]); 
             connection.end()
 
             return response;

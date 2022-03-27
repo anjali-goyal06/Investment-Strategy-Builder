@@ -2,15 +2,16 @@
 var getDbConnection = require('../db/dbconnect');
 
 import IInstrumentSkeleton from './IInstrumentSkeleton';
+import InstrumentSkeleton from './InstrumentSkeleton';
 
-export default class StockSkeleton implements IInstrumentSkeleton{
+export default class StockSkeleton extends InstrumentSkeleton{
 
-    id: number;
-    side: string;
+    //id: number;
+    //side: string;
     investmentStrategySkeletonId: number;
 
     constructor(id:number, side:string, skeletonId:number){
-        
+        super();
         this.id = id;
         this.side = side;
         this.investmentStrategySkeletonId = skeletonId;
@@ -35,7 +36,7 @@ export default class StockSkeleton implements IInstrumentSkeleton{
 
     }
     
-    async AddDataToDb(){
+    async AddDataToDb(StrategySkeletonId:number){
 
         if(this.id == -1){
             await this.setId();
@@ -47,7 +48,7 @@ export default class StockSkeleton implements IInstrumentSkeleton{
 
         try{
             const connection = await getDbConnection()
-            var response = await connection.query(sql, [this.id, this.side, this.investmentStrategySkeletonId]) ; 
+            var response = await connection.query(sql, [this.id, this.side, StrategySkeletonId]) ; 
             connection.end()
 
             return response;

@@ -8,14 +8,14 @@ var Instrument = require('./Instrument');
 
 
 export default class Future extends Instrument{
-    id : number;
-    quantity : number;
-    instrumentSkeleton : IInstrumentSkeleton;
+   // id : number;
+   // quantity : number;
+    //instrumentSkeleton : IInstrumentSkeleton;
     instrumentSkeletonId : number;
     strategyId:number;
-    side:string;
+    //side:string;
     price : number;
-    plot : StrategyPlot;
+    //plot : StrategyPlot;
     currentPrice : number;
 
     constructor(id:number, quantity:number, price:number, skeletonId:number, strategyId:number, side:string){
@@ -47,7 +47,7 @@ export default class Future extends Instrument{
     }
     
    
-    async AddDataToDb(){
+    async AddDataToDb(instrumentSkeletonId: number, strategyId: number){
 
         if(this.id == -1){
             await this.setId();
@@ -57,7 +57,7 @@ export default class Future extends Instrument{
        
         try{
             const connection = await getDbConnection()
-            var response = await connection.query(sql, [this.id ,this.price, this.quantity, this.instrumentSkeletonId, this.strategyId]); 
+            var response = await connection.query(sql, [this.id ,this.price, this.quantity, instrumentSkeletonId, strategyId]); 
             connection.end()
             return response;
 
