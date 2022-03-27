@@ -17,7 +17,7 @@ const InstrumentManager = require('../Model/InstrumentManager');
 
 
 
-router.post('/MakePlot', async(req, res)=>{
+router.post('/', async(req, res)=>{
 
   console.log(req.body);
     var investmentStrategy = await new InvestmentStrategy(-1, req.body.StockName, req.body.Ticker, -1, req.body.ExpiryDate, req.body.Name, -1, req.body.Description);

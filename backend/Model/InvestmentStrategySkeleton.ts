@@ -4,7 +4,7 @@ var getDbConnection = require('../db/dbconnect');
 const mysql = require('mysql');
 
 
-class InvestmentStrategySkeleton{
+export default class InvestmentStrategySkeleton{
     static count : number = 0;
     id : number;
     strategyName : string;
