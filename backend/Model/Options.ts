@@ -1,11 +1,15 @@
 
 var getDbConnection = require('../db/dbconnect');
 
+import fetch from "node-fetch";
+
 import StrategyPlot from './StrategyPlot';
 var StrategyPlot_ = require('./StrategyPlot')
 import IInstrumentSkeleton from './IInstrumentSkeleton';
 import IInstrument from './IInstrument';
 import OptionSkeleton from './OptionSkeleton';
+import { Http2ServerRequest } from 'http2';
+import { time } from "console";
 //import { Instrument } from './Instrument';
 var Instrument = require('./Instrument');
 
@@ -18,6 +22,7 @@ export default class Options extends Instrument{
     strikePrice : number;
     strategyId:number;
     premium : number;
+    currentPriceStock: number;
     //side : string;
     type : string;
     //plot : StrategyPlot;
@@ -44,6 +49,7 @@ export default class Options extends Instrument{
         console.log(this.premium);
 
     }
+
     
     setSkeleton(obj : OptionSkeleton){
         this.instrumentSkeleton = obj;
@@ -90,9 +96,7 @@ export default class Options extends Instrument{
 
     }
 
-    fetchPremiumFromMarketData(){
-
-    }
+    
 
     makePlot(xStart){
       //  var i = this.strikePrice - 30;
@@ -193,6 +197,59 @@ export default class Options extends Instrument{
         return this.plot;
     }
 
+    async fetchCurrentPriceFromMarketData(ticker:string){
+        let base: String = 'https://api.twelvedata.com/price?apikey=b99f631941204b32b0cd3abafc919341';
+        let url : String = base + "&symbol=" + ticker;
+        const response = await fetch(url);
+        const data = await response.json();
+        var price = 0;
+        price = data.price; 
+        //console.log(price);
+        this.currentPriceStock = price;
+    }
+
+
+    async fetchPremiumFromMarketData(ticker:string, expiryDate:string){
+    
+        await this.fetchCurrentPriceFromMarketData(ticker);
+        console.log(this.currentPriceStock);
+
+        var intrinsicValue = 0;
+        if(this.type == "Call" && this.currentPriceStock > this.strikePrice){
+          intrinsicValue = this.currentPriceStock - this.strikePrice;
+        }else if(this.type == "Put" && this.currentPriceStock < this.strikePrice){
+          intrinsicValue = this.strikePrice - this.currentPriceStock;
+        }
+       
+        var timeValue = 0;
+        
+        let date1: Date = new Date();
+        let date2: Date = new Date(expiryDate);
+        let timeInMilisec: number = date2.getTime() - date1.getTime();
+        let daysBetweenDates: number = Math.ceil(timeInMilisec / (1000 * 60 * 60 * 24));
+        let monthsBetweenDates = daysBetweenDates/30;
+        console.log(monthsBetweenDates);
+
+        if(monthsBetweenDates > 2){
+            timeValue = (monthsBetweenDates-2)*2;
+        }
+
+        this.premium = intrinsicValue + timeValue;
+
+        if(daysBetweenDates < 10){
+            this.premium = 2;
+        }
+        
+        console.log(this.premium);
+    }
+    
+
 }
 
+//const op = new Options(1, 1, 170, 1, 1, "Call", "Call");
+
+//op.fetchCurrentPriceFromMarketData("AAPL");
+//op.fetchPremiumFromMarketData("AAPL", "2022/05/30");
+
 module.exports = Options;
+
