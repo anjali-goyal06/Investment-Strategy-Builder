@@ -60,3 +60,5 @@ export default class InvestmentStrategySkeleton{
         }
     }
 }
+
+module.exports = InvestmentStrategySkeleton;

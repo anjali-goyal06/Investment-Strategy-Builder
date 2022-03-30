@@ -19,7 +19,7 @@ const InstrumentManager = require('../Model/InstrumentManager');
 
 router.post('/', async(req, res)=>{
 
-//  console.log(req.body);
+  console.log(req.body);
     var investmentStrategy = await new InvestmentStrategy(-1, req.body.StockName, req.body.Ticker, -1, req.body.ExpiryDate, req.body.Name, -1, req.body.Description);
     var instrumentManager = await new InstrumentManager();
     //console.log(req.body.instruments);
@@ -44,6 +44,10 @@ router.post('/', async(req, res)=>{
     var total = req.body.listInstruments.length;
     startCoord /= total;
     startCoord -= (range/2);
+    startCoord = Math.floor(startCoord);
+
+    if(startCoord<0) startCoord = 0;
+    console.log("startcoords = " + startCoord)
 
     var plot = await investmentStrategy.combinedPlot(startCoord);
   
@@ -55,3 +59,5 @@ router.post('/', async(req, res)=>{
 
 
   module.exports = router
+
+  // ) 1651363200000 1648666418777

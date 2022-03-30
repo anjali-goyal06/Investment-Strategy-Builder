@@ -100,12 +100,16 @@ export default class Options extends Instrument{
         var x = Math.floor(xStart);
         var y;
 
+        console.log("x val = " + x);
+
         this.plot = new StrategyPlot_();
 
         var str = this.side.toLowerCase() + " " + this.type.toLowerCase();
        
         //setting premium
         await this.setPremium(ticker, expiryDate);
+
+        console.log("premium = " + this.premium);
       
         switch(str){
 
@@ -210,16 +214,19 @@ export default class Options extends Instrument{
         console.log(this.currentPriceStock);
 
         var intrinsicValue = 0;
-        if(this.type == "Call" && this.currentPriceStock > this.strikePrice){
-          intrinsicValue = this.currentPriceStock - this.strikePrice;
-        }else if(this.type == "Put" && this.currentPriceStock < this.strikePrice){
-          intrinsicValue = this.strikePrice - this.currentPriceStock;
-        }
+        // if(this.type == "Call" && this.currentPriceStock > this.strikePrice){
+        //   intrinsicValue = this.currentPriceStock - this.strikePrice;
+        // }else if(this.type == "Put" && this.currentPriceStock < this.strikePrice){
+        //   intrinsicValue = this.strikePrice - this.currentPriceStock;
+        // }
+
+        intrinsicValue = Math.abs(this.currentPriceStock - this.strikePrice);
        
         var timeValue = 0;
         
         let date1: Date = new Date();
         let date2: Date = new Date(expiryDate);
+        console.log("date2 = " + date2 + " " + date2.getTime() + " " + date1.getTime())
         let timeInMilisec: number = date2.getTime() - date1.getTime();
         let daysBetweenDates: number = Math.ceil(timeInMilisec / (1000 * 60 * 60 * 24));
         let monthsBetweenDates = daysBetweenDates/30;
@@ -234,6 +241,8 @@ export default class Options extends Instrument{
         if(daysBetweenDates < 10){
             this.premium = 2;
         }
+
+        this.premium = Math.floor(this.premium);
         
         //console.log(this.premium);
     }
