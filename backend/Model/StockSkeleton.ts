@@ -3,7 +3,7 @@ var getDbConnection = require('../db/dbconnect');
 
 import IInstrumentSkeleton from './IInstrumentSkeleton';
 import InstrumentSkeleton from './InstrumentSkeleton';
-
+var DbManager = require('./DbManager');
 export default class StockSkeleton extends InstrumentSkeleton{
 
     //id: number;
@@ -22,18 +22,15 @@ export default class StockSkeleton extends InstrumentSkeleton{
     }
 
     async setId(){
-
-        //var Db = new DbManager();
-       // var result = Db.GetCountOfRecordsInDb("user");
-       var sql = "Select  count(*) as count from StockSkeleton";
-
-       const connection = await getDbConnection();
-       var response = await connection.query(sql) ; 
-       connection.end()
+        try{
+            const DbManager_ = await new DbManager();
+            var response = await DbManager_.GetCountOfRecordsInDb('StockSkeleton');
         
-        this.id = response[0].count + 1;
-        //console.log(this.id);
-
+            var current_count = response[0].count;
+            this.id = current_count + 1;
+        }catch(err){
+            console.log(err);
+        }
     }
     
     async AddDataToDb(StrategySkeletonId:number){

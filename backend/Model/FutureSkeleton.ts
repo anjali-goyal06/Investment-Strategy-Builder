@@ -1,5 +1,6 @@
 var getDbConnection = require('../db/dbconnect');
 
+var DbManager = require('./DbManager');
 import IInstrumentSkeleton from './IInstrumentSkeleton';
 import InstrumentSkeleton from './InstrumentSkeleton';
 
@@ -20,18 +21,17 @@ export default class FututreSkeleton extends InstrumentSkeleton{
     } 
     
     async setId(){
-
-       var sql = "Select  count(*) as count from FutureSkeleton";
+            
         try{
-            const connection = await getDbConnection();
-            var response = await connection.query(sql) ; 
-            connection.end()
-                
-            this.id = response[0].count + 1;
+            const DbManager_ = await new DbManager();
+            var response = await DbManager_.GetCountOfRecordsInDb('FutureSkeleton');
+        
+            var current_count = response[0].count;
+            this.id = current_count + 1;
         }catch(err){
-            console.log(err)
+            console.log(err);
         }
-
+    
     }
     
     async AddDataToDb(StrategySkeletonId:number){
