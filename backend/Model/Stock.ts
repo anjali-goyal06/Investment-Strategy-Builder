@@ -87,16 +87,18 @@ export default class Stock extends Instrument{
                 x++;
             }
         }else{
-            if(x<=this.price){
-                this.plot.xCoords.push(x);
-                y = this.quantity*(this.currentPrice - this.price);
-                this.plot.yCoords.push(y);
-            }else{
-                this.plot.xCoords.push(x);
-                y = -1*this.quantity*(this.currentPrice - this.price);
-                this.plot.yCoords.push(y);
+            for(var i=0;i<100;i++){
+                if(x<=this.price){
+                    this.plot.xCoords.push(x);
+                    y = this.quantity*(this.currentPrice - this.price);
+                    this.plot.yCoords.push(y);
+                }else{
+                    this.plot.xCoords.push(x);
+                    y = -1*this.quantity*(this.currentPrice - this.price);
+                    this.plot.yCoords.push(y);
+                }
+                x++;
             }
-            x++;
         }
         return this.plot;
     }
