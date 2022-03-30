@@ -25,7 +25,8 @@ router.get("/savedImplementation" , async (req,res) => {
   })
 
 
-  router.get("/savedSkeleton" , async (req,res) => {
+  router.post("/savedSkeleton" , async (req,res) => {
+    console.log("call..")
     var skeletonId = (req.body.skeletonId) ? req.body.skeletonId : 5;
     var investmentStrategy = await new InvestmentStrategy();
     var response = await investmentStrategy.fetchDetailedStrategySkeletonFromDbForUser(skeletonId);

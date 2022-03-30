@@ -1,5 +1,6 @@
 var getDbConnection = require('../db/dbconnect');
 
+import DbManager from './DbManager';
 import IInstrumentSkeleton from './IInstrumentSkeleton';
 import InstrumentSkeleton from './InstrumentSkeleton';
 

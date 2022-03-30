@@ -79,10 +79,7 @@ router.post('/SaveStrategy' , async (req,res)=>{
       }
 
     }
-
-    console.log("ans...")
     console.log("Added!!!!")
-    console.log("ans end..")
     return res.send("Success!!!!");
 
 })
