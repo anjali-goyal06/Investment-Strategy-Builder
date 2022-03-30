@@ -8,7 +8,7 @@ export default interface IInstrument{
     side : string
     plot :  StrategyPlot;
     instrumentSkeleton :  IInstrumentSkeleton;
-    makePlot(x:number)
+    makePlot(x:number, ticker:String, expiryDate:Date);
     getPlot() :  StrategyPlot;
 }
 

@@ -64,7 +64,7 @@ export default class Stock extends Instrument{
         }
     }
 
-    makePlot(xStart) {
+    makePlot(xStart, ticker, expiryDate) {
 
         var x = Math.floor(xStart);
         var y;
@@ -100,7 +100,7 @@ export default class Stock extends Instrument{
                 x++;
             }
         }
-        return this.plot;
+       // return this.plot;
     }
 
     getPlot(): StrategyPlot {

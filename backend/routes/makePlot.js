@@ -19,19 +19,34 @@ const InstrumentManager = require('../Model/InstrumentManager');
 
 router.post('/', async(req, res)=>{
 
-  console.log(req.body);
+//  console.log(req.body);
     var investmentStrategy = await new InvestmentStrategy(-1, req.body.StockName, req.body.Ticker, -1, req.body.ExpiryDate, req.body.Name, -1, req.body.Description);
     var instrumentManager = await new InstrumentManager();
     //console.log(req.body.instruments);
+
+    var startCoord = 0;
     for(var i=0; i<req.body.listInstruments.length; i++){
       var instrument = req.body.listInstruments[i];
+
+      if(instrument.segment == "option"){
+        startCoord += instrument.StrikePrice;
+      }else{
+        startCoord += instrument.Price;
+      }
+  
       var _instrument = await instrumentManager.createInstrument(instrument.segment, instrument.Quantity, instrument.StrikePrice, instrument.Price, instrument.Type, instrument.Side);
-      console.log(investmentStrategy.instruments)
+      //console.log(investmentStrategy.instruments)
       investmentStrategy.instruments.push(_instrument);
     }
+
+    var range = 100;
+
+    var total = req.body.listInstruments.length;
+    startCoord /= total;
+    startCoord -= (range/2);
+
+    var plot = await investmentStrategy.combinedPlot(startCoord);
   
-    var plot = await investmentStrategy.combinedPlot();
-    // = await investmentStrategy.getPlot();
     var response = plot
     console.log(response)
     res.send(response);

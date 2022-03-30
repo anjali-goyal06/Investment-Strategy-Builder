@@ -83,14 +83,29 @@ export default class InvestmentStrategy implements IInstrumentStrategy{
         return this.plot;
     }
 
-    combinedPlot(){
+    /*setXStart(){
+        for(let k in this.instruments){
+            var instrument = this.instruments[k];
+            if(instrument.hasOwnProperty('price')){
+                instrument.price
+            }
+        }
+    }*/
+
+    async combinedPlot(startCoord){
        // let i : keyof IInstrument
+
+       //setting starting coordinate
+       this.xStart = startCoord;
+
        var flag = true;
         for(let k in this.instruments){
             
-            console.log(this.instruments[k]);
-            let tempPlot= this.instruments[k].makePlot(this.xStart);
-                       
+            //console.log(this.instruments[k]);
+            
+            await this.instruments[k].makePlot(this.xStart, this.ticker, this.expiryDate);
+            let tempPlot = this.instruments[k].getPlot();
+
             if(flag){
                 for(let i in tempPlot.xCoords){
                     this.plot.yCoords.push(0)

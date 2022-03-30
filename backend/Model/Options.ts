@@ -76,11 +76,8 @@ export default class Options extends Instrument{
         if(this.id == -1){
             await this.setId();
         }
-        
-        //console.log(this.OptionSkeleton);
-        
+            
         var sql = "INSERT INTO Options (Id, StrikePrice , Premium, Quantity, OptionSkeletonId, InvestmentStrategyId) VALUES (?,?,?,?,?,?)";
-        //var {Id, Type, Side, StrategySkeletonId} = {this.id, 
 
         try{
             const connection = await getDbConnection()
@@ -97,7 +94,7 @@ export default class Options extends Instrument{
 
     
 
-    makePlot(xStart){
+    async makePlot(xStart, ticker, expiryDate){
       //  var i = this.strikePrice - 30;
 
         var x = Math.floor(xStart);
@@ -106,10 +103,10 @@ export default class Options extends Instrument{
         this.plot = new StrategyPlot_();
 
         var str = this.side.toLowerCase() + " " + this.type.toLowerCase();
-        this.premium = 10;
-       console.log(str)
-       console.log(this.premium)
-       console.log(this.quantity)
+       
+        //setting premium
+        await this.setPremium(ticker, expiryDate);
+      
         switch(str){
 
 
@@ -130,7 +127,7 @@ export default class Options extends Instrument{
                   
                     x++;
                 }
-                console.log("****************************************************************")
+               // console.log("****************************************************************")
                 break;
             }
 
@@ -186,8 +183,8 @@ export default class Options extends Instrument{
 
         }
 
-        console.log(this.plot)
-        return this.plot;
+        //console.log(this.plot)
+       // return this.plot;
         
     }
 
@@ -207,7 +204,7 @@ export default class Options extends Instrument{
     }
 
 
-    async fetchPremiumFromMarketData(ticker:string, expiryDate:string){
+    async setPremium(ticker:string, expiryDate:Date){
     
         await this.fetchCurrentPriceFromMarketData(ticker);
         console.log(this.currentPriceStock);
@@ -238,16 +235,15 @@ export default class Options extends Instrument{
             this.premium = 2;
         }
         
-        console.log(this.premium);
+        //console.log(this.premium);
     }
-    
 
 }
 
 //const op = new Options(1, 1, 170, 1, 1, "Call", "Call");
-
+//let d:Date = new Date("2022/5/3");
 //op.fetchCurrentPriceFromMarketData("AAPL");
-//op.fetchPremiumFromMarketData("AAPL", "2022/05/30");
+//op.setPremium("AAPL", d);
 
 module.exports = Options;
 
