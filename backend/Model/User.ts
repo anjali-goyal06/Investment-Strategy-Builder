@@ -1,8 +1,8 @@
-import DbManager from "./DbManager";
 
 var getDbConnection = require('../db/dbconnect');
 const mysql = require('mysql');
 const bcrypt = require('bcryptjs');
+var DbManager = require('./DbManager');
 
 export default class User{
     static count : number = 0;
@@ -21,17 +21,15 @@ export default class User{
 
     async setId(){
 
-        //var Db = new DbManager();
-       // var result = Db.GetCountOfRecordsInDb("user");
-       var sql = "Select  count(*) as count from user";
-
-       const connection = await getDbConnection();
-       var response = await connection.query(sql) ; 
-       connection.end()
+        try{
+            const DbManager_ = await new DbManager();
+            var response = await DbManager_.GetCountOfRecordsInDb('user');
         
-        this.id = response[0].count + 1;
-        console.log(this.id);
-
+            var current_count = response[0].count;
+            this.id = current_count + 1;
+        }catch(err){
+            console.log(err);
+        }
     }
 
     async AddUser(){

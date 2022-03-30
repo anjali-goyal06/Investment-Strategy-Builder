@@ -4,7 +4,8 @@ import StrategyPlot from './StrategyPlot';
 import IInstrumentSkeleton from './IInstrumentSkeleton';
 import IInstrument from './IInstrument';
 var Instrument =  require('./Instrument');
-
+var DbManager = require('./DbManager');
+var StrategyPlot_ = require('./StrategyPlot')
 
 export default class Stock extends Instrument{
     //id : number;
@@ -28,18 +29,15 @@ export default class Stock extends Instrument{
     }
 
     async setId(){
-
-        //var Db = new DbManager();
-       // var result = Db.GetCountOfRecordsInDb("user");
-       var sql = "Select  count(*) as count from Stock";
-
-       const connection = await getDbConnection();
-       var response = await connection.query(sql) ; 
-       connection.end()
+        try{
+            const DbManager_ = await new DbManager();
+            var response = await DbManager_.GetCountOfRecordsInDb('Stock');
         
-        this.id = response[0].count + 1;
-        console.log(this.id);
-
+            var current_count = response[0].count;
+            this.id = current_count + 1;
+        }catch(err){
+            console.log(err);
+        }
     }
     
    
@@ -67,21 +65,23 @@ export default class Stock extends Instrument{
     }
 
     makePlot(xStart) {
-        
-        if(this.side=="BUY"){
 
-            var x = Math.floor(xStart);
-            var y;
+        var x = Math.floor(xStart);
+        var y;
+        
+        this.plot = new StrategyPlot_();
+        
+        if(this.side.toLowerCase()=="buy"){
 
             for(var i=0;i<100;i++){
 
                 if(x<=this.price){
                     this.plot.xCoords.push(x);
-                    y = -1*this.quantity*(this.currentPrice - this.price);
+                    y = -1*this.quantity*(x - this.price);
                     this.plot.yCoords.push(y);
                 }else{
                     this.plot.xCoords.push(x);
-                    y = this.quantity*(this.currentPrice - this.price);
+                    y = this.quantity*(x - this.price);
                     this.plot.yCoords.push(y);
                 }
                 x++;

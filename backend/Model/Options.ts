@@ -1,13 +1,18 @@
 
 var getDbConnection = require('../db/dbconnect');
 
+import fetch from "node-fetch";
+
 import StrategyPlot from './StrategyPlot';
 var StrategyPlot_ = require('./StrategyPlot')
 import IInstrumentSkeleton from './IInstrumentSkeleton';
 import IInstrument from './IInstrument';
 import OptionSkeleton from './OptionSkeleton';
+
+import { time } from "console";
 //import { Instrument } from './Instrument';
 var Instrument = require('./Instrument');
+var DbManager = require('./DbManager');
 
 export default class Options extends Instrument{
    // static count : number = 0;
@@ -18,6 +23,7 @@ export default class Options extends Instrument{
     strikePrice : number;
     strategyId:number;
     premium : number;
+    currentPriceStock: number;
     //side : string;
     type : string;
     //plot : StrategyPlot;
@@ -44,6 +50,7 @@ export default class Options extends Instrument{
         console.log(this.premium);
 
     }
+
     
     setSkeleton(obj : OptionSkeleton){
         this.instrumentSkeleton = obj;
@@ -52,17 +59,15 @@ export default class Options extends Instrument{
 
     async setId(){
 
-        //var Db = new DbManager();
-       // var result = Db.GetCountOfRecordsInDb("user");
-       var sql = "Select  count(*) as count from Options";
-
-       const connection = await getDbConnection();
-       var response = await connection.query(sql) ; 
-       connection.end()
+        try{
+            const DbManager_ = await new DbManager();
+            var response = await DbManager_.GetCountOfRecordsInDb('Options');
         
-        this.id = response[0].count + 1;
-        console.log(this.id);
-
+            var current_count = response[0].count;
+            this.id = current_count + 1;
+        }catch(err){
+            console.log(err);
+        }
     }
     
    
@@ -90,9 +95,7 @@ export default class Options extends Instrument{
 
     }
 
-    fetchPremiumFromMarketData(){
-
-    }
+    
 
     makePlot(xStart){
       //  var i = this.strikePrice - 30;
@@ -102,16 +105,15 @@ export default class Options extends Instrument{
 
         this.plot = new StrategyPlot_();
 
-        var str = this.side + " " + this.type;
-        if(this.strikePrice==910) this.premium = 370;
-        else this.premium = 390;
+        var str = this.side.toLowerCase() + " " + this.type.toLowerCase();
+        this.premium = 10;
        console.log(str)
        console.log(this.premium)
        console.log(this.quantity)
         switch(str){
 
 
-            case "BUY CALL" : {
+            case "buy call" : {
 
                 for(var i=0;i<100;i++){
 
@@ -125,14 +127,14 @@ export default class Options extends Instrument{
                         y = this.quantity*((x-this.strikePrice) - this.premium);
                         this.plot.yCoords.push(y);
                     }
-                    console.log(x);
+                  
                     x++;
                 }
-                console.log(this.plot)
+                console.log("****************************************************************")
                 break;
             }
 
-            case "BUY PUT" : {
+            case "buy put" : {
                 for(var i=0;i<100;i++){
 
                     if(x<=this.strikePrice){
@@ -149,7 +151,7 @@ export default class Options extends Instrument{
                 break;
             }
 
-            case "SELL CALL" : {
+            case "sell call" : {
                 for(var i=0;i<100;i++){
 
                     if(x<=this.strikePrice){
@@ -166,7 +168,7 @@ export default class Options extends Instrument{
                 break;
             }
 
-            case "SELL PUT":{
+            case "sell put":{
                 for(var i=0;i<100;i++){
 
                     if(x<=this.strikePrice){
@@ -182,9 +184,9 @@ export default class Options extends Instrument{
                 }
             }
 
-
-
         }
+
+        console.log(this.plot)
         return this.plot;
         
     }
@@ -193,6 +195,59 @@ export default class Options extends Instrument{
         return this.plot;
     }
 
+    async fetchCurrentPriceFromMarketData(ticker:string){
+        let base: String = 'https://api.twelvedata.com/price?apikey=b99f631941204b32b0cd3abafc919341';
+        let url : String = base + "&symbol=" + ticker;
+        const response = await fetch(url);
+        const data = await response.json();
+        var price = 0;
+        price = data.price; 
+        //console.log(price);
+        this.currentPriceStock = price;
+    }
+
+
+    async fetchPremiumFromMarketData(ticker:string, expiryDate:string){
+    
+        await this.fetchCurrentPriceFromMarketData(ticker);
+        console.log(this.currentPriceStock);
+
+        var intrinsicValue = 0;
+        if(this.type == "Call" && this.currentPriceStock > this.strikePrice){
+          intrinsicValue = this.currentPriceStock - this.strikePrice;
+        }else if(this.type == "Put" && this.currentPriceStock < this.strikePrice){
+          intrinsicValue = this.strikePrice - this.currentPriceStock;
+        }
+       
+        var timeValue = 0;
+        
+        let date1: Date = new Date();
+        let date2: Date = new Date(expiryDate);
+        let timeInMilisec: number = date2.getTime() - date1.getTime();
+        let daysBetweenDates: number = Math.ceil(timeInMilisec / (1000 * 60 * 60 * 24));
+        let monthsBetweenDates = daysBetweenDates/30;
+        console.log(monthsBetweenDates);
+
+        if(monthsBetweenDates > 2){
+            timeValue = (monthsBetweenDates-2)*2;
+        }
+
+        this.premium = intrinsicValue + timeValue;
+
+        if(daysBetweenDates < 10){
+            this.premium = 2;
+        }
+        
+        console.log(this.premium);
+    }
+    
+
 }
 
+//const op = new Options(1, 1, 170, 1, 1, "Call", "Call");
+
+//op.fetchCurrentPriceFromMarketData("AAPL");
+//op.fetchPremiumFromMarketData("AAPL", "2022/05/30");
+
 module.exports = Options;
+

@@ -10,7 +10,7 @@ const OptionSkeleton = require('./OptionSkeleton');
 const FutureSkeleton = require('./FutureSkeleton');
 const StockSkeleton = require('./StockSkeleton');
 //import DbManager from './DbManager'
-const DbManager = require('./DbManager');
+var DbManager = require('./DbManager');
 
 interface IInstrumentStrategy{
     id : number;
@@ -53,7 +53,7 @@ export default class InvestmentStrategy implements IInstrumentStrategy{
         this.plot.xCoords = [];
         this.plot.yCoords = [];
 
-        this.xStart = (870);
+        this.xStart = (20);
     }
   
 
@@ -90,10 +90,7 @@ export default class InvestmentStrategy implements IInstrumentStrategy{
             
             console.log(this.instruments[k]);
             let tempPlot= this.instruments[k].makePlot(this.xStart);
-           
-            console.log(tempPlot);
-          
-            
+                       
             if(flag){
                 for(let i in tempPlot.xCoords){
                     this.plot.yCoords.push(0)
@@ -119,19 +116,14 @@ export default class InvestmentStrategy implements IInstrumentStrategy{
     async setId(){
 
         try{
-            var sql = "Select  count(*) as count from InvestmentStrategy";
-
-            const connection = await getDbConnection();
-            var response = await connection.query(sql) ; 
-            connection.end()
-            
-            this.id = response[0].count + 1;
-            console.log(this.id);
+            const DbManager_ = await new DbManager();
+            var response = await DbManager_.GetCountOfRecordsInDb('InvestmentStrategy');
+        
+            var current_count = response[0].count;
+            this.id = current_count + 1;
         }catch(err){
-           console.log(err)
-           return err
+            console.log(err);
         }
-
     }
 
   

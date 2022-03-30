@@ -139,7 +139,7 @@ export default class DbManager{
     
     async GetCountOfRecordsInDb(tableName){
         
-        var sql = "Select  count(*) as count from " +  mysql.escape(tableName);
+        var sql = "Select  count(*) as count from " + tableName;
 
         const connection = await getDbConnection();
         var response = await connection.query(sql) ; 

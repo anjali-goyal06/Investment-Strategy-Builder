@@ -2,8 +2,11 @@
 var getDbConnection = require('../db/dbconnect');
 
 import StrategyPlot from './StrategyPlot';
+var StrategyPlot_ = require('./StrategyPlot')
 import IInstrumentSkeleton from './IInstrumentSkeleton';
 import IInstrument from './IInstrument'
+
+var DbManager = require('./DbManager');
 var Instrument = require('./Instrument');
 
 
@@ -31,19 +34,17 @@ export default class Future extends Instrument{
     async setId(){
 
         try{
-            var sql = "Select  count(*) as count from Future";
-
-            const connection = await getDbConnection();
-            var response = await connection.query(sql); 
-            connection.end()
-                
-            this.id = response[0].count + 1;
-            console.log(this.id);
+            const DbManager_ = await new DbManager();
+            var response = await DbManager_.GetCountOfRecordsInDb('Future');
+        
+            var current_count = response[0].count;
+            this.id = current_count + 1;
         }catch(err){
             console.log(err);
-            return err;
         }
-
+        
+        
+       // console.log(this.id);
     }
     
    
@@ -69,21 +70,22 @@ export default class Future extends Instrument{
 
     
     makePlot(xStart) {
+
+        var x = Math.floor(xStart);
+        var y;
+        this.plot = new StrategyPlot_();
         
-        if(this.side=="BUY"){
-
-            var x = Math.floor(xStart);
-            var y;
-
+        if(this.side.toLowerCase()=="buy"){
+            
             for(var i=0;i<100;i++){
 
                 if(x<=this.price){
                     this.plot.xCoords.push(x);
-                    y = -1*this.quantity*(this.currentPrice - this.price);
+                    y = -1*this.quantity*(x - this.price);
                     this.plot.yCoords.push(y);
                 }else{
                     this.plot.xCoords.push(x);
-                    y = this.quantity*(this.currentPrice - this.price);
+                    y = this.quantity*(x - this.price);
                     this.plot.yCoords.push(y);
                 }
                 x++;
@@ -91,11 +93,11 @@ export default class Future extends Instrument{
         }else{
             if(x<=this.price){
                 this.plot.xCoords.push(x);
-                y = this.quantity*(this.currentPrice - this.price);
+                y = this.quantity*(x - this.price);
                 this.plot.yCoords.push(y);
             }else{
                 this.plot.xCoords.push(x);
-                y = -1*this.quantity*(this.currentPrice - this.price);
+                y = -1*this.quantity*(x - this.price);
                 this.plot.yCoords.push(y);
             }
             x++;
@@ -108,5 +110,8 @@ export default class Future extends Instrument{
         return this.plot;
     }
 }
+
+var f = new Future(1, 1, 1, 1, 1, "buy");
+f.setId();
 
 module.exports = Future
