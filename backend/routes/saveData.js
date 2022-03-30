@@ -20,10 +20,6 @@ const InstrumentManager = require('../Model/InstrumentManager');
 
 router.post('/SaveStrategy' , async (req,res)=>{
  
-  //const errors = validationResult(req);
-  //if (!errors.isEmpty()) {
-    //return res.status(400).json({ errors: errors.array() });
- // }
     var userId = 1;
 
     var strategySkeletonId = req.body.InvestmentStrategySkeletonId;
@@ -70,13 +66,13 @@ router.post('/SaveStrategy' , async (req,res)=>{
           instrumentSkeletonId = instrumentSkeleton.getId();
         }
 
-      try{
-        var _instrument = await instrumentManager.createInstrument(instrument.segment, instrument.Quantity, instrument.StrikePrice, instrument.Price, instrument.Type, instrument.Side);
-        var result4 = await _instrument.AddDataToDb(instrumentSkeletonId, strategyId);
-      }catch(err){
-        console.log(err)
-        res.status(400).send("Got Stuck at instrument");
-      }
+        try{
+          var _instrument = await instrumentManager.createInstrument(instrument.segment, instrument.Quantity, instrument.StrikePrice, instrument.Price, instrument.Type, instrument.Side);
+          var result4 = await _instrument.AddDataToDb(instrumentSkeletonId, strategyId);
+        }catch(err){
+          console.log(err)
+          res.status(400).send("Got Stuck at instrument");
+        }
 
     }
     console.log("Added!!!!")
@@ -87,10 +83,6 @@ router.post('/SaveStrategy' , async (req,res)=>{
 //saving strategy skeleton
 router.post('/SaveStrategySkeleton' , async (req,res)=>{
  
-  //const errors = validationResult(req);
-  //if (!errors.isEmpty()) {
-    //return res.status(400).json({ errors: errors.array() });
- // }
     var userId = 1;
 
     try{
@@ -117,9 +109,8 @@ router.post('/SaveStrategySkeleton' , async (req,res)=>{
       }       
     }
 
-    console.log("ans...")
+    
     console.log("Added!!!!")
-    console.log("ans end..")
     return res.send("Success!!!!");
 
 })
