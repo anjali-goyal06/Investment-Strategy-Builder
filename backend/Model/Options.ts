@@ -8,10 +8,11 @@ var StrategyPlot_ = require('./StrategyPlot')
 import IInstrumentSkeleton from './IInstrumentSkeleton';
 import IInstrument from './IInstrument';
 import OptionSkeleton from './OptionSkeleton';
-import { Http2ServerRequest } from 'http2';
+
 import { time } from "console";
 //import { Instrument } from './Instrument';
 var Instrument = require('./Instrument');
+var DbManager = require('./DbManager');
 
 export default class Options extends Instrument{
    // static count : number = 0;
@@ -58,17 +59,15 @@ export default class Options extends Instrument{
 
     async setId(){
 
-        //var Db = new DbManager();
-       // var result = Db.GetCountOfRecordsInDb("user");
-       var sql = "Select  count(*) as count from Options";
-
-       const connection = await getDbConnection();
-       var response = await connection.query(sql) ; 
-       connection.end()
+        try{
+            const DbManager_ = await new DbManager();
+            var response = await DbManager_.GetCountOfRecordsInDb('Options');
         
-        this.id = response[0].count + 1;
-        console.log(this.id);
-
+            var current_count = response[0].count;
+            this.id = current_count + 1;
+        }catch(err){
+            console.log(err);
+        }
     }
     
    

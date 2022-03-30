@@ -4,7 +4,7 @@ import StrategyPlot from './StrategyPlot';
 import IInstrumentSkeleton from './IInstrumentSkeleton';
 import IInstrument from './IInstrument';
 var Instrument =  require('./Instrument');
-
+var DbManager = require('./DbManager');
 
 export default class Stock extends Instrument{
     //id : number;
@@ -28,18 +28,15 @@ export default class Stock extends Instrument{
     }
 
     async setId(){
-
-        //var Db = new DbManager();
-       // var result = Db.GetCountOfRecordsInDb("user");
-       var sql = "Select  count(*) as count from Stock";
-
-       const connection = await getDbConnection();
-       var response = await connection.query(sql) ; 
-       connection.end()
+        try{
+            const DbManager_ = await new DbManager();
+            var response = await DbManager_.GetCountOfRecordsInDb('Stock');
         
-        this.id = response[0].count + 1;
-        console.log(this.id);
-
+            var current_count = response[0].count;
+            this.id = current_count + 1;
+        }catch(err){
+            console.log(err);
+        }
     }
     
    
