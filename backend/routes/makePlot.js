@@ -19,19 +19,29 @@ const InstrumentManager = require('../Model/InstrumentManager');
 
 router.post('/', async(req, res)=>{
 
+  
+  if(req.body.ExpiryDate=='')
+      req.body.ExpiryDate = '2022-04-10';
+  if(req.body.segment)
+  req.body.segment = req.body.segment.toLowerCase();
   console.log(req.body);
     var investmentStrategy = await new InvestmentStrategy(-1, req.body.StockName, req.body.Ticker, -1, req.body.ExpiryDate, req.body.Name, -1, req.body.Description);
     var instrumentManager = await new InstrumentManager();
     //console.log(req.body.instruments);
 
-    var startCoord = 0;
+    let sum = 0;
     for(var i=0; i<req.body.listInstruments.length; i++){
       var instrument = req.body.listInstruments[i];
 
-      if(instrument.segment == "option"){
-        startCoord += instrument.StrikePrice;
+      if(instrument.segment.toLowerCase() == "option"){
+       // sum = Math.floor(sum+instrument.StrikePrice);
+       sum = sum + parseInt(instrument.StrikePrice);
+       // console.log("strile = " + instrument.StrikePrice)
       }else{
-        startCoord += instrument.Price;
+        if(!instrument.Price) instrument.Price = instrument.StrikePrice
+      //  sum = Math.floor(sum+ instrument.Price);
+      sum = sum + parseInt(instrument.Price);
+       // console.log("strile = " + instrument.Price)
       }
   
       var _instrument = await instrumentManager.createInstrument(instrument.segment, instrument.Quantity, instrument.StrikePrice, instrument.Price, instrument.Type, instrument.Side);
@@ -40,10 +50,14 @@ router.post('/', async(req, res)=>{
     }
 
     var range = 100;
-
-    var total = req.body.listInstruments.length;
-    startCoord /= total;
+    console.log(sum)
+    let total = req.body.listInstruments.length;
+    console.log(total + " " + range)
+    let t = Math.floor(total);
+    let startCoord = Math.floor(sum/t);
+    console.log(startCoord)
     startCoord -= (range/2);
+    console.log(startCoord)
     startCoord = Math.floor(startCoord);
 
     if(startCoord<0) startCoord = 0;

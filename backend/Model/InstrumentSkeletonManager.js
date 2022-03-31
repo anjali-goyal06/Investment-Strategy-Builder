@@ -7,10 +7,10 @@ var InstrumentSkeletonManager = /** @class */ (function () {
     function InstrumentSkeletonManager() {
     }
     InstrumentSkeletonManager.prototype.createInstrument = function (instrumentType, type, side) {
-        if (instrumentType == 'option') {
+        if (instrumentType.toLowerCase() == 'option') {
             return new OptionSkeleton(-1, side, type, -1);
         }
-        else if (instrumentType == 'future') {
+        else if (instrumentType.toLowerCase() == 'future') {
             return new FutureSkeleton(-1, side, -1);
         }
         else {

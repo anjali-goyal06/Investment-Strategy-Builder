@@ -70,7 +70,7 @@ export default class Future extends Instrument{
 
     
     makePlot(xStart, ticker, expiryDate) {
-
+        console.log("future")
         var x = Math.floor(xStart);
         var y;
         this.plot = new StrategyPlot_();
@@ -81,7 +81,7 @@ export default class Future extends Instrument{
 
                 if(x<=this.price){
                     this.plot.xCoords.push(x);
-                    y = -1*this.quantity*(x - this.price);
+                    y = this.quantity*(x - this.price);
                     this.plot.yCoords.push(y);
                 }else{
                     this.plot.xCoords.push(x);
@@ -94,7 +94,7 @@ export default class Future extends Instrument{
             for(var i=0;i<100;i++){
                 if(x<=this.price){
                     this.plot.xCoords.push(x);
-                    y = this.quantity*(x - this.price);
+                    y = -1*this.quantity*(x - this.price);
                     this.plot.yCoords.push(y);
                 }else{
                     this.plot.xCoords.push(x);
