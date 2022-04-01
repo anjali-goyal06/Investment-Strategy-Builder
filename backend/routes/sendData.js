@@ -3,6 +3,7 @@ const router = express.Router();
 var getDbConnection = require('../db/dbconnect');
 const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
+const fetchuser = require('../middleware/fetchUser')
 
 const User = require('../Model/User');
 const InvestmentStrategySkeleton = require('../Model/InvestmentStrategySkeleton');
@@ -33,22 +34,22 @@ router.get("/savedImplementation" , async (req,res) => {
     res.send(response);
   })
 
-  router.get("/popularStrategy" , async(req,res) =>{
+  router.get("/popularStrategy" , fetchuser,async(req,res) =>{
     userId = 1;
     var db = await new DbManager();
     var popularStrategies = await db.GetStrategySkeletonsFromUserId(userId);
     res.send(popularStrategies);
   })
 
-  router.get("/customStrategy" , async(req,res) =>{
-    var userId = 2;
+  router.get("/customStrategy" ,fetchuser, async(req,res) =>{
+    var userId = req.body.userId;
     var db = await new DbManager();
     var customStrategies = await db.GetStrategySkeletonsFromUserId(userId);
     res.send(customStrategies);
   })
 
-  router.get("/allSavedImplemenations" , async (req,res) =>{
-      var userId = 2;
+  router.get("/allSavedImplemenations" ,fetchuser, async (req,res) =>{
+      var userId = req.body.userId;
       var db = await new DbManager();
       var response = await db.GetSavedStrategiesFromUserId(userId);
       return res.send(response);

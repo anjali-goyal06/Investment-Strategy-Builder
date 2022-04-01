@@ -3,6 +3,7 @@ const router = express.Router();
 var getDbConnection = require('../db/dbconnect');
 const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
+const fetchuser = require('../middleware/fetchUser')
 
 const User = require('../Model/User');
 const InvestmentStrategySkeleton = require('../Model/InvestmentStrategySkeleton');
@@ -43,8 +44,8 @@ router.post('/register' ,[
     var result = await user.AddUser();
   
     console.log(result)
-   
-    return res.send(result);
+    res.cookie("jwt",result.authtoken)
+    res.send(result);
 
 })
 
@@ -70,11 +71,13 @@ router.post('/login', [
         const user = req.body;
         var newuser = new User(user.id,user.name,user.email,user.password);
         var result = await newuser.LoginUser() ;
-        if(!result.error)
-              return res.status(200).send("Login succesful !!");
-        else
-              return res.status(400).send(result.error)
-      
+        if(!result.error){
+            res.cookie("jwt",result.authtoken)
+            res.status(200).send("Login succesful !!");
+        }
+        else{
+          res.status(400).send(result.error)
+        }
         
     } catch (error) {
         console.error(error.message);

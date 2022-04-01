@@ -3,6 +3,10 @@ var getDbConnection = require('../db/dbconnect');
 const mysql = require('mysql');
 const bcrypt = require('bcryptjs');
 var DbManager = require('./DbManager');
+var jwt = require('jsonwebtoken');
+
+const JWT_SECRET = 'abrakadabra';
+
 
 export default class User{
     static count : number = 0;
@@ -43,12 +47,16 @@ export default class User{
         const salt = await bcrypt.genSalt(10);
         var secPass = await bcrypt.hash(this.password, salt);
 
+        const authtoken = jwt.sign({_id : this.id}, JWT_SECRET);
+
+
         try{
             const connection = await getDbConnection()
             var response = await connection.query(sql, [this.id , this.name , this.email , secPass] ) ; //,  function (err, result) {
             connection.end()
-
-        return response;
+            
+            response.authtoken = authtoken;
+            return response;
         }catch(err){
             console.log(err);
             return err;
@@ -73,6 +81,9 @@ export default class User{
             return { error: "Please try to login with correct credentials" };
         }
         console.log(passwordCompare)
+
+        const authtoken = jwt.sign({_id : result.id}, JWT_SECRET);
+        result.authtoken = authtoken
         console.log(result);
         return result;
 

@@ -3,6 +3,7 @@ const router = express.Router();
 var getDbConnection = require('../db/dbconnect');
 const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
+const fetchuser = require('../middleware/fetchUser')
 
 const User = require('../Model/User');
 const InvestmentStrategySkeleton = require('../Model/InvestmentStrategySkeleton');
@@ -17,7 +18,7 @@ const InstrumentManager = require('../Model/InstrumentManager');
 
 
 
-router.post('/', async(req, res)=>{
+router.post('/',fetchuser, async(req, res)=>{
 
   
   if(req.body.ExpiryDate=='')

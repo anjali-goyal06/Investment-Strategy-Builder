@@ -3,6 +3,7 @@ const router = express.Router();
 var getDbConnection = require('../db/dbconnect');
 const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
+const fetchuser = require('../middleware/fetchUser')
 
 const User = require('../Model/User');
 const InvestmentStrategySkeleton = require('../Model/InvestmentStrategySkeleton');
@@ -18,9 +19,9 @@ const InstrumentSkeletonManager = require('../Model/InstrumentSkeletonManager');
 const InstrumentManager = require('../Model/InstrumentManager');
 
 
-router.post('/SaveStrategy' , async (req,res)=>{
+router.post('/SaveStrategy' ,fetchuser, async (req,res)=>{
  
-    var userId = 2;
+    var userId = req.body.userId;
 
     
     console.log(req.body);
@@ -90,9 +91,9 @@ router.post('/SaveStrategy' , async (req,res)=>{
 })
 
 //saving strategy skeleton
-router.post('/SaveStrategySkeleton' , async (req,res)=>{
+router.post('/SaveStrategySkeleton' , fetchuser,async (req,res)=>{
  
-    var userId = 1;
+    var userId = req.body.userId;
 
     try{
       var investmentStrategySkeleton = await new InvestmentStrategySkeleton(-1, req.body.StrategyName, userId, req.body.DescriptionSkeleton);
