@@ -20,15 +20,7 @@ const DbManager = require('../Model/DbManager');
 */
 router.post('/SaveStrategy' , async (req,res)=>{
  
-    var userId = 2;
-
-    
-    console.log(req.body);
-    console.log(req.body.listInstruments);
-    req.body.isSkeletonSaved = true;
-    req.body.Description = " ";
-    req.body.InvestmentStrategySkeletonId = 3;
-
+    var userId = 1;
     
     var strategySkeletonId = req.body.InvestmentStrategySkeletonId;
 
@@ -38,12 +30,11 @@ router.post('/SaveStrategy' , async (req,res)=>{
         var investmentStrategySkeleton = await new InvestmentStrategySkeleton(-1, req.body.StrategyName, userId, req.body.DescriptionSkeleton);
         var result1 = await investmentStrategySkeleton.AddDataToDb();
         console.log(result1);
-        res.status(200).send("Saved Successfully");
       }catch(err){
         console.log(err)
         return res.status(400).send("Got Stuck at investment strategy skeleton");
       }
-      strategySkeletonId = investmentStrategySkeleton.getId();
+      strategySkeletonId = await investmentStrategySkeleton.getId();
     }
 
     //Adding strategy in database
@@ -78,7 +69,7 @@ router.post('/SaveStrategy' , async (req,res)=>{
             console.log(err);
             return res.status(400).send("Got stuck at instrument skeleton");
           }
-          instrumentSkeletonId = instrumentSkeleton.getId();
+          instrumentSkeletonId = await instrumentSkeleton.getId();
         }
 
         //Adding the instrument in database
@@ -86,15 +77,16 @@ router.post('/SaveStrategy' , async (req,res)=>{
            //instrument manager returns the object of the appropriate instrument
           var _instrument = await instrumentManager.createInstrument(instrument.segment, instrument.Quantity, instrument.StrikePrice, instrument.Price, instrument.Type, instrument.Side);
           var result4 = await _instrument.AddDataToDb(instrumentSkeletonId, strategyId);
-          
-          console.log("Added!!!!")
-          return res.send("Success!!!!");
+          console.log(result4);
         }catch(err){
           console.log(err)
           return res.status(400).send("Got Stuck at instrument");
         }
 
     }
+
+    console.log("Added!!!!");
+    return res.send("Success!!!!");
 
 })
 

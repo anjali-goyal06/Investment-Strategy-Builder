@@ -10,22 +10,22 @@ var StockSkeleton = require("./StockSkeleton");
 var InstrumentSkeletonManager = /** @class */ (function () {
     function InstrumentSkeletonManager() {
     }
-    /*
-    Purpose - It creates and returns the appropriate instrument skeleton object.
-    Parameters -
-        1. Instrument type (specifies the type of instrument skeleton object to be created, type -string)
-        2. Other parameters required to create objects - Type (String), Side (String)
-    Return Value - IInstrumentSkeleton type object of respective instrument skelton
-    */
+    /**
+     * Purpose - It creates and returns the appropriate instrument skeleton object.
+     * @param instrumentType - specifies the type of instrument skeleton object to be created, type = string
+     * @param type
+     * @param side
+     * @returns IInstrumentSkeleton type object of respective instrument skelton
+     */
     InstrumentSkeletonManager.prototype.createInstrument = function (instrumentType, type, side) {
         if (instrumentType.toLowerCase() == 'option') {
-            return new OptionSkeleton(-1, side, type, -1);
+            return new OptionSkeleton(-1, side, type);
         }
         else if (instrumentType.toLowerCase() == 'future') {
-            return new FutureSkeleton(-1, side, -1);
+            return new FutureSkeleton(-1, side);
         }
         else {
-            return new StockSkeleton(-1, side, -1);
+            return new StockSkeleton(-1, side);
         }
     };
     return InstrumentSkeletonManager;
