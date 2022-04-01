@@ -1,6 +1,11 @@
 var getDbConnection = require('../db/dbconnect');
 const mysql = require('mysql');
 
+/**
+ * This class is a manager class for database.
+ * It wraps most of the sql queries needed to fetch data from db and insert data in db in its functions.
+ * These functions are then used whenever required with the help of object of this class.
+ */
 export default class DbManager{
 
     constructor(){
@@ -9,7 +14,7 @@ export default class DbManager{
 
   
   /**
-   * Purpose - To fetch the record of given user from user table in database
+   * To fetch the record of given user from user table in database
    * @param id - User Id (Integer)
    * @returns - Sql Record corresponding to given user id in form of json object
    */
@@ -32,7 +37,7 @@ export default class DbManager{
     
 
   /**
-   * Purpose - To fetch the instrument skeleton records of a particular strategy skeleton from database.
+   * To fetch the instrument skeleton records of a particular strategy skeleton from database.
    * @param id - strategy skeleton id
    * @returns an array of all the instrument skeleton records 
    */
@@ -75,7 +80,7 @@ export default class DbManager{
 
 
     /**
-     * Purpose - Fetches the instrument record from its instrument skeleton id and strategy id to which it belongs
+     * Fetches the instrument record from its instrument skeleton id and strategy id to which it belongs
      * @param segment - name of the instrument is given to fetch record from appropriate table
      * @param InstrumentId 
      * @param StrategyId 
@@ -106,7 +111,7 @@ export default class DbManager{
 
 
     /**
-     * Purpose - Fetches the strategy skeletons saved by a particular user from database
+     * Fetches the strategy skeletons saved by a particular user from database
      * @param id - user id
      * @returns strategy skeleton records as response
      */
@@ -126,7 +131,7 @@ export default class DbManager{
     }
 
     /**
-     * Purpose - Fetch the strategy skeleton record for the specified skeleton id
+     * Fetch the strategy skeleton record for the specified skeleton id
      * @param id - Strategy Skeleton Id
      * @returns - Strategy skeleton record as response
      */
@@ -148,7 +153,7 @@ export default class DbManager{
     }
 
     /**
-     * Purpose - Fetches the strategy record for the specified strategy id
+     * Fetches the strategy record for the specified strategy id
      * @param id - Strategy Id
      * @returns strategy record as response
      */
@@ -165,7 +170,7 @@ export default class DbManager{
     }
     
     /**
-     * Purpose - Fetches all the strategies (with values) saved by a given user from database
+     * Fetches all the strategies (with values) saved by a given user from database
      * @param id  user id
      * @returns strategy records as response
      */
@@ -185,7 +190,7 @@ export default class DbManager{
     }
 
     /**
-     * Purpose - To get the count of records in a particular table in database
+     * To get the count of records in a particular table in database
      * @param tableName 
      * @returns sql query response in json format which has a count field
      */

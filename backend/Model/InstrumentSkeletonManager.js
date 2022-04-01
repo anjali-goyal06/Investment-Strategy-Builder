@@ -11,7 +11,7 @@ var InstrumentSkeletonManager = /** @class */ (function () {
     function InstrumentSkeletonManager() {
     }
     /**
-     * Purpose - It creates and returns the appropriate instrument skeleton object.
+     *  - It creates and returns the appropriate instrument skeleton object.
      * @param instrumentType - specifies the type of instrument skeleton object to be created, type = string
      * @param type
      * @param side

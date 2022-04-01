@@ -20,7 +20,7 @@ export default class User{
     }
 
     /**
-     * Purpose - Fetches current record count in user table and sets id of current record to current record count plus one.
+     * Fetches current record count in user table and sets id of current record to current record count plus one.
      * Parameters - None
      * Return Value - None
      */
@@ -38,7 +38,7 @@ export default class User{
     }
 
     /**
-     * Purpose - Adds user record in user table
+     * Adds user record in user table
      * @returns sql query response in case of successful insertion. 
      */
     async AddUser(){
@@ -58,16 +58,14 @@ export default class User{
             const connection = await getDbConnection()
             var response = await connection.query(sql, [this.id , this.name , this.email , secPass] ) ; //,  function (err, result) {
             connection.end()
-
-        return response;
+            return response;
         }catch(err){
-            console.log(err);
             return err;
         }
     }
 
     /**
-     * Purpose - Fetches user record corresponding to given email
+     * Fetches user record corresponding to given email
      * @returns User record as response
      */
     async LoginUser(){
@@ -76,7 +74,6 @@ export default class User{
         const connection = await getDbConnection()
         var response = await connection.query(sql) ; 
         connection.end()
-        console.log(response)
         return response;
     }
 }

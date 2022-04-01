@@ -35,7 +35,7 @@ export default class Options extends Instrument{
     }
 
     /*
-    Purpose - Fetches current record count in options table and sets id of current record to current record count plus one.
+    Fetches current record count in options table and sets id of current record to current record count plus one.
     Parameters - None
     Return Value - None
     */
@@ -54,7 +54,7 @@ export default class Options extends Instrument{
     
    
   /**
-   * Purpose - Inserts the options object in options table.
+   * Inserts the options object in options table.
    * @param instrumentSkeletonId 
    * @param strategyId - id of strategy to which it belongs must be provided
    * @returns sql query response on successful insertion. In case of any errors, returns the error.
@@ -83,7 +83,7 @@ export default class Options extends Instrument{
 
 
    /**
-     * Purpose - To make plot for option instrument and store the respective x & y coordinates in plot data member. 
+     * To make plot for option instrument and store the respective x & y coordinates in plot data member. 
      * @param xStart Starting x coordinate of plot
      * @param ticker - string type
      * @param expiryDate - date type
@@ -195,7 +195,7 @@ export default class Options extends Instrument{
     }
 
     /** 
-    * Purpose - Returns the plot.
+    * Returns the plot.
     * Parameters - None
     * @returns - Plot (StrategyPlot type)
     */
@@ -204,7 +204,7 @@ export default class Options extends Instrument{
     }
 
    /**
-    * Purpose - To fetch the current price of a given stock in the market using TwelveData API
+    * To fetch the current price of a given stock in the market using TwelveData API
     * @param ticker 
     * Return Value - None. Sets the currentPriceStock data member to current price
     */
@@ -221,7 +221,7 @@ export default class Options extends Instrument{
 
 
    /**
-    * Purpose - Sets the premium of the option contract according to the strike price and expiry date
+    * Sets the premium of the option contract according to the strike price and expiry date
     * @param ticker 
     * @param expiryDate 
     * Return Value - None, Sets the premium

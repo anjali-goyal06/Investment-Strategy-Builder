@@ -15,7 +15,7 @@ export default class InstrumentManager{
     }
     
    /**
-    * Purpose - It creates and returns the appropriate instrument object.
+    *  It creates and returns the appropriate instrument object.
     * @param instrumentType specifies the type of instrument object to be created, type -string
     * @param quantity - type number, quantity of instrument
     * @param strikePrice - type number, strike price of instrument

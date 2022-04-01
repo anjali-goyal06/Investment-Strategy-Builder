@@ -5,8 +5,9 @@ import StrategyPlot from './StrategyPlot';
 var StrategyPlot_ = require('./StrategyPlot')
 const DbManager = require('./DbManager');
 import DbManager_ from './DbManager';
+import { constants } from 'buffer';
 var Instrument = require('./Instrument');
-
+var Constants = require('./Constants');
 
 
 export default class Future extends Instrument{
@@ -23,7 +24,7 @@ export default class Future extends Instrument{
     }
 
     /*
-    Purpose - Fetches current record count in the table and sets id of current record to current record count plus one.
+    Fetches current record count in the table and sets id of current record to current record count plus one.
     Parameters - None
     Return Value - None
     */
@@ -43,7 +44,7 @@ export default class Future extends Instrument{
     
   
   /**
-   *  Purpose - Inserts the future object in future table.
+   * Inserts the future object in future table.
    * @param instrumentSkeletonId 
    * @param strategyId - id of strategy to which it belongs must be provided
    * @returns sql query response on successful insertion. In case of any errors, returns the error.
@@ -69,7 +70,7 @@ export default class Future extends Instrument{
     }
     
     /**
-     * Purpose - To make plot for future instrument and store the respective x & y coordinates in plot data member. 
+     * To make plot for future instrument and store the respective x & y coordinates in plot data member. 
      * @param xStart Starting x coordinate of plot
      * @param ticker - string type
      * @param expiryDate - date type
@@ -83,9 +84,31 @@ export default class Future extends Instrument{
         var y;
         this.plot = new StrategyPlot_();
         
+        var multiplier = 0;
+
         //handles two cases - buy and sell
-        if(this.side.toLowerCase()=="buy"){
+
+        if(this.side.toLowerCase() == Constants.Buy){
+            multiplier = 1;
+        }else if (this.side.toLowerCase() == Constants.Sell){
+            multiplier = -1;
+        }else{
+            console.log("Invalid Case");
+        }
+
+        //loop over the range and calculate y coordinates
+        for(var i=0;i<100;i++){
+
+            this.plot.xCoords.push(x);
+            y = (multiplier) * (this.quantity*(x - this.price));
+            this.plot.yCoords.push(y);
+            x++;
+        }
+
+        /*
+        if(this.side.toLowerCase()==Constants.Buy){
             
+
             //loop over the range and calculate y coordinates
             for(var i=0;i<100;i++){
 
@@ -115,10 +138,14 @@ export default class Future extends Instrument{
                 }
                 x++;
             }
-        }
+        }*/
         //return this.plot;
     }
 
+    /**
+     * Getter for plot
+     * @returns plot of future instrument
+     */
     getPlot(): StrategyPlot {
         return this.plot;
     }

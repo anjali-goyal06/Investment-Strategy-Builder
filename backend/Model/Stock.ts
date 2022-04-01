@@ -21,7 +21,7 @@ export default class Stock extends Instrument{
 
     
     /**
-     * Purpose - Fetches current record count in stock table and sets id of current record to current record count plus one.
+     * Fetches current record count in stock table and sets id of current record to current record count plus one.
      * Parameters - None
      * Return Value - None
      */
@@ -39,7 +39,7 @@ export default class Stock extends Instrument{
 
      
   /**
-   * Purpose - Inserts the stock object in stock table.
+   * Inserts the stock object in stock table.
    * @param instrumentSkeletonId 
    * @param strategyId - id of strategy to which it belongs must be provided
    * @returns sql query response on successful insertion. In case of any errors, returns the error.
@@ -67,7 +67,7 @@ export default class Stock extends Instrument{
     }
 
     /**
-     * Purpose - To make plot for stock instrument and store the respective x & y coordinates in plot data member. 
+     * To make plot for stock instrument and store the respective x & y coordinates in plot data member. 
      * @param xStart Starting x coordinate of plot
      * @param ticker - string type
      * @param expiryDate - date type
@@ -119,6 +119,10 @@ export default class Stock extends Instrument{
        // return this.plot;
     }
 
+    /**
+     * Getter for plot
+     * @returns plot of stock instrument
+     */
     getPlot(): StrategyPlot {
         return this.plot;
     }
