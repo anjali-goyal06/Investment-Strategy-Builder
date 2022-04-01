@@ -59,10 +59,23 @@ export default class User{
         var sql = "Select  * from user where email = " + mysql.escape(this.email);
 
         const connection = await getDbConnection()
-        var response = await connection.query(sql) ; 
+        var result = await connection.query(sql) ; 
         connection.end()
-        console.log(response)
-        return response;
+
+        var cnt = Object.keys(result).length;  
+        if(cnt==0 || cnt>1){ 
+            return { error: "Please try to login with correct credentials" };
+        }
+
+        // password matching 
+        const passwordCompare = await bcrypt.compare(this.password, result[0].password);
+        if (!passwordCompare) {
+            return { error: "Please try to login with correct credentials" };
+        }
+        console.log(passwordCompare)
+        console.log(result);
+        return result;
+
     }
 }
 

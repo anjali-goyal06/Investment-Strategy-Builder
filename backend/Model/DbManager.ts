@@ -122,7 +122,6 @@ export default class DbManager{
     }
     
     async GetSavedStrategiesFromUserId(id){
-
         var sql = "select Id, Name,StockName,Ticker,ExpiryDate,userId,Description, InvestmentStrategySkeletonId from InvestmentStrategy where InvestmentStrategy.userId =  " + mysql.escape(id);
 
         try{
@@ -133,7 +132,6 @@ export default class DbManager{
         }catch(err){
             return err;
         }
-        
     }
 
     

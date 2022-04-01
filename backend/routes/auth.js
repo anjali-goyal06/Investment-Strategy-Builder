@@ -57,6 +57,8 @@ router.post('/login', [
     let success = false;
 
     // If there are errors, return Bad request and the errors
+   console.log(req.body)
+ //  console.log(req.body.email.isEmail())
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
@@ -66,22 +68,13 @@ router.post('/login', [
     try{
 
         const user = req.body;
-        var newuser = new User(user);
-        var result = await newuser.GetUserByemailId();
-
-        var cnt = Object.keys(result).length;  
-        if(cnt==0 || cnt>1){ 
-            return res.status(400).json({ success, error: "Please try to login with correct credentials" });
-        }
-
-        // password matching 
-        const passwordCompare = await bcrypt.compare(req.body.password, result[0].password);
-        if (!passwordCompare) {
-            success = false
-            return res.status(400).json({ success, error: "Please try to login with correct credentials" });
-        }
-        console.log(result);
-        return res.send(result);
+        var newuser = new User(user.id,user.name,user.email,user.password);
+        var result = await newuser.LoginUser() ;
+        if(!result.error)
+              return res.status(200).send("Login succesful !!");
+        else
+              return res.status(400).send(result.error)
+      
         
     } catch (error) {
         console.error(error.message);
