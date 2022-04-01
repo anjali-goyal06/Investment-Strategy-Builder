@@ -2,30 +2,27 @@ const express = require('express');
 const router = express.Router();
 var getDbConnection = require('../db/dbconnect');
 const { body, validationResult } = require('express-validator');
-const bcrypt = require('bcryptjs');
 const fetchuser = require('../middleware/fetchUser')
 
-const User = require('../Model/User');
-const InvestmentStrategySkeleton = require('../Model/InvestmentStrategySkeleton');
 const InvestmentStrategy = require('../Model/InvestmentStrategy');
-const OptionSkeleton = require('../Model/OptionSkeleton');
-const Options = require('../Model/Options');
-const FutureSkeleton = require('../Model/FutureSkeleton');
-const Future = require('../Model/Future');
-const StockSkeleton = require('../Model/StockSkeleton');
-const Stock = require('../Model/Stock');
-const InstrumentManager = require('../Model/InstrumentManager');
+const InstrumentManager = require('../Model/InstrumentManager')
 
 
+/**
+ * Purpose - Making the plot for the investment strategy whose details are provided in the request body.
+ * It also calculates the starting x coordinate for the combined plot.
+ * @returns the combined plot, basically x & y coordinates of the plot as response
+ */
+router.post('/',fetchuser ,async(req, res)=>{
 
-router.post('/',fetchuser, async(req, res)=>{
+    console.log(req.body);
 
-  
   if(req.body.ExpiryDate=='')
       req.body.ExpiryDate = '2022-04-10';
   if(req.body.segment)
   req.body.segment = req.body.segment.toLowerCase();
-  console.log(req.body);
+ 
+     //Creating investment strategy object
     var investmentStrategy = await new InvestmentStrategy(-1, req.body.StockName, req.body.Ticker, -1, req.body.ExpiryDate, req.body.Name, -1, req.body.Description);
     var instrumentManager = await new InstrumentManager();
     //console.log(req.body.instruments);
@@ -35,26 +32,29 @@ router.post('/',fetchuser, async(req, res)=>{
       var instrument = req.body.listInstruments[i];
 
       if(instrument.segment.toLowerCase() == "option"){
-       // sum = Math.floor(sum+instrument.StrikePrice);
+      
        sum = sum + parseInt(instrument.StrikePrice);
        // console.log("strile = " + instrument.StrikePrice)
       }else{
         if(!instrument.Price) instrument.Price = instrument.StrikePrice
-      //  sum = Math.floor(sum+ instrument.Price);
       sum = sum + parseInt(instrument.Price);
        // console.log("strile = " + instrument.Price)
       }
   
+      //creating appropriate instrument object using instrument manager and adding to investment strategy object
       var _instrument = await instrumentManager.createInstrument(instrument.segment, instrument.Quantity, instrument.StrikePrice, instrument.Price, instrument.Type, instrument.Side);
       //console.log(investmentStrategy.instruments)
       investmentStrategy.instruments.push(_instrument);
     }
 
     var range = 100;
+  
     console.log(sum)
     let total = req.body.listInstruments.length;
     console.log(total + " " + range)
     let t = Math.floor(total);
+  
+   //setting the starting x coordinate of combined plot
     let startCoord = Math.floor(sum/t);
     console.log(startCoord)
     startCoord -= (range/2);
@@ -64,6 +64,7 @@ router.post('/',fetchuser, async(req, res)=>{
     if(startCoord<0) startCoord = 0;
     console.log("startcoords = " + startCoord)
 
+    //Making the combined plot
     var plot = await investmentStrategy.combinedPlot(startCoord);
   
     var response = plot

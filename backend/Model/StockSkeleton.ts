@@ -1,9 +1,8 @@
 
 var getDbConnection = require('../db/dbconnect');
-
-import IInstrumentSkeleton from './IInstrumentSkeleton';
 import InstrumentSkeleton from './InstrumentSkeleton';
-var DbManager = require('./DbManager');
+//var DbManager = require('./DbManager');
+import DbManager from './DbManager';
 export default class StockSkeleton extends InstrumentSkeleton{
 
     //id: number;
@@ -21,6 +20,11 @@ export default class StockSkeleton extends InstrumentSkeleton{
         return this.id;
     }
 
+   /**
+    * Purpose - Fetches current record count in stock skeleton table and sets id of current record to current record count plus one.
+    * Parameters - None
+    * Return Value - None
+    */
     async setId(){
         try{
             const DbManager_ = await new DbManager();
@@ -32,9 +36,15 @@ export default class StockSkeleton extends InstrumentSkeleton{
             console.log(err);
         }
     }
-    
+
+  /**
+   *  Purpose - Inserts the stock skeleton object in stock skeleton table.
+   * @param StrategySkeletonId - Id of the strategy skeleton (integer) to which it belongs must be provided
+   * @returns sql query response on successful insertion. In case of any errors, returns the error.
+   */
     async AddDataToDb(StrategySkeletonId:number){
 
+        //sets the id before inserting in database
         if(this.id == -1){
             await this.setId();
         }
