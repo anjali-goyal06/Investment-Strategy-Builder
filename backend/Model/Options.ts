@@ -9,30 +9,21 @@ import OptionSkeleton from './OptionSkeleton';
 
 import { time } from "console";
 var Instrument = require('./Instrument');
-//var DbManager = require('./DbManager');
-import DbManager from './DbManager';
+const DbManager = require('./DbManager');
+import DbManager_ from './DbManager';
 
 export default class Options extends Instrument{
 
-   // id : number;
-   // quantity : number;
-   // instrumentSkeleton : IInstrumentSkeleton;
-    //side : string;
-    //plot : StrategyPlot;
-    instrumentSkeletonId:number;
     strikePrice : number;
-    strategyId:number;
     premium : number;
     currentPriceStock: number;
     type : string;
 
-    constructor(id:number, quantity:number, strikePrice:number, skeletonId:number, strategyId:number, type:string, side:string){
+    constructor(id:number, quantity:number, strikePrice:number,  type:string, side:string){
         super()
         this.id = id;
         this.quantity = quantity;
         this.strikePrice = strikePrice;
-        this.instrumentSkeletonId = skeletonId;
-        this.strategyId = strategyId;
         this.premium = 5;
         this.side = side;
         this.type = type;
@@ -51,8 +42,8 @@ export default class Options extends Instrument{
     async setId(){
 
         try{
-            const DbManager_ = await new DbManager();
-            var response = await DbManager_.GetCountOfRecordsInDb('Options');
+            var dbManager_ = await new DbManager();
+            var response = await dbManager_.GetCountOfRecordsInDb('Options');
         
             var current_count = response[0].count;
             this.id = current_count + 1;
