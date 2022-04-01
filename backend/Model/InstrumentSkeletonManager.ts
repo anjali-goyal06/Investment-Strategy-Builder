@@ -25,9 +25,9 @@ export default class InstrumentSkeletonManager{
     * @returns IInstrumentSkeleton type object of respective instrument skelton
     */
     createInstrument(instrumentType: string,  type:string, side:string) : IInstrumentSkeleton{
-       if(instrumentType == 'option'){
+       if(instrumentType.toLowerCase() == 'option'){
            return new OptionSkeleton(-1, side, type, -1);
-       }else if(instrumentType == 'future'){
+       }else if(instrumentType.toLowerCase() == 'future'){
            return new FutureSkeleton(-1, side, -1);
        }else {
            return new StockSkeleton(-1, side, -1);

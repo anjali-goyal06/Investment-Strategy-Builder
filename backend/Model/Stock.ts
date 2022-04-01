@@ -82,10 +82,14 @@ export default class Stock extends Instrument{
      */
     makePlot(xStart, ticker, expiryDate) {
 
+        console.log("stock")
+      
         //set the start coordinate of x
         var x = Math.floor(xStart);
         var y;
         
+        console.log(this.price);
+       
         this.plot = new StrategyPlot_();
         
         //two cases handled - buy and sell
@@ -96,7 +100,7 @@ export default class Stock extends Instrument{
 
                 if(x<=this.price){
                     this.plot.xCoords.push(x);
-                    y = -1*this.quantity*(x - this.price);
+                    y = this.quantity*(x - this.price);
                     this.plot.yCoords.push(y);
                 }else{
                     this.plot.xCoords.push(x);
@@ -110,11 +114,11 @@ export default class Stock extends Instrument{
             for(var i=0;i<100;i++){
                 if(x<=this.price){
                     this.plot.xCoords.push(x);
-                    y = this.quantity*(this.currentPrice - this.price);
+                    y = -1*this.quantity*(x - this.price);
                     this.plot.yCoords.push(y);
                 }else{
                     this.plot.xCoords.push(x);
-                    y = -1*this.quantity*(this.currentPrice - this.price);
+                    y = -1*this.quantity*(x - this.price);
                     this.plot.yCoords.push(y);
                 }
                 x++;
