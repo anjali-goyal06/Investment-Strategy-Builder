@@ -1,18 +1,14 @@
 var getDbConnection = require('../db/dbconnect');
-//var DbManager = require('./DbManager');
-import DbManager from './DbManager';
+const DbManager = require('./DbManager');
+import DbManager_ from './DbManager';
 import InstrumentSkeleton from './InstrumentSkeleton';
 
 export default class FutureSkeleton extends InstrumentSkeleton{
-    //id: number;
-    //side: string;
-    investmentStrategySkeletonId: number;
 
-    constructor(id:number, side:string, skeletonId:number){
+    constructor(id:number, side:string){
         super();
         this.id = id;
         this.side = side;
-        this.investmentStrategySkeletonId = skeletonId;
     }
 
     getId() : number {
@@ -27,8 +23,8 @@ export default class FutureSkeleton extends InstrumentSkeleton{
     async setId(){
             
         try{
-            const DbManager_ = await new DbManager();
-            var response = await DbManager_.GetCountOfRecordsInDb('FutureSkeleton');
+            var dbManager_ = await new DbManager();
+            var response = await dbManager_.GetCountOfRecordsInDb('FutureSkeleton');
         
             var current_count = response[0].count;
             this.id = current_count + 1;

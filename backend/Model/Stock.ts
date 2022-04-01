@@ -2,29 +2,21 @@
 var getDbConnection = require('../db/dbconnect');
 import StrategyPlot from './StrategyPlot';
 var Instrument =  require('./Instrument');
-//var DbManager = require('./DbManager');
-import DbManager from './DbManager';
+const DbManager = require('./DbManager');
+import DbManager_ from './DbManager';
 var StrategyPlot_ = require('./StrategyPlot')
 
 export default class Stock extends Instrument{
-    //id : number;
-    //quantity : number;
-    //instrumentSkeleton : IInstrumentSkeleton;
-    //side:string;
-    //plot : StrategyPlot;
-    instrumentSkeletonId:number;
-    strategyId:number;
+
     price : number;
     currentPrice:number
 
-    constructor(id:number, quantity:number, price:number, skeletonId:number, strategyId:number, side:string){
+    constructor(id:number, quantity:number, price:number, side:string){
         super()
         this.id = id;
         this.quantity = quantity;
         this.price = price;
         this.side = side;
-        this.instrumentSkeletonId = skeletonId;
-        this.strategyId = strategyId;
     }
 
     
@@ -35,8 +27,8 @@ export default class Stock extends Instrument{
      */
     async setId(){
         try{
-            const DbManager_ = await new DbManager();
-            var response = await DbManager_.GetCountOfRecordsInDb('Stock');
+            var dbManager_ = await new DbManager();
+            var response = await dbManager_.GetCountOfRecordsInDb('Stock');
         
             var current_count = response[0].count;
             this.id = current_count + 1;

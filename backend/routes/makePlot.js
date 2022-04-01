@@ -17,10 +17,10 @@ router.post('/',fetchuser ,async(req, res)=>{
 
     console.log(req.body);
 
-  if(req.body.ExpiryDate=='')
-      req.body.ExpiryDate = '2022-04-10';
-  if(req.body.segment)
-  req.body.segment = req.body.segment.toLowerCase();
+  //if(req.body.ExpiryDate=='')
+    //  req.body.ExpiryDate = '2022-04-10';
+  //if(req.body.segment)
+  //req.body.segment = req.body.segment.toLowerCase();
  
      //Creating investment strategy object
     var investmentStrategy = await new InvestmentStrategy(-1, req.body.StockName, req.body.Ticker, -1, req.body.ExpiryDate, req.body.Name, -1, req.body.Description);

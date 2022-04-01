@@ -3,31 +3,23 @@ var getDbConnection = require('../db/dbconnect');
 
 import StrategyPlot from './StrategyPlot';
 var StrategyPlot_ = require('./StrategyPlot')
-//var DbManager = require('./DbManager');
-import DbManager from './DbManager';
+const DbManager = require('./DbManager');
+import DbManager_ from './DbManager';
 var Instrument = require('./Instrument');
 
 
 
 export default class Future extends Instrument{
-    //id : number;
-    //quantity : number;
-    //instrumentSkeleton : IInstrumentSkeleton;
-    //side:string;
-    //plot : StrategyPlot;
-    instrumentSkeletonId : number;
-    strategyId:number;
+    
     price : number;
     currentPrice : number;
 
-    constructor(id:number, quantity:number, price:number, skeletonId:number, strategyId:number, side:string){
+    constructor(id:number, quantity:number, price:number,side:string){
         super()
         this.id = id;
         this.quantity = quantity;
         this.price = price;
         this.side = side;
-        this.instrumentSkeletonId = skeletonId;
-        this.strategyId = strategyId;
     }
 
     /*
@@ -38,8 +30,8 @@ export default class Future extends Instrument{
     async setId(){
 
         try{
-            const DbManager_ = await new DbManager();
-            var response = await DbManager_.GetCountOfRecordsInDb('Future');
+            var dbManager_ = await new DbManager();
+            var response = await dbManager_.GetCountOfRecordsInDb('Future');
         
             var current_count = response[0].count;
             this.id = current_count + 1;

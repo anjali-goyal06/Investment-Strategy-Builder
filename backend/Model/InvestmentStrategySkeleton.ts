@@ -3,8 +3,8 @@ import { validationResult } from "express-validator";
 var getDbConnection = require('../db/dbconnect');
 const mysql = require('mysql');
 
-//var DbManager = require('./DbManager');
-import DbManager from './DbManager';
+const DbManager = require('./DbManager');
+import DbManager_ from './DbManager';
 
 export default class InvestmentStrategySkeleton{
     static count : number = 0;
@@ -39,8 +39,8 @@ export default class InvestmentStrategySkeleton{
     async setId(){
 
         try{
-            const DbManager_ = await new DbManager();
-            var response = await DbManager_.GetCountOfRecordsInDb('InvestmentStrategySkeleton');
+            var dbManager_ = await new DbManager();
+            var response = await dbManager_.GetCountOfRecordsInDb('InvestmentStrategySkeleton');
         
             var current_count = response[0].count;
             this.id = current_count + 1;

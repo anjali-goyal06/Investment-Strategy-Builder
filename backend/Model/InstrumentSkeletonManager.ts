@@ -16,7 +16,7 @@ export default class InstrumentSkeletonManager{
 
     }
 
-    
+
    /**
     * Purpose - It creates and returns the appropriate instrument skeleton object.
     * @param instrumentType - specifies the type of instrument skeleton object to be created, type = string
@@ -26,11 +26,11 @@ export default class InstrumentSkeletonManager{
     */
     createInstrument(instrumentType: string,  type:string, side:string) : IInstrumentSkeleton{
        if(instrumentType.toLowerCase() == 'option'){
-           return new OptionSkeleton(-1, side, type, -1);
+           return new OptionSkeleton(-1, side, type);
        }else if(instrumentType.toLowerCase() == 'future'){
-           return new FutureSkeleton(-1, side, -1);
+           return new FutureSkeleton(-1, side);
        }else {
-           return new StockSkeleton(-1, side, -1);
+           return new StockSkeleton(-1, side);
        }
     }
 }

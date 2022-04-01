@@ -26,13 +26,13 @@ export default class InstrumentManager{
     */
     createInstrument(instrumentType: string, quantity:number, strikePrice:number, price:number, type:string, side:string) : IInstrument{
        if(instrumentType.toLowerCase() == 'option'){
-           return new Options(-1, quantity, strikePrice, -1, -1, type, side);
+           return new Options(-1, quantity, strikePrice, type, side);
        }else if(instrumentType.toLowerCase() == 'future'){
            if(!price) price = strikePrice
-           return new Future(-1, quantity, price, -1, -1, side);
+           return new Future(-1, quantity, price, side);
        }else{
            if(!price) price = strikePrice
-           return new Stock(-1, quantity, price, -1, -1 , side);
+           return new Stock(-1, quantity, price, side);
        }
     }
 }

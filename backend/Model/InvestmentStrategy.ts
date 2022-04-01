@@ -2,8 +2,8 @@ var getDbConnection = require('../db/dbconnect');
 
 import StrategyPlot from './StrategyPlot';
 import IInstrument from './IInstrument';
-//var DbManager = require('./DbManager');
-import DbManager from './DbManager';
+const DbManager = require('./DbManager');
+import DbManager_ from './DbManager';
 var StrategyPlot_ = require('./StrategyPlot');
 
 interface IInstrumentStrategy{
@@ -118,8 +118,8 @@ export default class InvestmentStrategy implements IInstrumentStrategy{
     async setId(){
 
         try{
-            const DbManager_ = await new DbManager();
-            var response = await DbManager_.GetCountOfRecordsInDb('InvestmentStrategy');
+            var dbManager_ = await new DbManager();
+            var response = await dbManager_.GetCountOfRecordsInDb('InvestmentStrategy');
         
             var current_count = response[0].count;
             this.id = current_count + 1;
@@ -178,7 +178,7 @@ export default class InvestmentStrategy implements IInstrumentStrategy{
 
         //fetch startegy skeleton details from skeleton id 
         var skeleton = await db.GetStrategySkeletonsFromSkeletonId(strategySkeletonId)
-        
+
         //fetch instrument skeletons from strategy skeleton id
         var listInstrumentSkeleton = await db.GetInstrumentsFromStrategySkeletonId(strategySkeletonId);
         var response = skeleton[0];
