@@ -1,21 +1,20 @@
 
 var getDbConnection = require('../db/dbconnect');
 import StrategyPlot from './StrategyPlot';
-import IInstrumentSkeleton from './IInstrumentSkeleton';
-import IInstrument from './IInstrument';
 var Instrument =  require('./Instrument');
-var DbManager = require('./DbManager');
+//var DbManager = require('./DbManager');
+import DbManager from './DbManager';
 var StrategyPlot_ = require('./StrategyPlot')
 
 export default class Stock extends Instrument{
     //id : number;
     //quantity : number;
     //instrumentSkeleton : IInstrumentSkeleton;
+    //side:string;
+    //plot : StrategyPlot;
     instrumentSkeletonId:number;
     strategyId:number;
     price : number;
-    //side:string;
-    //plot : StrategyPlot;
     currentPrice:number
 
     constructor(id:number, quantity:number, price:number, skeletonId:number, strategyId:number, side:string){
@@ -28,6 +27,12 @@ export default class Stock extends Instrument{
         this.strategyId = strategyId;
     }
 
+    
+    /**
+     * Purpose - Fetches current record count in stock table and sets id of current record to current record count plus one.
+     * Parameters - None
+     * Return Value - None
+     */
     async setId(){
         try{
             const DbManager_ = await new DbManager();
@@ -39,18 +44,23 @@ export default class Stock extends Instrument{
             console.log(err);
         }
     }
-    
-   
+
+     
+  /**
+   * Purpose - Inserts the stock object in stock table.
+   * @param instrumentSkeletonId 
+   * @param strategyId - id of strategy to which it belongs must be provided
+   * @returns sql query response on successful insertion. In case of any errors, returns the error.
+   */
     async AddDataToDb(instrumentSkeletonId: number, strategyId: number){
 
+        //sets id before inserting in table
         if(this.id == -1){
             await this.setId();
         }
         
-        //console.log(this.OptionSkeleton);
         
         var sql = "INSERT INTO Stock (Id, Price, Quantity, StockSkeletonId, InvestmentStrategyId) VALUES (?,?,?,?,?)";
-        //var {Id, Type, Side, StrategySkeletonId} = {this.id, 
 
         try{
             const connection = await getDbConnection()
@@ -64,15 +74,24 @@ export default class Stock extends Instrument{
         }
     }
 
+    /**
+     * Purpose - To make plot for stock instrument and store the respective x & y coordinates in plot data member. 
+     * @param xStart Starting x coordinate of plot
+     * @param ticker - string type
+     * @param expiryDate - date type
+     */
     makePlot(xStart, ticker, expiryDate) {
 
+        //set the start coordinate of x
         var x = Math.floor(xStart);
         var y;
         
         this.plot = new StrategyPlot_();
         
+        //two cases handled - buy and sell
         if(this.side.toLowerCase()=="buy"){
 
+            // loop over the range and calculate y coordinate 
             for(var i=0;i<100;i++){
 
                 if(x<=this.price){
@@ -87,6 +106,7 @@ export default class Stock extends Instrument{
                 x++;
             }
         }else{
+             // loop over the range and calculate y coordinate 
             for(var i=0;i<100;i++){
                 if(x<=this.price){
                     this.plot.xCoords.push(x);

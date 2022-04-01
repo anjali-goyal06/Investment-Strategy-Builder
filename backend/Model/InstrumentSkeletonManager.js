@@ -3,9 +3,20 @@ exports.__esModule = true;
 var FutureSkeleton = require("./FutureSkeleton");
 var OptionSkeleton = require("./OptionSkeleton");
 var StockSkeleton = require("./StockSkeleton");
+/**
+ * Manager Class for Instrument skeletons.
+ * Has been used for implementing factory design pattern for creating appropriate instrument skeleton object.
+**/
 var InstrumentSkeletonManager = /** @class */ (function () {
     function InstrumentSkeletonManager() {
     }
+    /*
+    Purpose - It creates and returns the appropriate instrument skeleton object.
+    Parameters -
+        1. Instrument type (specifies the type of instrument skeleton object to be created, type -string)
+        2. Other parameters required to create objects - Type (String), Side (String)
+    Return Value - IInstrumentSkeleton type object of respective instrument skelton
+    */
     InstrumentSkeletonManager.prototype.createInstrument = function (instrumentType, type, side) {
         if (instrumentType == 'option') {
             return new OptionSkeleton(-1, side, type, -1);

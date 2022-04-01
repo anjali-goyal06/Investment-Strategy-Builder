@@ -3,7 +3,8 @@ import { validationResult } from "express-validator";
 var getDbConnection = require('../db/dbconnect');
 const mysql = require('mysql');
 
-var DbManager = require('./DbManager');
+//var DbManager = require('./DbManager');
+import DbManager from './DbManager';
 
 export default class InvestmentStrategySkeleton{
     static count : number = 0;
@@ -11,7 +12,6 @@ export default class InvestmentStrategySkeleton{
     strategyName : string;
     userId : number;
     description : string;
-    //instrumentSkeletons : IInstrumentSkeleton[];
 
     constructor(id:number, strategyName:string, userId:number, description:string){
        
@@ -21,10 +21,21 @@ export default class InvestmentStrategySkeleton{
        this.description = description;
     }
 
+    
+    /*
+    Purpose - Getter for strategy skeleton id
+    Parameters - None
+    Return Value - Id (integer)
+    */
     getId() : number {
         return this.id;
     }
 
+    /*
+    Purpose - Fetches current record count in investment strategy skeleton table and sets id of current record to current record count plus one.
+    Parameters - None
+    Return Value - None
+    */
     async setId(){
 
         try{
@@ -38,15 +49,19 @@ export default class InvestmentStrategySkeleton{
         }
     }
 
+    /** 
+   * Purpose - Inserts the investment strategy skeleton object in investment strategy skeleton table.
+   * Parameters - None
+   * @returns sql query response on successful insertion. In case of any errors, returns the error.
+   */
     async AddDataToDb(){
         
-        //console.log(this.OptionSkeleton);
+        //sets id before insertion
         if(this.id == -1){
             await this.setId();
         }
         
         var sql = "INSERT INTO InvestmentStrategySkeleton (Id, StrategyName , Description, UserId) VALUES (?,?,?,?)";
-        //var {Id, Type, Side, StrategySkeletonId} = {this.id, 
 
         try{
             const connection = await getDbConnection()
@@ -60,3 +75,5 @@ export default class InvestmentStrategySkeleton{
         }
     }
 }
+
+module.exports = InvestmentStrategySkeleton;

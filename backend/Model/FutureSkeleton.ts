@@ -1,8 +1,6 @@
 var getDbConnection = require('../db/dbconnect');
-
-//import DbManager from './DbManager';
-var DbManager = require('./DbManager');
-import IInstrumentSkeleton from './IInstrumentSkeleton';
+//var DbManager = require('./DbManager');
+import DbManager from './DbManager';
 import InstrumentSkeleton from './InstrumentSkeleton';
 
 export default class FutureSkeleton extends InstrumentSkeleton{
@@ -21,6 +19,11 @@ export default class FutureSkeleton extends InstrumentSkeleton{
         return this.id;
     } 
     
+    /*
+    Purpose - Fetches current record count in future skeleton table and sets id of current record to current record count plus one.
+    Parameters - None
+    Return Value - None
+    */
     async setId(){
             
         try{
@@ -34,9 +37,16 @@ export default class FutureSkeleton extends InstrumentSkeleton{
         }
     
     }
-    
+
+  /**
+   *  Purpose - Inserts the future skeleton object in future skeleton table.
+   * @param StrategySkeletonId - Id of the strategy skeleton (integer) to which it belongs must be provided
+   * @returns sql query response on successful insertion. In case of any errors, returns the error.
+   */
     async AddDataToDb(StrategySkeletonId:number){
 
+
+        //sets id before inserting in db
         if(this.id == -1){
             await this.setId();
         }

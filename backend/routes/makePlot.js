@@ -1,25 +1,21 @@
 const express = require('express');
 const router = express.Router();
 var getDbConnection = require('../db/dbconnect');
-const { body, validationResult } = require('express-validator');
-const bcrypt = require('bcryptjs');
 
-const User = require('../Model/User');
-const InvestmentStrategySkeleton = require('../Model/InvestmentStrategySkeleton');
 const InvestmentStrategy = require('../Model/InvestmentStrategy');
-const OptionSkeleton = require('../Model/OptionSkeleton');
-const Options = require('../Model/Options');
-const FutureSkeleton = require('../Model/FutureSkeleton');
-const Future = require('../Model/Future');
-const StockSkeleton = require('../Model/StockSkeleton');
-const Stock = require('../Model/Stock');
-const InstrumentManager = require('../Model/InstrumentManager');
+const InstrumentManager = require('../Model/InstrumentManager')
 
 
-
+/**
+ * Purpose - Making the plot for the investment strategy whose details are provided in the request body.
+ * It also calculates the starting x coordinate for the combined plot.
+ * @returns the combined plot, basically x & y coordinates of the plot as response
+ */
 router.post('/', async(req, res)=>{
 
-//  console.log(req.body);
+    console.log(req.body);
+
+    //Creating investment strategy object
     var investmentStrategy = await new InvestmentStrategy(-1, req.body.StockName, req.body.Ticker, -1, req.body.ExpiryDate, req.body.Name, -1, req.body.Description);
     var instrumentManager = await new InstrumentManager();
     //console.log(req.body.instruments);
@@ -34,6 +30,7 @@ router.post('/', async(req, res)=>{
         startCoord += instrument.Price;
       }
   
+      //creating appropriate instrument object using instrument manager and adding to investment strategy object
       var _instrument = await instrumentManager.createInstrument(instrument.segment, instrument.Quantity, instrument.StrikePrice, instrument.Price, instrument.Type, instrument.Side);
       //console.log(investmentStrategy.instruments)
       investmentStrategy.instruments.push(_instrument);
@@ -42,9 +39,12 @@ router.post('/', async(req, res)=>{
     var range = 100;
 
     var total = req.body.listInstruments.length;
+
+    //setting the starting x coordinate of combined plot
     startCoord /= total;
     startCoord -= (range/2);
 
+    //Making the combined plot
     var plot = await investmentStrategy.combinedPlot(startCoord);
   
     var response = plot
