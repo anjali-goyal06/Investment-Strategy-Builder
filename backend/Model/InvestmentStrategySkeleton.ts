@@ -7,7 +7,6 @@ const DbManager = require('./DbManager');
 import DbManager_ from './DbManager';
 
 export default class InvestmentStrategySkeleton{
-    static count : number = 0;
     id : number;
     strategyName : string;
     userId : number;

@@ -124,7 +124,5 @@ export default class Future extends Instrument{
     }
 }
 
-//var f = new Future(1, 1, 1, 1, 1, "buy");
-//f.setId();
 
 module.exports = Future

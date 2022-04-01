@@ -79,7 +79,7 @@ export default class InvestmentStrategy implements IInstrumentStrategy{
             //console.log(this.instruments[k]);
             
             //calculate the instrument plot
-            await this.instruments[k].makePlot(this.xStart, this.ticker, this.expiryDate);
+            this.instruments[k].makePlot(this.xStart, this.ticker, this.expiryDate);
             let tempPlot = this.instruments[k].getPlot();
 
             if(flag){

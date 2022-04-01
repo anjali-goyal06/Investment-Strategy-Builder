@@ -127,7 +127,7 @@ export default class Options extends Instrument{
                   
                     x++;
                 }
-               // console.log("****************************************************************")
+               
                 break;
             }
 
