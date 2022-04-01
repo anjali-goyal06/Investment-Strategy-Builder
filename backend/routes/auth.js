@@ -5,16 +5,6 @@ const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 
 const User = require('../Model/User');
-const InvestmentStrategySkeleton = require('../Model/InvestmentStrategySkeleton');
-const InvestmentStrategy = require('../Model/InvestmentStrategy');
-const OptionSkeleton = require('../Model/OptionSkeleton');
-const Options = require('../Model/Options');
-const FutureSkeleton = require('../Model/FutureSkeleton');
-const Future = require('../Model/Future');
-const StockSkeleton = require('../Model/StockSkeleton');
-const Stock = require('../Model/Stock');
-const InstrumentManager = require('../Model/InstrumentManager');
-
 
 router.get('/' , (req,res)=>{
     console.log("Hello World||");
@@ -23,7 +13,9 @@ router.get('/' , (req,res)=>{
 
 
 
-// register a new user
+/**
+ * Purpose - Inserts user record in database when new user registers
+ */
 router.post('/register' ,[
     body('name', 'Enter a valid name').isLength({ min: 3 }),
     body('email', 'Enter a valid email').isEmail(),
@@ -37,8 +29,6 @@ router.post('/register' ,[
       return res.status(400).json({ errors: errors.array() });
     }
 
-    
-
     var user = await new User(-1, req.body.name,req.body.email,req.body.password);
     var result = await user.AddUser();
   
@@ -48,8 +38,9 @@ router.post('/register' ,[
 
 })
 
-
-//  Authenticate a User 
+/**
+ * Purpose - Authenticate a User 
+ */ 
 router.post('/login', [
     body('email', 'Enter a valid email').isEmail(),
     body('password', 'Password cannot be blank').exists(),
@@ -69,6 +60,7 @@ router.post('/login', [
         var newuser = new User(user);
         var result = await newuser.GetUserByemailId();
 
+        //If zero or more records if one email are found then error
         var cnt = Object.keys(result).length;  
         if(cnt==0 || cnt>1){ 
             return res.status(400).json({ success, error: "Please try to login with correct credentials" });
@@ -80,6 +72,8 @@ router.post('/login', [
             success = false
             return res.status(400).json({ success, error: "Please try to login with correct credentials" });
         }
+
+        //If one record is found only, then login successful
         console.log(result);
         return res.send(result);
         

@@ -5,28 +5,26 @@ import fetch from "node-fetch";
 
 import StrategyPlot from './StrategyPlot';
 var StrategyPlot_ = require('./StrategyPlot')
-import IInstrumentSkeleton from './IInstrumentSkeleton';
-import IInstrument from './IInstrument';
 import OptionSkeleton from './OptionSkeleton';
 
 import { time } from "console";
-//import { Instrument } from './Instrument';
 var Instrument = require('./Instrument');
-var DbManager = require('./DbManager');
+//var DbManager = require('./DbManager');
+import DbManager from './DbManager';
 
 export default class Options extends Instrument{
-   // static count : number = 0;
+
    // id : number;
    // quantity : number;
    // instrumentSkeleton : IInstrumentSkeleton;
+    //side : string;
+    //plot : StrategyPlot;
     instrumentSkeletonId:number;
     strikePrice : number;
     strategyId:number;
     premium : number;
     currentPriceStock: number;
-    //side : string;
     type : string;
-    //plot : StrategyPlot;
 
     constructor(id:number, quantity:number, strikePrice:number, skeletonId:number, strategyId:number, type:string, side:string){
         super()
@@ -40,23 +38,16 @@ export default class Options extends Instrument{
         this.type = type;
     }
 
-    printValues(){
-        console.log(this.id);
-        console.log(this.quantity);
-        console.log(this.strikePrice);
-        console.log(this.strategyId);
-        console.log(this.side);
-        console.log(this.type);
-        console.log(this.premium);
-
-    }
-
-    
     setSkeleton(obj : OptionSkeleton){
         this.instrumentSkeleton = obj;
         this.instrumentSkeletonId = obj.id;
     }
 
+    /*
+    Purpose - Fetches current record count in options table and sets id of current record to current record count plus one.
+    Parameters - None
+    Return Value - None
+    */
     async setId(){
 
         try{
@@ -71,8 +62,15 @@ export default class Options extends Instrument{
     }
     
    
+  /**
+   * Purpose - Inserts the options object in options table.
+   * @param instrumentSkeletonId 
+   * @param strategyId - id of strategy to which it belongs must be provided
+   * @returns sql query response on successful insertion. In case of any errors, returns the error.
+   */
     async AddDataToDb(instrumentSkeletonId: number, strategyId: number){
 
+        //sets id before inserting in db
         if(this.id == -1){
             await this.setId();
         }
@@ -92,11 +90,17 @@ export default class Options extends Instrument{
 
     }
 
-    
 
+   /**
+     * Purpose - To make plot for option instrument and store the respective x & y coordinates in plot data member. 
+     * @param xStart Starting x coordinate of plot
+     * @param ticker - string type
+     * @param expiryDate - date type
+     */
     async makePlot(xStart, ticker, expiryDate){
       //  var i = this.strikePrice - 30;
 
+      //sets starting x coordinate of plot
         var x = Math.floor(xStart);
         var y;
 
@@ -106,21 +110,22 @@ export default class Options extends Instrument{
 
         var str = this.side.toLowerCase() + " " + this.type.toLowerCase();
        
-        //setting premium
+        //setting premium before plot calculation
         await this.setPremium(ticker, expiryDate);
 
         console.log("premium = " + this.premium);
       
+        //handles 4 cases - BUY CALL, SELL CALL, BUY PUT , SELL PUT
         switch(str){
 
 
             case "buy call" : {
 
+                //loop over the range and calculate y coordinate for every x in range
                 for(var i=0;i<100;i++){
 
                     if(x<=this.strikePrice){
                         this.plot.xCoords.push(x);
-                        
                         y = -(this.quantity*this.premium);
                         this.plot.yCoords.push(y);
                     }else{
@@ -136,6 +141,8 @@ export default class Options extends Instrument{
             }
 
             case "buy put" : {
+
+                //loop over the range and calculate y coordinate for every x in range
                 for(var i=0;i<100;i++){
 
                     if(x<=this.strikePrice){
@@ -153,6 +160,8 @@ export default class Options extends Instrument{
             }
 
             case "sell call" : {
+
+                //loop over the range and calculate y coordinate for every x in range
                 for(var i=0;i<100;i++){
 
                     if(x<=this.strikePrice){
@@ -170,6 +179,8 @@ export default class Options extends Instrument{
             }
 
             case "sell put":{
+
+                //loop over the range and calculate y coordinate for every x in range
                 for(var i=0;i<100;i++){
 
                     if(x<=this.strikePrice){
@@ -192,10 +203,20 @@ export default class Options extends Instrument{
         
     }
 
+    /** 
+    * Purpose - Returns the plot.
+    * Parameters - None
+    * @returns - Plot (StrategyPlot type)
+    */
     getPlot(): StrategyPlot {
         return this.plot;
     }
 
+   /**
+    * Purpose - To fetch the current price of a given stock in the market using TwelveData API
+    * @param ticker 
+    * Return Value - None. Sets the currentPriceStock data member to current price
+    */
     async fetchCurrentPriceFromMarketData(ticker:string){
         let base: String = 'https://api.twelvedata.com/price?apikey=b99f631941204b32b0cd3abafc919341';
         let url : String = base + "&symbol=" + ticker;
@@ -208,19 +229,28 @@ export default class Options extends Instrument{
     }
 
 
+   /**
+    * Purpose - Sets the premium of the option contract according to the strike price and expiry date
+    * @param ticker 
+    * @param expiryDate 
+    * Return Value - None, Sets the premium
+    */
     async setPremium(ticker:string, expiryDate:Date){
     
         await this.fetchCurrentPriceFromMarketData(ticker);
         console.log(this.currentPriceStock);
 
-        var intrinsicValue = 0;
-        // if(this.type == "Call" && this.currentPriceStock > this.strikePrice){
-        //   intrinsicValue = this.currentPriceStock - this.strikePrice;
-        // }else if(this.type == "Put" && this.currentPriceStock < this.strikePrice){
-        //   intrinsicValue = this.strikePrice - this.currentPriceStock;
-        // }
 
+        var intrinsicValue = 0;
         intrinsicValue = Math.abs(this.currentPriceStock - this.strikePrice);
+        console.log(intrinsicValue);
+
+       // if(this.type == "Call" && this.currentPriceStock > this.strikePrice){
+         // intrinsicValue = this.currentPriceStock - this.strikePrice;
+        //}else if(this.type == "Put" && this.currentPriceStock < this.strikePrice){
+          //intrinsicValue = this.strikePrice - this.currentPriceStock;
+       // }
+
        
         var timeValue = 0;
         
@@ -230,26 +260,25 @@ export default class Options extends Instrument{
         let timeInMilisec: number = date2.getTime() - date1.getTime();
         let daysBetweenDates: number = Math.ceil(timeInMilisec / (1000 * 60 * 60 * 24));
         let monthsBetweenDates = daysBetweenDates/30;
-        console.log(monthsBetweenDates);
 
-        if(monthsBetweenDates > 2){
-            timeValue = (monthsBetweenDates-2)*2;
-        }
+        console.log(monthsBetweenDates);
+       
+        timeValue = monthsBetweenDates*8;
 
         this.premium = intrinsicValue + timeValue;
 
-        if(daysBetweenDates < 10){
-            this.premium = 2;
+        if(daysBetweenDates < 5){
+            this.premium = intrinsicValue;
         }
 
         this.premium = Math.floor(this.premium);
         
-        //console.log(this.premium);
+        console.log(this.premium);
     }
 
 }
 
-//const op = new Options(1, 1, 170, 1, 1, "Call", "Call");
+//const op = new Options(1, 1, 190, 1, 1, "Call", "Call");
 //let d:Date = new Date("2022/5/3");
 //op.fetchCurrentPriceFromMarketData("AAPL");
 //op.setPremium("AAPL", d);

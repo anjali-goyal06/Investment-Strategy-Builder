@@ -1,16 +1,10 @@
 var getDbConnection = require('../db/dbconnect');
 
 import StrategyPlot from './StrategyPlot';
-var StrategyPlot_ = require('./StrategyPlot');
 import IInstrument from './IInstrument';
-const Future =  require('./Future');
-const Stock  = require('./Stock');
-const Options = require('./Options');
-const OptionSkeleton = require('./OptionSkeleton');
-const FutureSkeleton = require('./FutureSkeleton');
-const StockSkeleton = require('./StockSkeleton');
-//import DbManager from './DbManager'
-var DbManager = require('./DbManager');
+//var DbManager = require('./DbManager');
+import DbManager from './DbManager';
+var StrategyPlot_ = require('./StrategyPlot');
 
 interface IInstrumentStrategy{
     id : number;
@@ -57,52 +51,34 @@ export default class InvestmentStrategy implements IInstrumentStrategy{
     }
   
 
-    setValues(obj: IInstrumentStrategy){
-        this.id = obj?.id ?? -1;
-        this.stockName = obj?.stockName ?? "";
-        this.ticker  = obj?.ticker ?? "";
-        this.userId  = obj?.userId ?? -1;
-        this.expiryDate =  obj?.expiryDate? new Date(obj.expiryDate) : new Date("2022-03-31");
-        this.name = obj?.name ?? "";
-        this.strategySkeletonId = obj?.strategySkeletonId ?? -1;
-        this.description =  obj?.description ?? ""; 
-    }
-
-    printValues(){
-        console.log(this.id);
-        console.log(this.stockName);
-        console.log(this.ticker);
-        console.log(this.userId);
-        console.log(this.expiryDate);
-        console.log(this.name);
-        console.log(this.strategySkeletonId);
-        console.log(this.description);
-    }
-
+    
+   /**
+    * Purpose - Returns the strategy plot
+    * Parameter - None
+    * @returns Plot (StrategyPlot type)
+    */
     getPlot() : StrategyPlot{
         return this.plot;
     }
 
-    /*setXStart(){
-        for(let k in this.instruments){
-            var instrument = this.instruments[k];
-            if(instrument.hasOwnProperty('price')){
-                instrument.price
-            }
-        }
-    }*/
-
+   /**
+    * Purpose - Makes the combined plot of the strategy from the plots of the instruments it has.
+    * @param startCoord - Starting x coordinate of the plot, type - number
+    * @returns combined plot
+    */
     async combinedPlot(startCoord){
-       // let i : keyof IInstrument
 
        //setting starting coordinate
        this.xStart = startCoord;
 
        var flag = true;
+
+       //for each instrument in the strategy
         for(let k in this.instruments){
             
             //console.log(this.instruments[k]);
             
+            //calculate the instrument plot
             await this.instruments[k].makePlot(this.xStart, this.ticker, this.expiryDate);
             let tempPlot = this.instruments[k].getPlot();
 
@@ -113,7 +89,7 @@ export default class InvestmentStrategy implements IInstrumentStrategy{
                 }
             }
            
-           
+           // add instrument plot values to combined plot of strategy
             for(let i in tempPlot.xCoords){
                 this.plot.xCoords[i] = tempPlot.xCoords[i]
                 this.plot.yCoords[i] += tempPlot.yCoords[i];
@@ -123,11 +99,22 @@ export default class InvestmentStrategy implements IInstrumentStrategy{
         return this.plot;
     }
 
-    
+
+   /**
+    * Purpose - Getter for strategy id
+    * Parameters - None
+    * @returns Id (integer)
+    */
     getId() : number {
         return this.id;
     }
 
+    
+   /**
+    * Purpose - Fetches current record count in investment strategy table an  d sets id of current record to current record count plus one.
+    * Parameters - None
+    * Return Value - None
+    */
     async setId(){
 
         try{
@@ -140,10 +127,15 @@ export default class InvestmentStrategy implements IInstrumentStrategy{
             console.log(err);
         }
     }
-
-  
+    
+  /**
+   * Purpose - Inserts the investment strategy object in investment strategy table.
+   * Parameters - None
+   * @returns sql query response on successful insertion. In case of any errors, returns the error.
+   */
     async AddDataToDb(){
         
+        //sets id before inserting in db
         if(this.id == -1){
             await this.setId();
         }
@@ -162,19 +154,32 @@ export default class InvestmentStrategy implements IInstrumentStrategy{
         }
     }
 
+    
+   /**
+    * Purpose - Fetches all the saved strategies for a given user id from investment strategy table.
+    * @param userId 
+    * @returns Query Response containing the saved strategies record in json object
+    */
     async fetchAllStrategyImplementationFromDBForUser(userId){
         var db = await new DbManager();
         var arrStrategy =  await db.GetSavedStrategiesFromUserId(userId);
-
-        console.log("arrastrateg")
         console.log(arrStrategy);
        
         return arrStrategy;
     }
 
+    /**
+     * Purpose - Fetches the complete strategy skeleton (with instrument skeletons) of given strategy skeleton id
+     * @param strategySkeletonId - strategy skeleton id 
+     * @returns a json object having strategy skeleton details and list of all the instrument skeletons it has
+     */
     async fetchDetailedStrategySkeletonFromDbForUser(strategySkeletonId){
         var db = await new DbManager();
+
+        //fetch startegy skeleton details from skeleton id 
         var skeleton = await db.GetStrategySkeletonsFromSkeletonId(strategySkeletonId)
+        
+        //fetch instrument skeletons from strategy skeleton id
         var listInstrumentSkeleton = await db.GetInstrumentsFromStrategySkeletonId(strategySkeletonId);
         var response = skeleton[0];
         console.log(listInstrumentSkeleton);
@@ -183,24 +188,39 @@ export default class InvestmentStrategy implements IInstrumentStrategy{
         return response;
     }
 
+    /**
+     * Purpose - Fetches the complete strategy implementation (with all its instruments) of given strategy id
+     * @param strategyId - strategy id
+     * @returns a json object having strategy details and list of all the instruments it has
+     */
     async fetchDetailedStrategyImplementationFromDbForUser(strategyId){
 
         try{
             var db = await new DbManager();
+
+            //get strategy record from strategy id
             var strategy = await db.fetchStrategyFromStrategyId(strategyId);
             console.log(strategy);
         
+            //fetch instrument skeletons of given strategy
             var listInstrumentSkeleton = await db.GetInstrumentsFromStrategySkeletonId(strategy[0].InvestmentStrategySkeletonId);
             console.log(listInstrumentSkeleton);
+
             var listInstrument = [];
             for(let j in listInstrumentSkeleton){
+                
+                //fetch instrument record from database
                 var input = await db.getUserInputFromStrategySkeletonIdAndStrategyId(listInstrumentSkeleton[j].segment,listInstrumentSkeleton[j].Id,strategyId)
                 console.log(input[0]);
                 console.log(listInstrumentSkeleton[j])
+
+                //adding skeleton information to instrument record and pushing it to instrument array
                 listInstrument.push(this.AddSkeleton(input[0],listInstrumentSkeleton[j]));
             }
+
             console.log("list of instruments : ")
             console.log(listInstrument);
+
             var result = strategy[0];
             result.listInstruments = listInstrument;
             console.log(result);
@@ -211,6 +231,12 @@ export default class InvestmentStrategy implements IInstrumentStrategy{
         }
     }
     
+    /**
+     * Purpose - It combines the data of instrument skeleton table and instrument table into a complete instrument object
+     * @param x - record of instrument table. It has values (price, quantity, strike price/price etc) but does not have skeleton information (side, type) of instruments
+     * @param y - record of instrument skeleton table. It has skeleton information but not values.
+     * @returns complete instrument object (with values and skeleton information both) in json format
+     */
     AddSkeleton(x,y){
         let a = x;
         console.log("input 0")
@@ -230,37 +256,9 @@ export default class InvestmentStrategy implements IInstrumentStrategy{
         return a;
     }
 
-    async fetchStrategyWithValuesFromDb(userId){
-
-        var db = await new DbManager();
-        var arrStrategy =  await db.GetSavedStrategiesFromUserId(userId);
-        console.log("arrastrateg")
-        console.log(arrStrategy);
-        return arrStrategy;
-    }
-
 }
 
 module.exports = InvestmentStrategy;
 
 
 
-
-
-
-/*  constructor();
-    constructor(obj: IInstrumentStrategy);
-    constructor(obj? : IInstrumentStrategy){
-        console.log("inside class strategy")
-        this.id = obj?.id ?? -1;
-        this.stockName = obj?.stockName ?? "";
-        this.ticker  = obj?.ticker ?? "";
-        this.userId  = obj?.userId ?? -1;
-        this.expiryDate =  obj?.expiryDate? new Date(obj.expiryDate) : new Date("2022-03-31");
-        this.name = obj?.name ?? "";
-        this.strategySkeletonId = obj?.strategySkeletonId ?? -1;
-        this.description =  obj?.description ?? ""; 
-        console.log("cons value = ");
-        console.log(this)
-    }
-    */

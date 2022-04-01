@@ -3,22 +3,21 @@ var getDbConnection = require('../db/dbconnect');
 
 import StrategyPlot from './StrategyPlot';
 var StrategyPlot_ = require('./StrategyPlot')
-import IInstrumentSkeleton from './IInstrumentSkeleton';
-import IInstrument from './IInstrument'
-
-var DbManager = require('./DbManager');
+//var DbManager = require('./DbManager');
+import DbManager from './DbManager';
 var Instrument = require('./Instrument');
 
 
+
 export default class Future extends Instrument{
-   // id : number;
-   // quantity : number;
+    //id : number;
+    //quantity : number;
     //instrumentSkeleton : IInstrumentSkeleton;
+    //side:string;
+    //plot : StrategyPlot;
     instrumentSkeletonId : number;
     strategyId:number;
-    //side:string;
     price : number;
-    //plot : StrategyPlot;
     currentPrice : number;
 
     constructor(id:number, quantity:number, price:number, skeletonId:number, strategyId:number, side:string){
@@ -31,6 +30,11 @@ export default class Future extends Instrument{
         this.strategyId = strategyId;
     }
 
+    /*
+    Purpose - Fetches current record count in the table and sets id of current record to current record count plus one.
+    Parameters - None
+    Return Value - None
+    */
     async setId(){
 
         try{
@@ -43,11 +47,15 @@ export default class Future extends Instrument{
             console.log(err);
         }
         
-        
-       // console.log(this.id);
     }
     
-   
+  
+  /**
+   *  Purpose - Inserts the future object in future table.
+   * @param instrumentSkeletonId 
+   * @param strategyId - id of strategy to which it belongs must be provided
+   * @returns sql query response on successful insertion. In case of any errors, returns the error.
+   */
     async AddDataToDb(instrumentSkeletonId: number, strategyId: number){
 
         if(this.id == -1){
@@ -67,16 +75,26 @@ export default class Future extends Instrument{
             return err;
         }
     }
-
     
+    /**
+     * Purpose - To make plot for future instrument and store the respective x & y coordinates in plot data member. 
+     * @param xStart Starting x coordinate of plot
+     * @param ticker - string type
+     * @param expiryDate - date type
+     */
     makePlot(xStart, ticker, expiryDate) {
-        console.log("future")
+      
+      console.log("future")
+
+        //sets the start x coordinate
         var x = Math.floor(xStart);
         var y;
         this.plot = new StrategyPlot_();
         
+        //handles two cases - buy and sell
         if(this.side.toLowerCase()=="buy"){
             
+            //loop over the range and calculate y coordinates
             for(var i=0;i<100;i++){
 
                 if(x<=this.price){
@@ -91,6 +109,8 @@ export default class Future extends Instrument{
                 x++;
             }
         }else{
+
+            //loop over the range and calculate y coordinates
             for(var i=0;i<100;i++){
                 if(x<=this.price){
                     this.plot.xCoords.push(x);
@@ -105,7 +125,6 @@ export default class Future extends Instrument{
             }
         }
         //return this.plot;
-
     }
 
     getPlot(): StrategyPlot {
@@ -113,7 +132,7 @@ export default class Future extends Instrument{
     }
 }
 
-var f = new Future(1, 1, 1, 1, 1, "buy");
-f.setId();
+//var f = new Future(1, 1, 1, 1, 1, "buy");
+//f.setId();
 
 module.exports = Future
