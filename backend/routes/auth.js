@@ -3,6 +3,7 @@ const router = express.Router();
 var getDbConnection = require('../db/dbconnect');
 const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
+const fetchuser = require('../middleware/fetchUser')
 
 const User = require('../Model/User');
 
@@ -33,8 +34,8 @@ router.post('/register' ,[
     var result = await user.AddUser();
   
     console.log(result)
-   
-    return res.send(result);
+    res.cookie("jwt",result.authtoken)
+    res.send(result);
 
 })
 
@@ -45,41 +46,24 @@ router.post('/login', [
     body('email', 'Enter a valid email').isEmail(),
     body('password', 'Password cannot be blank').exists(),
   ], async (req, res) => {
-    let success = false;
-
+    
     // If there are errors, return Bad request and the errors
-    const errors = validationResult(req);
+     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
     
-
     try{
-
         const user = req.body;
-        var newuser = new User(user);
-        var result = await newuser.GetUserByemailId();
-
-        //If zero or more records if one email are found then error
-        var cnt = Object.keys(result).length;  
-        if(cnt==0 || cnt>1){ 
-            return res.status(400).json({ success, error: "Please try to login with correct credentials" });
-        }
-
-        // password matching 
-        const passwordCompare = await bcrypt.compare(req.body.password, result[0].password);
-        if (!passwordCompare) {
-            success = false
-            return res.status(400).json({ success, error: "Please try to login with correct credentials" });
-        }
-
-        //If one record is found only, then login successful
-        console.log(result);
-        return res.send(result);
-        
-    } catch (error) {
-        console.error(error.message);
-        res.status(500).send("Internal Server Error");
+        var newuser = new User(user.id,user.name,user.email,user.password);
+        var result = await newuser.LoginUser() ;
+        if(!result.error){
+            res.cookie("jwt",result.authtoken)
+            res.status(200).send("Login succesful !!"); 
+        }       
+      }catch (error) {
+          console.error(error.message);
+          res.status(500).send("Internal Server Error");
     }
   
   });

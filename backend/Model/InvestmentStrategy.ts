@@ -76,7 +76,7 @@ export default class InvestmentStrategy{
             //console.log(this.instruments[k]);
             
             //calculate the instrument plot
-            await this.instruments[k].makePlot(this.xStart, this.ticker, this.expiryDate);
+            this.instruments[k].makePlot(this.xStart, this.ticker, this.expiryDate);
             let tempPlot = this.instruments[k].getPlot();
 
             //If this is the first iteration of loop, then set combined plot's coordinate values to zero

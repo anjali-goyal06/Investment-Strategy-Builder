@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 var getDbConnection = require('../db/dbconnect');
 const { body, validationResult } = require('express-validator');
+const bcrypt = require('bcryptjs');
+const fetchuser = require('../middleware/fetchUser')
 
 const InvestmentStrategySkeleton = require('../Model/InvestmentStrategySkeleton');
 const InvestmentStrategy = require('../Model/InvestmentStrategy');
@@ -18,9 +20,9 @@ const DbManager = require('../Model/DbManager');
  * If isSkeletonSaved is false then skeleton is not saved in database. In this case, skeleton is first inserted in database and then it's id is used for strategy insertion.
  *  
 */
-router.post('/SaveStrategy' , async (req,res)=>{
+router.post('/SaveStrategy' , fetchuser,async (req,res)=>{
  
-    var userId = 1;
+    var userId = req.body.userId;
     
     var strategySkeletonId = req.body.InvestmentStrategySkeletonId;
 
@@ -94,9 +96,9 @@ router.post('/SaveStrategy' , async (req,res)=>{
  * Inserts strategy skeleton in database (with all the instrument skeletons) by fetching values from request body
  * 
  */
-router.post('/SaveStrategySkeleton' , async (req,res)=>{
+router.post('/SaveStrategySkeleton' , fetchuser, async (req,res)=>{
  
-    var userId = 1;
+    var userId = req.body.userId;
 
     //Adding Strategy Skeleton in database
     try{

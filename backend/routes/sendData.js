@@ -4,13 +4,14 @@ var getDbConnection = require('../db/dbconnect');
 const { body, validationResult } = require('express-validator');
 const InvestmentStrategy = require('../Model/InvestmentStrategy');
 const DbManager = require('../Model/DbManager');
+const fetchuser = require('../middleware/fetchUser')
 
 
  /**
   *  Given a strategy id, it fetches its implementation 
   * @returns strategy details and list of all the instruments it has as response in json format
   */
-router.get("/savedImplementation" , async (req,res) => {
+router.get("/savedImplementation" ,fetchuser, async (req,res) => {
     // var user = new User();
     var investmentStrategy = await new InvestmentStrategy();
     var response = await investmentStrategy.fetchDetailedStrategyImplementationFromDbForUser(3);
@@ -33,7 +34,7 @@ router.get("/savedImplementation" , async (req,res) => {
    * Fetches the skeletons of popular strategies from database i.e. the strategies saved by system user
    * @returns strategy skeleton records as response
    */
-  router.get("/popularStrategy" , async(req,res) =>{
+  router.get("/popularStrategy" ,fetchuser, async(req,res) =>{
     userId = 1;
     var db = await new DbManager();
     var popularStrategies = await db.GetStrategySkeletonsFromUserId(userId);
@@ -44,8 +45,8 @@ router.get("/savedImplementation" , async (req,res) => {
    * Fetches the strategy skeletons saved by a particular user from database
    * @returns strategy skeleton records as response
    */
-  router.get("/customStrategy" , async(req,res) =>{
-    var userId = 2;
+  router.get("/customStrategy" ,fetchuser, async(req,res) =>{
+    var userId = req.body.userId;
     var db = await new DbManager();
     var customStrategies = await db.GetStrategySkeletonsFromUserId(userId);
     res.send(customStrategies);
@@ -56,8 +57,8 @@ router.get("/savedImplementation" , async (req,res) => {
    * Fetches all the strategies (with values) that are saved by a given user
    * @returns fetched strategies as response
    */
-  router.get("/allSavedImplemenations" , async (req,res) =>{
-      var userId = 2;
+   router.get("/allSavedImplemenations" ,fetchuser, async (req,res) =>{
+    var userId = req.body.userId;
       var db = await new DbManager();
       var response = await db.GetSavedStrategiesFromUserId(userId);
       return res.send(response);

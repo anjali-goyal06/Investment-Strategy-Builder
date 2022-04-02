@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 var getDbConnection = require('../db/dbconnect');
+const { body, validationResult } = require('express-validator');
+const fetchuser = require('../middleware/fetchUser')
 
 const InvestmentStrategy = require('../Model/InvestmentStrategy');
 const InstrumentManager = require('../Model/InstrumentManager')
@@ -11,8 +13,7 @@ const InstrumentManager = require('../Model/InstrumentManager')
  * It also calculates the starting x coordinate for the combined plot.
  * @returns the combined plot, basically x & y coordinates of the plot as response
  */
-router.post('/', async(req, res)=>{
-
+router.post('/',fetchuser ,async(req, res)=>{
 
     console.log(req.body);
 
