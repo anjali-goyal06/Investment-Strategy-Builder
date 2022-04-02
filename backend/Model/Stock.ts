@@ -3,6 +3,7 @@ var getDbConnection = require('../db/dbconnect');
 import StrategyPlot from './StrategyPlot';
 var Instrument =  require('./Instrument');
 const DbManager = require('./DbManager');
+const Constants = require('./Constants');
 import DbManager_ from './DbManager';
 var StrategyPlot_ = require('./StrategyPlot')
 
@@ -73,48 +74,34 @@ export default class Stock extends Instrument{
      * @param expiryDate - date type
      */
     makePlot(xStart, ticker, expiryDate) {
-
-        console.log("stock")
       
         //set the start coordinate of x
         var x = Math.floor(xStart);
         var y;
-        
-        console.log(this.price);
        
         this.plot = new StrategyPlot_();
-        
+
+        var multiplier = 0;
+
         //two cases handled - buy and sell
-        if(this.side.toLowerCase()=="buy"){
-
-            // loop over the range and calculate y coordinate 
-            for(var i=0;i<100;i++){
-
-                if(x<=this.price){
-                    this.plot.xCoords.push(x);
-                    y = this.quantity*(x - this.price);
-                    this.plot.yCoords.push(y);
-                }else{
-                    this.plot.xCoords.push(x);
-                    y = this.quantity*(x - this.price);
-                    this.plot.yCoords.push(y);
-                }
-                x++;
-            }
+        if(this.side.toLowerCase() == Constants.Buy){
+            multiplier = 1;
+        }else if(this.side.toLowerCase() == Constants.Sell){
+            multiplier = -1;
         }else{
-             // loop over the range and calculate y coordinate 
-            for(var i=0;i<100;i++){
-                if(x<=this.price){
-                    this.plot.xCoords.push(x);
-                    y = -1*this.quantity*(x - this.price);
-                    this.plot.yCoords.push(y);
-                }else{
-                    this.plot.xCoords.push(x);
-                    y = -1*this.quantity*(x - this.price);
-                    this.plot.yCoords.push(y);
-                }
-                x++;
-            }
+            //invalid case
+            console.log("Invalid Case");
+            multiplier = NaN;
+        }
+
+        //loop over the range and calculate y coordinate 
+        for(var i=0;i<100;i++){
+
+            this.plot.xCoords.push(x);
+            y = (multiplier)*(this.quantity*(x - this.price));
+            this.plot.yCoords.push(y);
+
+            x++;
         }
        // return this.plot;
     }
@@ -127,5 +114,6 @@ export default class Stock extends Instrument{
         return this.plot;
     }
 }
+
 
 module.exports = Stock;

@@ -2,6 +2,7 @@ var Future = require("./Future");
 import IInstrument from "./IInstrument";
 var Options  = require("./Options");
 var Stock = require("./Stock");
+const Constants = require('./Constants');
 
 /**
  * Manager Class for Instruments.
@@ -25,16 +26,15 @@ export default class InstrumentManager{
     * @returns IInstrument type object of respective instrument
     */
     createInstrument(instrumentType: string, quantity:number, strikePrice:number, price:number, type:string, side:string) : IInstrument{
-       if(instrumentType.toLowerCase() == 'option'){
+       if(instrumentType.toLowerCase() == Constants.Option){
            return new Options(-1, quantity, strikePrice, type, side);
-       }else if(instrumentType.toLowerCase() == 'future'){
-           if(!price) price = strikePrice
+       }else if(instrumentType.toLowerCase() == Constants.Future){
            return new Future(-1, quantity, price, side);
        }else{
-           if(!price) price = strikePrice
            return new Stock(-1, quantity, price, side);
        }
     }
 }
+
 
 module.exports = InstrumentManager;

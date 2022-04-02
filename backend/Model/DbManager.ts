@@ -1,5 +1,8 @@
+import { Context } from "express-validator/src/context";
+
 var getDbConnection = require('../db/dbconnect');
 const mysql = require('mysql');
+const Constants = require('./Constants');
 
 /**
  * This class is a manager class for database.
@@ -57,19 +60,19 @@ export default class DbManager{
         console.log(sqlOptions);
         console.log(arr);
         for(let i in arr){
-             arr[i].segment = "option";
+             arr[i].segment = Constants.Option;
              response.push(arr[i]);             
         }
 
         arr = await connection.query(sqlFutures) ; 
         for(let i in arr){
-            arr[i].segment = "future";
+            arr[i].segment = Constants.Future;
             response.push(arr[i]);
         }
 
         arr = await connection.query(sqlStocks) ; 
         for(let i in arr){
-            arr[i].segment = "stock"
+            arr[i].segment = Constants.Stock;
             response.push(arr[i]);
         }
 
@@ -212,7 +215,6 @@ export default class DbManager{
     //var DbManager_ = new DbManager();
     //var response = DbManager_.GetUserDetailsFromUserId(1);
     //console.log(response);
-
 
 
 module.exports = DbManager;

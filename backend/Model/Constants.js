@@ -1,5 +1,5 @@
 class Constants{
-static Option = "options";
+static Option = "option";
 static Future = "future";
 static Stock = "stock";
 static Buy = "buy";
@@ -12,5 +12,5 @@ static BuyPut = "buy put";
 static SellPut = "sell put";
 }
 
-console.log(Constants.Option);
-console.log(Constants.Call);
+
+module.exports = Constants;

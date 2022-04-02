@@ -5,9 +5,9 @@ import StrategyPlot from './StrategyPlot';
 var StrategyPlot_ = require('./StrategyPlot')
 const DbManager = require('./DbManager');
 import DbManager_ from './DbManager';
-import { constants } from 'buffer';
 var Instrument = require('./Instrument');
-var Constants = require('./Constants');
+const Constants = require('./Constants');
+
 
 
 export default class Future extends Instrument{
@@ -15,7 +15,7 @@ export default class Future extends Instrument{
     price : number;
     currentPrice : number;
 
-    constructor(id:number, quantity:number, price:number,side:string){
+    constructor(id:number, quantity:number, price:number, side:string){
         super()
         this.id = id;
         this.quantity = quantity;
@@ -77,7 +77,6 @@ export default class Future extends Instrument{
      */
     makePlot(xStart, ticker, expiryDate) {
       
-      console.log("future")
 
         //sets the start x coordinate
         var x = Math.floor(xStart);
@@ -87,13 +86,14 @@ export default class Future extends Instrument{
         var multiplier = 0;
 
         //handles two cases - buy and sell
-
         if(this.side.toLowerCase() == Constants.Buy){
             multiplier = 1;
         }else if (this.side.toLowerCase() == Constants.Sell){
             multiplier = -1;
         }else{
-            console.log("Invalid Case");
+            //invalid case
+            console.log("Invalid Case -> Other than sell/buy");
+            multiplier = NaN;
         }
 
         //loop over the range and calculate y coordinates
@@ -105,40 +105,6 @@ export default class Future extends Instrument{
             x++;
         }
 
-        /*
-        if(this.side.toLowerCase()==Constants.Buy){
-            
-
-            //loop over the range and calculate y coordinates
-            for(var i=0;i<100;i++){
-
-                if(x<=this.price){
-                    this.plot.xCoords.push(x);
-                    y = this.quantity*(x - this.price);
-                    this.plot.yCoords.push(y);
-                }else{
-                    this.plot.xCoords.push(x);
-                    y = this.quantity*(x - this.price);
-                    this.plot.yCoords.push(y);
-                }
-                x++;
-            }
-        }else{
-
-            //loop over the range and calculate y coordinates
-            for(var i=0;i<100;i++){
-                if(x<=this.price){
-                    this.plot.xCoords.push(x);
-                    y = -1*this.quantity*(x - this.price);
-                    this.plot.yCoords.push(y);
-                }else{
-                    this.plot.xCoords.push(x);
-                    y = -1*this.quantity*(x - this.price);
-                    this.plot.yCoords.push(y);
-                }
-                x++;
-            }
-        }*/
         //return this.plot;
     }
 
@@ -151,7 +117,11 @@ export default class Future extends Instrument{
     }
 }
 
-//var f = new Future(1, 1, 1, 1, 1, "buy");
+//var f = new Future(-1, 1, 70, "buy");
 //f.setId();
+//f.makePlot(20, "AAPL", "2022-03-01");
+//var plot = f.getPlot();
+//console.log(plot);
+
 
 module.exports = Future

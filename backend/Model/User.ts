@@ -4,6 +4,7 @@ const mysql = require('mysql');
 const bcrypt = require('bcryptjs');
 var DbManager = require('./DbManager');
 
+
 export default class User{
     static count : number = 0;
     id : number;
@@ -48,8 +49,7 @@ export default class User{
         }
           
         var sql = "INSERT INTO user (id,name,email,password) VALUES (?,?,?,?)";
-        //this.id = Math.floor(Math.random() * (10000000));
-
+    
         //Password Encrypted before adding in db
         const salt = await bcrypt.genSalt(10);
         var secPass = await bcrypt.hash(this.password, salt);
