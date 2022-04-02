@@ -12,18 +12,9 @@ var StrategyPlot_ = require('./StrategyPlot');
  * 1. Stock it is implemented on, its expiry date, name, description
  * 2. Complete details of the instruments it has (price of instrument, quantity, type, side etc) 
  */
-interface IInstrumentStrategy{
-    id : number;
-    stockName : string;
-    ticker : string;
-    userId : number;
-    expiryDate : Date;
-    name:string;
-    strategySkeletonId:number;
-    description : string;
-}
 
-export default class InvestmentStrategy implements IInstrumentStrategy{
+
+export default class InvestmentStrategy{
 
     id : number;
     stockName : string;
