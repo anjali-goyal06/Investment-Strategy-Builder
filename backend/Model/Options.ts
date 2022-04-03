@@ -101,7 +101,7 @@ export default class Options extends Instrument{
        
         //setting premium before plot calculation
        // this.setPremium(ticker, expiryDate);
-        this.premium = 20;
+        this.premium = 5;
         console.log("premium = " + this.premium);
       
         //handles 4 cases - BUY CALL, SELL CALL, BUY PUT , SELL PUT
@@ -233,13 +233,13 @@ export default class Options extends Instrument{
 
 }
 
-//var op = new Options(-1, 1, 185, "Put", "buy");
+var op = new Options(-1, 1, 198, "Put", "buy");
 //let d:Date = new Date("2022/5/3");
 //op.fetchCurrentPriceFromMarketData("AAPL");
 //op.setPremium("AAPL", d);
-//op.makePlot(135,"AAPL", "2022-05-15");
-//var plot = op.getPlot();
-//console.log(plot);
+op.makePlot(135,"AAPL", "2022-05-15");
+var plot = op.getPlot();
+console.log(plot);
 
 module.exports = Options;
 
