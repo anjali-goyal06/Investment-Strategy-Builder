@@ -3,6 +3,8 @@ const JWT_SECRET = 'abrakadabra';
 
 const fetchuser = (req, res, next) => {
     // Get the user from the jwt token and add id to req object
+    next()
+    return
     const token = req.cookies.jwt
     if (!token) {
         res.status(401).send({ error: "Please authenticate using a valid token" })

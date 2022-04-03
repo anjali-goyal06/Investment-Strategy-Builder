@@ -153,11 +153,13 @@ export default class DbManager{
      * @returns strategy record as response
      */
     async fetchStrategyFromStrategyId(strategyId){
-        var sql = "select Id, Name,StockName,Ticker,ExpiryDate,userId,Description, InvestmentStrategySkeletonId from InvestmentStrategy where InvestmentStrategy.Id =  " + mysql.escape(strategyId);
+        console.log(strategyId);
+        var sql = "select * from InvestmentStrategy where InvestmentStrategy.Id =  " + mysql.escape(strategyId);
          try{
             const connection = await getDbConnection()
             var response = await connection.query(sql) ; 
             connection.end()
+            console.log(response)
             return response;
         }catch(err){
             return err;

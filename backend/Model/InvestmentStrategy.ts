@@ -2,8 +2,7 @@ var getDbConnection = require('../db/dbconnect');
 
 import StrategyPlot from './StrategyPlot';
 import IInstrument from './IInstrument';
-const DbManager = require('./DbManager');
-import DbManager_ from './DbManager';
+var DbManager = require('./DbManager');
 var StrategyPlot_ = require('./StrategyPlot');
 
 interface IInstrumentStrategy{
@@ -200,7 +199,7 @@ export default class InvestmentStrategy implements IInstrumentStrategy{
 
             //get strategy record from strategy id
             var strategy = await db.fetchStrategyFromStrategyId(strategyId);
-            console.log(strategy);
+            console.log("line 202" + strategy);
         
             //fetch instrument skeletons of given strategy
             var listInstrumentSkeleton = await db.GetInstrumentsFromStrategySkeletonId(strategy[0].InvestmentStrategySkeletonId);
