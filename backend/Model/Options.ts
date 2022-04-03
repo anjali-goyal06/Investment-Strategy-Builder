@@ -132,7 +132,7 @@ export default class Options extends Instrument{
             }
 
             case "buy put" : {
-                console.log("buy put")
+                
                 //loop over the range and calculate y coordinate for every x in range
                 for(var i=0;i<100;i++){
 
