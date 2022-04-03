@@ -1,4 +1,5 @@
 
+
 var getDbConnection = require('../db/dbconnect');
 
 import StrategyPlot from './StrategyPlot';
@@ -75,8 +76,8 @@ export default class Future extends Instrument{
      * @param ticker - string type
      * @param expiryDate - date type
      */
+    
     makePlot(xStart, ticker, expiryDate) {
-      
 
         //sets the start x coordinate
         var x = Math.floor(xStart);

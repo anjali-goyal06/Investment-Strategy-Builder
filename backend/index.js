@@ -17,7 +17,7 @@ app.use(cors())
 app.use(express.json())
 
 
-// Available Routes
+// Available Routes//
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/save', require('./routes/saveData'));
 app.use('/api/makePlot', require('./routes/makePlot'));

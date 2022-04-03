@@ -16,7 +16,7 @@ export default class InstrumentManager{
     }
     
    /**
-    *  It creates and returns the appropriate instrument object.
+    * It creates and returns the appropriate instrument object.
     * @param instrumentType specifies the type of instrument object to be created, type -string
     * @param quantity - type number, quantity of instrument
     * @param strikePrice - type number, strike price of instrument
@@ -25,9 +25,9 @@ export default class InstrumentManager{
     * @param side - type string, side of instrument (buy or sell)
     * @returns IInstrument type object of respective instrument
     */
-    createInstrument(instrumentType: string, quantity:number, strikePrice:number, price:number, type:string, side:string) : IInstrument{
+    createInstrument(instrumentType: string, quantity:number, strikePrice:number, price:number, type:string, side:string, premium:number) : IInstrument{
        if(instrumentType.toLowerCase() == Constants.Option){
-           return new Options(-1, quantity, strikePrice, type, side);
+           return new Options(-1, quantity, strikePrice, type, side, premium);
        }else if(instrumentType.toLowerCase() == Constants.Future){
            return new Future(-1, quantity, price, side);
        }else{

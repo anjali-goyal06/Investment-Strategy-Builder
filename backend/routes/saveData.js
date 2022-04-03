@@ -3,7 +3,7 @@ const router = express.Router();
 var getDbConnection = require('../db/dbconnect');
 const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
-const fetchuser = require('../middleware/fetchUser')
+//const fetchuser = require('../middleware/fetchUser')
 
 const InvestmentStrategySkeleton = require('../Model/InvestmentStrategySkeleton');
 const InvestmentStrategy = require('../Model/InvestmentStrategy');
@@ -20,7 +20,7 @@ const DbManager = require('../Model/DbManager');
  * If isSkeletonSaved is false then skeleton is not saved in database. In this case, skeleton is first inserted in database and then it's id is used for strategy insertion.
  *  
 */
-router.post('/SaveStrategy' , fetchuser,async (req,res)=>{
+router.post('/SaveStrategy' , async (req,res)=>{
  
     var userId = req.body.userId;
     
@@ -77,7 +77,7 @@ router.post('/SaveStrategy' , fetchuser,async (req,res)=>{
         //Adding the instrument in database
         try{
            //instrument manager returns the object of the appropriate instrument
-          var _instrument = await instrumentManager.createInstrument(instrument.segment, instrument.Quantity, instrument.StrikePrice, instrument.Price, instrument.Type, instrument.Side);
+          var _instrument = await instrumentManager.createInstrument(instrument.segment, instrument.Quantity, instrument.StrikePrice, instrument.Price, instrument.Type, instrument.Side, instrument.Premium);
           var result4 = await _instrument.AddDataToDb(instrumentSkeletonId, strategyId);
           console.log(result4);
         }catch(err){
@@ -96,7 +96,7 @@ router.post('/SaveStrategy' , fetchuser,async (req,res)=>{
  * Inserts strategy skeleton in database (with all the instrument skeletons) by fetching values from request body
  * 
  */
-router.post('/SaveStrategySkeleton' , fetchuser, async (req,res)=>{
+router.post('/SaveStrategySkeleton' ,  async (req,res)=>{
  
     var userId = req.body.userId;
 

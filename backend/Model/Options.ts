@@ -1,7 +1,4 @@
-
 var getDbConnection = require('../db/dbconnect');
-
-import fetch from "node-fetch";
 
 import StrategyPlot from './StrategyPlot';
 var StrategyPlot_ = require('./StrategyPlot')
@@ -20,12 +17,12 @@ export default class Options extends Instrument{
     currentPriceStock: number;
     type : string;
 
-    constructor(id:number, quantity:number, strikePrice:number,  type:string, side:string){
+    constructor(id:number, quantity:number, strikePrice:number,  type:string, side:string, premium:number){
         super()
         this.id = id;
         this.quantity = quantity;
         this.strikePrice = strikePrice;
-        this.premium = 5;
+        this.premium = premium;
         this.side = side;
         this.type = type;
     }
@@ -101,7 +98,6 @@ export default class Options extends Instrument{
        
         //setting premium before plot calculation
        // this.setPremium(ticker, expiryDate);
-        this.premium = 5;
         console.log("premium = " + this.premium);
       
         //handles 4 cases - BUY CALL, SELL CALL, BUY PUT , SELL PUT
@@ -174,72 +170,15 @@ export default class Options extends Instrument{
         return this.plot;
     }
 
-   /**
-    * To fetch the current price of a given stock in the market using TwelveData API
-    * @param ticker 
-    * Return Value - None. Sets the currentPriceStock data member to current price
-    */
-    async fetchCurrentPriceFromMarketData(ticker:string){
-        let base: String = 'https://api.twelvedata.com/price?apikey=b99f631941204b32b0cd3abafc919341';
-        let url : String = base + "&symbol=" + ticker;
-        const response = await fetch(url);
-        const data = await response.json();
-        var price = 0;
-        price = data.price; 
-        //console.log(price);
-        this.currentPriceStock = price;
-    }
-
-
-   /**
-    * Sets the premium of the option contract according to the strike price and expiry date
-    * @param ticker 
-    * @param expiryDate 
-    * Return Value - None, Sets the premium
-    */
-    async setPremium(ticker:string, expiryDate:Date){
-    
-        await this.fetchCurrentPriceFromMarketData(ticker);
-        console.log(this.currentPriceStock);
-
-
-        var intrinsicValue = 0;
-        intrinsicValue = Math.abs(this.currentPriceStock - this.strikePrice);
-        console.log(intrinsicValue);
-       
-        var timeValue = 0;
-        
-        let date1: Date = new Date();
-        let date2: Date = new Date(expiryDate);
-        console.log("date2 = " + date2 + " " + date2.getTime() + " " + date1.getTime())
-        let timeInMilisec: number = date2.getTime() - date1.getTime();
-        let daysBetweenDates: number = Math.ceil(timeInMilisec / (1000 * 60 * 60 * 24));
-        let monthsBetweenDates = daysBetweenDates/30;
-
-        console.log(monthsBetweenDates);
-       
-        timeValue = monthsBetweenDates*8;
-
-        this.premium = intrinsicValue + timeValue;
-
-        if(daysBetweenDates < 5){
-            this.premium = intrinsicValue;
-        }
-
-        this.premium = Math.floor(this.premium);
-        
-        console.log("Premium = " + this.premium);
-    }
-
 }
 
-var op = new Options(-1, 1, 198, "Put", "buy");
+//var op = new Options(-1, 1, 198, "Put", "buy", 20);
 //let d:Date = new Date("2022/5/3");
 //op.fetchCurrentPriceFromMarketData("AAPL");
 //op.setPremium("AAPL", d);
-op.makePlot(135,"AAPL", "2022-05-15");
-var plot = op.getPlot();
-console.log(plot);
+//op.makePlot(135,"AAPL", "2022-05-15");
+//var plot = op.getPlot();
+//console.log(plot);
 
 module.exports = Options;
 

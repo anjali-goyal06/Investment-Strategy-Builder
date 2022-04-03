@@ -13,7 +13,7 @@ const InstrumentManager = require('../Model/InstrumentManager')
  * It also calculates the starting x coordinate for the combined plot.
  * @returns the combined plot, basically x & y coordinates of the plot as response
  */
-router.post('/',fetchuser ,async(req, res)=>{
+router.post('/',async(req, res)=>{
 
     console.log(req.body);
 
@@ -36,13 +36,13 @@ router.post('/',fetchuser ,async(req, res)=>{
        sum = sum + parseInt(instrument.StrikePrice);
        // console.log("strile = " + instrument.StrikePrice)
       }else{
-        if(!instrument.Price) instrument.Price = instrument.StrikePrice
+       // if(!instrument.Price) instrument.Price = instrument.StrikePrice
       sum = sum + parseInt(instrument.Price);
        // console.log("strile = " + instrument.Price)
       }
   
       //creating appropriate instrument object using instrument manager and adding to investment strategy object
-      var _instrument = await instrumentManager.createInstrument(instrument.segment, instrument.Quantity, instrument.StrikePrice, instrument.Price, instrument.Type, instrument.Side);
+      var _instrument = await instrumentManager.createInstrument(instrument.segment, instrument.Quantity, instrument.StrikePrice, instrument.Price, instrument.Type, instrument.Side, instrument.Premium);
       //console.log(investmentStrategy.instruments)
       investmentStrategy.instruments.push(_instrument);
     }
