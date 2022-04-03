@@ -6,6 +6,14 @@ import InstrumentSkeleton from './InstrumentSkeleton';
 const DbManager = require('./DbManager');
 import DbManager_ from './DbManager';
 
+/**
+ * A Option Skeleton only contains the structural information of a option instrument without its specifying values (strike price, ticker, quantity, premium etc).
+ * For e.g. A option contract consists of premium of contract, quantity, side, ticker, expiry date etc.
+ * But Option Skeleton only holds its side and type information i.e. -
+ * Option Skeleton = (type -> put or call) and (side -> buy or sell)
+ * 
+ * This class holds option skeleton information in its objects.
+ */
 
 export default class OptionSkeleton extends InstrumentSkeleton{
    
@@ -18,12 +26,16 @@ export default class OptionSkeleton extends InstrumentSkeleton{
         this.type = type;
     }
     
+    /**
+     * Getter for option skeleton id
+     * @returns Id of option skeleton (integer)
+     */
     getId() : number {
         return this.id;
     }
 
     /*
-    Purpose - Fetches current record count in option skeleton table and sets id of current record to current record count plus one.
+    Fetches current record count in option skeleton table and sets id of current record to current record count plus one.
     Parameters - None
     Return Value - None
     */
@@ -43,7 +55,7 @@ export default class OptionSkeleton extends InstrumentSkeleton{
     
   
   /**
-   *  Purpose - Inserts the option skeleton object in option skeleton table.
+   * Inserts the option skeleton object in option skeleton table.
    * @param StrategySkeletonId - Id of the strategy skeleton (integer) to which it belongs must be provided
    * @returns sql query response on successful insertion. In case of any errors, returns the error.
    */

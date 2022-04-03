@@ -11,6 +11,7 @@ import { time } from "console";
 var Instrument = require('./Instrument');
 const DbManager = require('./DbManager');
 import DbManager_ from './DbManager';
+const Constants = require('./Constants');
 
 export default class Options extends Instrument{
 
@@ -35,7 +36,7 @@ export default class Options extends Instrument{
     }
 
     /*
-    Purpose - Fetches current record count in options table and sets id of current record to current record count plus one.
+    Fetches current record count in options table and sets id of current record to current record count plus one.
     Parameters - None
     Return Value - None
     */
@@ -54,7 +55,7 @@ export default class Options extends Instrument{
     
    
   /**
-   * Purpose - Inserts the options object in options table.
+   * Inserts the options object in options table.
    * @param instrumentSkeletonId 
    * @param strategyId - id of strategy to which it belongs must be provided
    * @returns sql query response on successful insertion. In case of any errors, returns the error.
@@ -83,119 +84,89 @@ export default class Options extends Instrument{
 
 
    /**
-     * Purpose - To make plot for option instrument and store the respective x & y coordinates in plot data member. 
+     * To make plot for option instrument and store the respective x & y coordinates in plot data member. 
      * @param xStart Starting x coordinate of plot
      * @param ticker - string type
      * @param expiryDate - date type
      */
-    async makePlot(xStart, ticker, expiryDate){
-      //  var i = this.strikePrice - 30;
+    makePlot(xStart, ticker, expiryDate){
 
       //sets starting x coordinate of plot
         var x = Math.floor(xStart);
         var y;
-
-        console.log("x val = " + x);
 
         this.plot = new StrategyPlot_();
 
         var str = this.side.toLowerCase() + " " + this.type.toLowerCase();
        
         //setting premium before plot calculation
-        await this.setPremium(ticker, expiryDate);
-
+       // this.setPremium(ticker, expiryDate);
+        this.premium = 20;
         console.log("premium = " + this.premium);
       
         //handles 4 cases - BUY CALL, SELL CALL, BUY PUT , SELL PUT
         switch(str){
 
-
-            case "buy call" : {
+            case Constants.BuyCall : {
 
                 //loop over the range and calculate y coordinate for every x in range
                 for(var i=0;i<100;i++){
 
-                    if(x<=this.strikePrice){
-                        this.plot.xCoords.push(x);
-                        y = -(this.quantity*this.premium);
-                        this.plot.yCoords.push(y);
-                    }else{
-                        this.plot.xCoords.push(x);
-                        y = this.quantity*((x-this.strikePrice) - this.premium);
-                        this.plot.yCoords.push(y);
-                    }
-                  
-                    x++;
-                }
-               
-                break;
-            }
-
-            case "buy put" : {
-                
-                //loop over the range and calculate y coordinate for every x in range
-                for(var i=0;i<100;i++){
-
-                    if(x<=this.strikePrice){
-                        this.plot.xCoords.push(x);
-                        y = this.quantity*((this.strikePrice -x) - this.premium);
-                        this.plot.yCoords.push(y);
-                    }else{
-                        this.plot.xCoords.push(x);
-                        y = -this.quantity*(this.premium);
-                        this.plot.yCoords.push(y);
-                    }
+                    this.plot.xCoords.push(x);
+                    var x2 = Math.max(x, this.strikePrice);
+                    y = this.quantity*((x2-this.strikePrice) - this.premium);
+                    this.plot.yCoords.push(y);
                     x++;
                 }
                 break;
             }
 
-            case "sell call" : {
+            case Constants.BuyPut : {
 
                 //loop over the range and calculate y coordinate for every x in range
                 for(var i=0;i<100;i++){
 
-                    if(x<=this.strikePrice){
-                        this.plot.xCoords.push(x);
-                        y = (this.quantity*this.premium);
-                        this.plot.yCoords.push(y);
-                    }else{
-                        this.plot.xCoords.push(x);
-                        y = -1*this.quantity*((x-this.strikePrice) - this.premium);
-                        this.plot.yCoords.push(y);
-                    }
+                    this.plot.xCoords.push(x);
+                    var x2 = Math.min(x, this.strikePrice);
+                    y = this.quantity*((this.strikePrice -x2) - this.premium);
+                    this.plot.yCoords.push(y);
                     x++;
                 }
                 break;
             }
 
-            case "sell put":{
+            case Constants.SellCall : {
 
                 //loop over the range and calculate y coordinate for every x in range
                 for(var i=0;i<100;i++){
 
-                    if(x<=this.strikePrice){
-                        this.plot.xCoords.push(x);
-                        y = -1*this.quantity*((this.strikePrice -x) - this.premium);
-                        this.plot.yCoords.push(y);
-                    }else{
-                        this.plot.xCoords.push(x);
-                        y = this.quantity*(this.premium);
-                        this.plot.yCoords.push(y);
-                    }
+                    this.plot.xCoords.push(x);
+                    var x2 = Math.max(x, this.strikePrice);
+                    y = -1*this.quantity*((x2-this.strikePrice) - this.premium);
+                    this.plot.yCoords.push(y);
+                    x++;
+                }
+                break;
+            }
+
+            case Constants.SellPut :{
+
+                //loop over the range and calculate y coordinate for every x in range
+                for(var i=0;i<100;i++){
+
+                    this.plot.xCoords.push(x);
+                    var x2 = Math.min(x, this.strikePrice);
+                    y = -1*this.quantity*((this.strikePrice -x2) - this.premium);
                     x++;
                 }
             }
 
         }
-
-        //console.log(this.plot)
-       // return this.plot;
         
     }
 
     /** 
-    * Purpose - Returns the plot.
+    * Returns the plot.
     * Parameters - None
     * @returns - Plot (StrategyPlot type)
     */
@@ -204,7 +175,7 @@ export default class Options extends Instrument{
     }
 
    /**
-    * Purpose - To fetch the current price of a given stock in the market using TwelveData API
+    * To fetch the current price of a given stock in the market using TwelveData API
     * @param ticker 
     * Return Value - None. Sets the currentPriceStock data member to current price
     */
@@ -221,7 +192,7 @@ export default class Options extends Instrument{
 
 
    /**
-    * Purpose - Sets the premium of the option contract according to the strike price and expiry date
+    * Sets the premium of the option contract according to the strike price and expiry date
     * @param ticker 
     * @param expiryDate 
     * Return Value - None, Sets the premium
@@ -235,13 +206,6 @@ export default class Options extends Instrument{
         var intrinsicValue = 0;
         intrinsicValue = Math.abs(this.currentPriceStock - this.strikePrice);
         console.log(intrinsicValue);
-
-       // if(this.type == "Call" && this.currentPriceStock > this.strikePrice){
-         // intrinsicValue = this.currentPriceStock - this.strikePrice;
-        //}else if(this.type == "Put" && this.currentPriceStock < this.strikePrice){
-          //intrinsicValue = this.strikePrice - this.currentPriceStock;
-       // }
-
        
         var timeValue = 0;
         
@@ -264,15 +228,18 @@ export default class Options extends Instrument{
 
         this.premium = Math.floor(this.premium);
         
-        console.log(this.premium);
+        console.log("Premium = " + this.premium);
     }
 
 }
 
-//const op = new Options(1, 1, 190, 1, 1, "Call", "Call");
+//var op = new Options(-1, 1, 185, "Put", "buy");
 //let d:Date = new Date("2022/5/3");
 //op.fetchCurrentPriceFromMarketData("AAPL");
 //op.setPremium("AAPL", d);
+//op.makePlot(135,"AAPL", "2022-05-15");
+//var plot = op.getPlot();
+//console.log(plot);
 
 module.exports = Options;
 

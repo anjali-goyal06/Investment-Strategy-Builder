@@ -8,7 +8,7 @@ const fetchuser = require('../middleware/fetchUser')
 
 
  /**
-  * Purpose - Given a strategy id, it fetches its implementation 
+  *  Given a strategy id, it fetches its implementation 
   * @returns strategy details and list of all the instruments it has as response in json format
   */
 router.get("/savedImplementation" ,fetchuser, async (req,res) => {
@@ -19,7 +19,7 @@ router.get("/savedImplementation" ,fetchuser, async (req,res) => {
   })
 
   /**
-   * Purpose - Fetches the complete strategy skeleton (with instrument skeletons) of given strategy skeleton id
+   * Fetches the complete strategy skeleton (with instrument skeletons) of given strategy skeleton id
    * @returns strategy skeleton details and list of all the instrument skeletons it has as response
    */
   router.post("/savedSkeleton" ,fetchuser, async (req,res) => {
@@ -31,7 +31,7 @@ router.get("/savedImplementation" ,fetchuser, async (req,res) => {
   })
 
    /**
-   * Purpose - Fetches the skeletons of popular strategies from database i.e. the strategies saved by system user
+   * Fetches the skeletons of popular strategies from database i.e. the strategies saved by system user
    * @returns strategy skeleton records as response
    */
   router.get("/popularStrategy" ,fetchuser, async(req,res) =>{
@@ -42,7 +42,7 @@ router.get("/savedImplementation" ,fetchuser, async (req,res) => {
   })
 
   /**
-   * Purpose - Fetches the strategy skeletons saved by a particular user from database
+   * Fetches the strategy skeletons saved by a particular user from database
    * @returns strategy skeleton records as response
    */
   router.get("/customStrategy" ,fetchuser, async(req,res) =>{
@@ -54,7 +54,7 @@ router.get("/savedImplementation" ,fetchuser, async (req,res) => {
 
 
   /**
-   * Purpose - Fetches all the strategies (with values) that are saved by a given user
+   * Fetches all the strategies (with values) that are saved by a given user
    * @returns fetched strategies as response
    */
    router.get("/allSavedImplemenations" ,fetchuser, async (req,res) =>{

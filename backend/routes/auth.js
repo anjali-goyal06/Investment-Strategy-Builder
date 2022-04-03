@@ -15,7 +15,7 @@ router.get('/' , (req,res)=>{
 
 
 /**
- * Purpose - Inserts user record in database when new user registers
+ * Inserts user record in database when new user registers
  */
 router.post('/register' ,[
     body('name', 'Enter a valid name').isLength({ min: 3 }),
@@ -40,7 +40,7 @@ router.post('/register' ,[
 })
 
 /**
- * Purpose - Authenticate a User 
+ * Authenticate a User 
  */ 
 router.post('/login', [
     body('email', 'Enter a valid email').isEmail(),

@@ -8,6 +8,7 @@ var jwt = require('jsonwebtoken');
 const JWT_SECRET = 'abrakadabra';
 
 
+
 export default class User{
     static count : number = 0;
     id : number;
@@ -24,7 +25,7 @@ export default class User{
     }
 
     /**
-     * Purpose - Fetches current record count in user table and sets id of current record to current record count plus one.
+     * Fetches current record count in user table and sets id of current record to current record count plus one.
      * Parameters - None
      * Return Value - None
      */
@@ -42,7 +43,7 @@ export default class User{
     }
 
     /**
-     * Purpose - Adds user record in user table
+     * Adds user record in user table
      * @returns sql query response in case of successful insertion. 
      */
     async AddUser(){
@@ -52,8 +53,7 @@ export default class User{
         }
           
         var sql = "INSERT INTO user (id,name,email,password) VALUES (?,?,?,?)";
-        //this.id = Math.floor(Math.random() * (10000000));
-
+    
         //Password Encrypted before adding in db
         const salt = await bcrypt.genSalt(10);
         var secPass = await bcrypt.hash(this.password, salt);
@@ -69,13 +69,12 @@ export default class User{
             response.authtoken = authtoken;
             return response;
         }catch(err){
-            console.log(err);
             return err;
         }
     }
 
     /**
-     * Purpose - Fetches user record corresponding to given email
+     * Fetches user record corresponding to given email
      * @returns User record as response
      */
     async LoginUser(){

@@ -3,6 +3,7 @@ var getDbConnection = require('../db/dbconnect');
 import StrategyPlot from './StrategyPlot';
 var Instrument =  require('./Instrument');
 const DbManager = require('./DbManager');
+const Constants = require('./Constants');
 import DbManager_ from './DbManager';
 var StrategyPlot_ = require('./StrategyPlot')
 
@@ -21,7 +22,7 @@ export default class Stock extends Instrument{
 
     
     /**
-     * Purpose - Fetches current record count in stock table and sets id of current record to current record count plus one.
+     * Fetches current record count in stock table and sets id of current record to current record count plus one.
      * Parameters - None
      * Return Value - None
      */
@@ -39,7 +40,7 @@ export default class Stock extends Instrument{
 
      
   /**
-   * Purpose - Inserts the stock object in stock table.
+   * Inserts the stock object in stock table.
    * @param instrumentSkeletonId 
    * @param strategyId - id of strategy to which it belongs must be provided
    * @returns sql query response on successful insertion. In case of any errors, returns the error.
@@ -67,61 +68,52 @@ export default class Stock extends Instrument{
     }
 
     /**
-     * Purpose - To make plot for stock instrument and store the respective x & y coordinates in plot data member. 
+     * To make plot for stock instrument and store the respective x & y coordinates in plot data member. 
      * @param xStart Starting x coordinate of plot
      * @param ticker - string type
      * @param expiryDate - date type
      */
     makePlot(xStart, ticker, expiryDate) {
-
-        console.log("stock")
       
         //set the start coordinate of x
         var x = Math.floor(xStart);
         var y;
-        
-        console.log(this.price);
        
         this.plot = new StrategyPlot_();
-        
+
+        var multiplier = 0;
+
         //two cases handled - buy and sell
-        if(this.side.toLowerCase()=="buy"){
-
-            // loop over the range and calculate y coordinate 
-            for(var i=0;i<100;i++){
-
-                if(x<=this.price){
-                    this.plot.xCoords.push(x);
-                    y = this.quantity*(x - this.price);
-                    this.plot.yCoords.push(y);
-                }else{
-                    this.plot.xCoords.push(x);
-                    y = this.quantity*(x - this.price);
-                    this.plot.yCoords.push(y);
-                }
-                x++;
-            }
+        if(this.side.toLowerCase() == Constants.Buy){
+            multiplier = 1;
+        }else if(this.side.toLowerCase() == Constants.Sell){
+            multiplier = -1;
         }else{
-             // loop over the range and calculate y coordinate 
-            for(var i=0;i<100;i++){
-                if(x<=this.price){
-                    this.plot.xCoords.push(x);
-                    y = -1*this.quantity*(x - this.price);
-                    this.plot.yCoords.push(y);
-                }else{
-                    this.plot.xCoords.push(x);
-                    y = -1*this.quantity*(x - this.price);
-                    this.plot.yCoords.push(y);
-                }
-                x++;
-            }
+            //invalid case
+            console.log("Invalid Case");
+            multiplier = NaN;
+        }
+
+        //loop over the range and calculate y coordinate 
+        for(var i=0;i<100;i++){
+
+            this.plot.xCoords.push(x);
+            y = (multiplier)*(this.quantity*(x - this.price));
+            this.plot.yCoords.push(y);
+
+            x++;
         }
        // return this.plot;
     }
 
+    /**
+     * Getter for plot
+     * @returns plot of stock instrument
+     */
     getPlot(): StrategyPlot {
         return this.plot;
     }
 }
+
 
 module.exports = Stock;

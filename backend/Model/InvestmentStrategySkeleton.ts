@@ -6,6 +6,21 @@ const mysql = require('mysql');
 const DbManager = require('./DbManager');
 import DbManager_ from './DbManager';
 
+/**
+ * This class is used for holding the skeleton of strategies inside its objects.
+ * 
+ * A strategy skeleton is the term we have used for denoting only the structural information of a strategy, not its values.
+ * For e.g. - A married put strategy refers to buying a stock and simultaneously buying a put option for that stock.
+ * So, skeleton of married put will only have the following info-
+ * 1. Strategy Name, Description 
+ * 2. One Option instrument, type = put, side = buy
+ * 3. One stock instrument, side = buy
+ *
+ * While a strategy implementation has complete information - strategy skeleton + values (ticker, expiry date, quantity, strike price or price of instrument etc)
+ * 
+ * This class has mainly been used to model the strategy skeleton information into an object while adding it or fetching it to/from database.
+ */
+
 export default class InvestmentStrategySkeleton{
     id : number;
     strategyName : string;
@@ -22,7 +37,7 @@ export default class InvestmentStrategySkeleton{
 
     
     /*
-    Purpose - Getter for strategy skeleton id
+    Getter for strategy skeleton id
     Parameters - None
     Return Value - Id (integer)
     */
@@ -31,7 +46,7 @@ export default class InvestmentStrategySkeleton{
     }
 
     /*
-    Purpose - Fetches current record count in investment strategy skeleton table and sets id of current record to current record count plus one.
+    Fetches current record count in investment strategy skeleton table and sets id of current record to current record count plus one.
     Parameters - None
     Return Value - None
     */
@@ -49,7 +64,7 @@ export default class InvestmentStrategySkeleton{
     }
 
     /** 
-   * Purpose - Inserts the investment strategy skeleton object in investment strategy skeleton table.
+   * Inserts the investment strategy skeleton object in investment strategy skeleton table.
    * Parameters - None
    * @returns sql query response on successful insertion. In case of any errors, returns the error.
    */

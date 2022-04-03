@@ -5,18 +5,15 @@ import IInstrument from './IInstrument';
 var DbManager = require('./DbManager');
 var StrategyPlot_ = require('./StrategyPlot');
 
-interface IInstrumentStrategy{
-    id : number;
-    stockName : string;
-    ticker : string;
-    userId : number;
-    expiryDate : Date;
-    name:string;
-    strategySkeletonId:number;
-    description : string;
-}
+/**
+ * This class is used for holding strategy implementations in its objects.
+ * Strategy Implementation refers to the complete snapshot of a strategy (with specific values) having full details -
+ * 1. Stock it is implemented on, its expiry date, name, description
+ * 2. Complete details of the instruments it has (price of instrument, quantity, type, side etc) 
+ */
 
-export default class InvestmentStrategy implements IInstrumentStrategy{
+
+export default class InvestmentStrategy{
 
     id : number;
     stockName : string;
@@ -52,7 +49,7 @@ export default class InvestmentStrategy implements IInstrumentStrategy{
 
     
    /**
-    * Purpose - Returns the strategy plot
+    * Returns the strategy plot
     * Parameter - None
     * @returns Plot (StrategyPlot type)
     */
@@ -61,7 +58,7 @@ export default class InvestmentStrategy implements IInstrumentStrategy{
     }
 
    /**
-    * Purpose - Makes the combined plot of the strategy from the plots of the instruments it has.
+    * Makes the combined plot of the strategy from the plots of the instruments it has.
     * @param startCoord - Starting x coordinate of the plot, type - number
     * @returns combined plot
     */
@@ -70,7 +67,7 @@ export default class InvestmentStrategy implements IInstrumentStrategy{
        //setting starting coordinate
        this.xStart = startCoord;
 
-       var flag = true;
+       var FirstIteration = true;
 
        //for each instrument in the strategy
         for(let k in this.instruments){
@@ -81,7 +78,8 @@ export default class InvestmentStrategy implements IInstrumentStrategy{
             this.instruments[k].makePlot(this.xStart, this.ticker, this.expiryDate);
             let tempPlot = this.instruments[k].getPlot();
 
-            if(flag){
+            //If this is the first iteration of loop, then set combined plot's coordinate values to zero
+            if(FirstIteration){
                 for(let i in tempPlot.xCoords){
                     this.plot.yCoords.push(0)
                     this.plot.xCoords.push(0)
@@ -93,14 +91,14 @@ export default class InvestmentStrategy implements IInstrumentStrategy{
                 this.plot.xCoords[i] = tempPlot.xCoords[i]
                 this.plot.yCoords[i] += tempPlot.yCoords[i];
             }
-            flag = false;
+            FirstIteration = false;
         }
         return this.plot;
     }
 
 
    /**
-    * Purpose - Getter for strategy id
+    * Getter for strategy id
     * Parameters - None
     * @returns Id (integer)
     */
@@ -110,7 +108,7 @@ export default class InvestmentStrategy implements IInstrumentStrategy{
 
     
    /**
-    * Purpose - Fetches current record count in investment strategy table an  d sets id of current record to current record count plus one.
+    * Fetches current record count in investment strategy table an  d sets id of current record to current record count plus one.
     * Parameters - None
     * Return Value - None
     */
@@ -128,7 +126,7 @@ export default class InvestmentStrategy implements IInstrumentStrategy{
     }
     
   /**
-   * Purpose - Inserts the investment strategy object in investment strategy table.
+   * Inserts the investment strategy object in investment strategy table.
    * Parameters - None
    * @returns sql query response on successful insertion. In case of any errors, returns the error.
    */
@@ -155,7 +153,7 @@ export default class InvestmentStrategy implements IInstrumentStrategy{
 
     
    /**
-    * Purpose - Fetches all the saved strategies for a given user id from investment strategy table.
+    * Fetches all the saved strategies for a given user id from investment strategy table.
     * @param userId 
     * @returns Query Response containing the saved strategies record in json object
     */
@@ -168,7 +166,7 @@ export default class InvestmentStrategy implements IInstrumentStrategy{
     }
 
     /**
-     * Purpose - Fetches the complete strategy skeleton (with instrument skeletons) of given strategy skeleton id
+     * Fetches the complete strategy skeleton (with instrument skeletons) of given strategy skeleton id
      * @param strategySkeletonId - strategy skeleton id 
      * @returns a json object having strategy skeleton details and list of all the instrument skeletons it has
      */
@@ -188,7 +186,7 @@ export default class InvestmentStrategy implements IInstrumentStrategy{
     }
 
     /**
-     * Purpose - Fetches the complete strategy implementation (with all its instruments) of given strategy id
+     * Fetches the complete strategy implementation (with all its instruments) of given strategy id
      * @param strategyId - strategy id
      * @returns a json object having strategy details and list of all the instruments it has
      */
@@ -231,7 +229,7 @@ export default class InvestmentStrategy implements IInstrumentStrategy{
     }
     
     /**
-     * Purpose - It combines the data of instrument skeleton table and instrument table into a complete instrument object
+     * It combines the data of instrument skeleton table and instrument table into a complete instrument object
      * @param x - record of instrument table. It has values (price, quantity, strike price/price etc) but does not have skeleton information (side, type) of instruments
      * @param y - record of instrument skeleton table. It has skeleton information but not values.
      * @returns complete instrument object (with values and skeleton information both) in json format

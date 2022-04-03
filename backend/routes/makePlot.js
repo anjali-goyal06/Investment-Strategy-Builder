@@ -9,7 +9,7 @@ const InstrumentManager = require('../Model/InstrumentManager')
 
 
 /**
- * Purpose - Making the plot for the investment strategy whose details are provided in the request body.
+ * Making the plot for the investment strategy whose details are provided in the request body.
  * It also calculates the starting x coordinate for the combined plot.
  * @returns the combined plot, basically x & y coordinates of the plot as response
  */

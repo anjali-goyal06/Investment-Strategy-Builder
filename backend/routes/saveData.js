@@ -12,7 +12,7 @@ const InstrumentManager = require('../Model/InstrumentManager');
 const DbManager = require('../Model/DbManager');
 
 /**
- * Purpose - Inserts the strategy (with all the instruments and their values) in database by fetching values from request body.
+ * Inserts the strategy (with all the instruments and their values) in database by fetching values from request body.
  * 
  * Explanation-
  * Request Body has a variable 'isSkeletonSaved' in it. This variable governs whether strategy skeleton will be added or not in the database.
@@ -93,7 +93,7 @@ router.post('/SaveStrategy' , fetchuser,async (req,res)=>{
 })
 
 /**
- * Purpose - Inserts strategy skeleton in database (with all the instrument skeletons) by fetching values from request body
+ * Inserts strategy skeleton in database (with all the instrument skeletons) by fetching values from request body
  * 
  */
 router.post('/SaveStrategySkeleton' , fetchuser, async (req,res)=>{
