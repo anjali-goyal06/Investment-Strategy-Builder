@@ -74,7 +74,7 @@ export default class Options extends Instrument{
      * @param ticker - string type
      * @param expiryDate - date type
      */
-    makePlot(xStart, ticker, expiryDate){
+    makePlot(xStart){
 
       //sets starting x coordinate of plot
         var x = Math.floor(xStart);
@@ -161,13 +161,6 @@ export default class Options extends Instrument{
 
 }
 
-//var op = new Options(-1, 1, 198, "Put", "buy", 20);
-//let d:Date = new Date("2022/5/3");
-//op.fetchCurrentPriceFromMarketData("AAPL");
-//op.setPremium("AAPL", d);
-//op.makePlot(135,"AAPL", "2022-05-15");
-//var plot = op.getPlot();
-//console.log(plot);
 
 module.exports = Options;
 

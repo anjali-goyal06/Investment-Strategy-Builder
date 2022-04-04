@@ -13,6 +13,14 @@ class Constants{
     static SellCall = "sell call";
     static BuyPut = "buy put";
     static SellPut = "sell put";
+    static BuyStock = "Buy Stock";
+    static BuyFuture = "Buy Future";
+    static SellFuture = "Sell Future";
+    static BuyCallOptions = "Buy Call Options";
+    static BuyPutOptions = "Buy Put Options";
+    static SellCallOptions = "Sell Call Options";
+    static SellPutOptions = "Sell Put Options";
+    
 }
 
 

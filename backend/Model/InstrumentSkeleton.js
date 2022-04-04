@@ -1,4 +1,7 @@
 "use strict";
+/**
+ * This file contains the definition of Instrument Skelton class. It implements Instrument Skelton inteface.
+ */
 exports.__esModule = true;
 /**
  * This is the base class from which all the instrument skeleton classes have been inherited.

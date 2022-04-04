@@ -19,7 +19,7 @@ export default class Instrument implements IInstrument{
     side;
     plot;
     instrumentSkeleton;
-    makePlot(x, ticker, expiryDate) {}
+    makePlot(x) {}
     getPlot() :  StrategyPlot {return this.plot;};
 }
 

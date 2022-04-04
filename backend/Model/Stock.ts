@@ -57,7 +57,7 @@ export default class Stock extends Instrument{
      * @param ticker - string type
      * @param expiryDate - date type
      */
-    makePlot(xStart, ticker, expiryDate) {
+    makePlot(xStart) {
       
         //set the start coordinate of x
         var x = Math.floor(xStart);

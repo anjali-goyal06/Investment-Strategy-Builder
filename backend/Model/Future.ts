@@ -62,7 +62,7 @@ export default class Future extends Instrument{
      * @param expiryDate - date type
      */
     
-    makePlot(xStart, ticker, expiryDate) {
+    makePlot(xStart) {
 
         //sets the start x coordinate
         var x = Math.floor(xStart);
@@ -102,12 +102,6 @@ export default class Future extends Instrument{
         return this.plot;
     }
 }
-
-//var f = new Future(-1, 1, 70, "buy");
-//f.setId();
-//f.makePlot(20, "AAPL", "2022-03-01");
-//var plot = f.getPlot();
-//console.log(plot);
 
 
 //var res = f.AddDataToDb(null, null);
