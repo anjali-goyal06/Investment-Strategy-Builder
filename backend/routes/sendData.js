@@ -46,7 +46,7 @@ router.get("/savedImplementation" ,fetchuser, async (req,res) => {
    * @returns strategy skeleton records as response
    */
   router.get("/customStrategy" ,fetchuser, async(req,res) =>{
-    var userId = req.body.userId;
+    var userId = (req.body.userId) ? req.body.userId : '2';
     var db = await new DbManager();
     var customStrategies = await db.GetStrategySkeletonsFromUserId(userId);
     res.send(customStrategies);
