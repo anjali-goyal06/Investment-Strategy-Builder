@@ -71,10 +71,9 @@ export default class Options extends Instrument{
    /**
      * To make plot for option instrument and store the respective x & y coordinates in plot data member. 
      * @param xStart Starting x coordinate of plot
-     * @param ticker - string type
-     * @param expiryDate - date type
+     * @param range - range of plot coordinates
      */
-    makePlot(xStart){
+    makePlot(xStart, range){
 
       //sets starting x coordinate of plot
         var x = Math.floor(xStart);
@@ -84,9 +83,6 @@ export default class Options extends Instrument{
 
         var str = this.side.toLowerCase() + " " + this.type.toLowerCase();
        
-        //setting premium before plot calculation
-       // this.setPremium(ticker, expiryDate);
-        console.log("premium = " + this.premium);
       
         //handles 4 cases - BUY CALL, SELL CALL, BUY PUT , SELL PUT
         switch(str){
@@ -94,7 +90,7 @@ export default class Options extends Instrument{
             case Constants.BuyCall : {
 
                 //loop over the range and calculate y coordinate for every x in range
-                for(var i=0;i<100;i++){
+                for(var i=0;i<range;i++){
 
                     this.plot.xCoords.push(x);
                     var x2 = Math.max(x, this.strikePrice);
@@ -108,7 +104,7 @@ export default class Options extends Instrument{
             case Constants.BuyPut : {
 
                 //loop over the range and calculate y coordinate for every x in range
-                for(var i=0;i<100;i++){
+                for(var i=0;i<range;i++){
 
                     this.plot.xCoords.push(x);
                     var x2 = Math.min(x, this.strikePrice);
@@ -122,7 +118,7 @@ export default class Options extends Instrument{
             case Constants.SellCall : {
 
                 //loop over the range and calculate y coordinate for every x in range
-                for(var i=0;i<100;i++){
+                for(var i=0;i<range;i++){
 
                     this.plot.xCoords.push(x);
                     var x2 = Math.max(x, this.strikePrice);
@@ -136,7 +132,7 @@ export default class Options extends Instrument{
             case Constants.SellPut :{
 
                 //loop over the range and calculate y coordinate for every x in range
-                for(var i=0;i<100;i++){
+                for(var i=0;i<range;i++){
 
                     this.plot.xCoords.push(x);
                     var x2 = Math.min(x, this.strikePrice);

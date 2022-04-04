@@ -14,13 +14,6 @@ const InstrumentManager = require('../Model/InstrumentManager')
  * @returns the combined plot, basically x & y coordinates of the plot as response
  */
 router.post('/',async(req, res)=>{
-
-    console.log(req.body);
-
-  //if(req.body.ExpiryDate=='')
-    //  req.body.ExpiryDate = '2022-04-10';
-  //if(req.body.segment)
-  //req.body.segment = req.body.segment.toLowerCase();
  
      //Creating investment strategy object
     var investmentStrategy = await new InvestmentStrategy(-1, req.body.StockName, req.body.Ticker, -1, req.body.ExpiryDate, req.body.Name, -1, req.body.Description);
@@ -47,25 +40,31 @@ router.post('/',async(req, res)=>{
       investmentStrategy.instruments.push(_instrument);
     }
 
-    var range = 100;
+    //var range = 100;
   
     console.log(sum)
     let total = req.body.listInstruments.length;
-    console.log(total + " " + range)
+    console.log(total)
     let t = Math.floor(total);
   
    //setting the starting x coordinate of combined plot
-    let startCoord = Math.floor(sum/t);
-    console.log(startCoord)
-    startCoord -= (range/2);
+    let average = Math.floor(sum/t);
+
+    let range = 2*average;
+    if(range > 400) range = 400;
+
+
+    let startCoord = average - (range/2);
     console.log(startCoord)
     startCoord = Math.floor(startCoord);
+    range = Math.floor(range);
 
     if(startCoord<0) startCoord = 0;
-    console.log("startcoords = " + startCoord)
+    console.log("startcoords = " + startCoord);
+    console.log("range = " + range);
 
     //Making the combined plot
-    var plot = await investmentStrategy.combinedPlot(startCoord);
+    var plot = await investmentStrategy.combinedPlot(startCoord, range);
   
     var response = plot
     console.log(response)

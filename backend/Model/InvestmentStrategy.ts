@@ -61,9 +61,10 @@ export default class InvestmentStrategy{
    /**
     * Makes the combined plot of the strategy from the plots of the instruments it has.
     * @param startCoord - Starting x coordinate of the plot, type - number
+    * @param range - range of plot coordinates
     * @returns combined plot
     */
-    async combinedPlot(startCoord){
+    async combinedPlot(startCoord, range){
 
        //setting starting coordinate
        this.xStart = startCoord;
@@ -76,7 +77,7 @@ export default class InvestmentStrategy{
             //console.log(this.instruments[k]);
             
             //calculate the instrument plot
-            await this.instruments[k].makePlot(this.xStart);
+            await this.instruments[k].makePlot(this.xStart, range);
             let tempPlot = await this.instruments[k].getPlot();
 
             //If this is the first iteration of loop, then set combined plot's coordinate values to zero

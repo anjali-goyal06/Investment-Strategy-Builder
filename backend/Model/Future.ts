@@ -58,11 +58,9 @@ export default class Future extends Instrument{
     /**
      * To make plot for future instrument and store the respective x & y coordinates in plot data member. 
      * @param xStart Starting x coordinate of plot
-     * @param ticker - string type
-     * @param expiryDate - date type
+     * @param range - range of plot coordinates
      */
-    
-    makePlot(xStart) {
+    makePlot(xStart, range) {
 
         //sets the start x coordinate
         var x = Math.floor(xStart);
@@ -83,7 +81,7 @@ export default class Future extends Instrument{
         }
 
         //loop over the range and calculate y coordinates
-        for(var i=0;i<100;i++){
+        for(var i=0;i<range;i++){
 
             this.plot.xCoords.push(x);
             y = (multiplier) * (this.quantity*(x - this.price));
