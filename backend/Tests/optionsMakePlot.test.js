@@ -16,13 +16,13 @@ test(Constants.BuyCallOptions, async () => {
 
     var id = -1;
     var quantity = 1;
-    var price = 190;
+    var strikePrice = 190;
     var side = "buy";
     var type = "call";
     var premium = 20;
   
-    var option = new Options(id, quantity, price, type, side, premium);
-    await option.makePlot(price-50, 100);
+    var option = new Options(id, quantity, strikePrice, type, side, premium);
+    await option.makePlot(strikePrice-50, 100);
     var plot = option.getPlot();
     
     var tempArr = {
@@ -46,13 +46,13 @@ test(Constants.BuyCallOptions, async () => {
 
     var id = -1;
     var quantity = 1;
-    var price = 190;
+    var strikePrice = 190;
     var side = "buy";
     var type = "put";
     var premium = 20;
   
-    var option = new Options(id, quantity, price, type, side, premium);
-    await option.makePlot(price-50, 100);
+    var option = new Options(id, quantity, strikePrice, type, side, premium);
+    await option.makePlot(strikePrice-50, 100);
     var plot = option.getPlot();
     
     var tempArr = {
@@ -75,13 +75,13 @@ test(Constants.BuyCallOptions, async () => {
 
     var id = -1;
     var quantity = 1;
-    var price = 190;
+    var strikePrice = 190;
     var side = "sell";
     var type = "call";
     var premium = 20;
   
-    var option = new Options(id, quantity, price, type, side, premium);
-    await option.makePlot(price-50, 100);
+    var option = new Options(id, quantity, strikePrice, type, side, premium);
+    await option.makePlot(strikePrice-50, 100);
     var plot = option.getPlot();
     
     var tempArr = {
@@ -104,13 +104,13 @@ test(Constants.BuyCallOptions, async () => {
 
     var id = -1;
     var quantity = 1;
-    var price = 190;
+    var strikePrice = 190;
     var side = "sell";
     var type = "put";
     var premium = 20;
   
-    var option = new Options(id, quantity, price, type, side, premium);
-    await option.makePlot(price-50, 100);
+    var option = new Options(id, quantity, strikePrice, type, side, premium);
+    await option.makePlot(strikePrice-50, 100);
     var plot = option.getPlot();
     
     var tempArr = {

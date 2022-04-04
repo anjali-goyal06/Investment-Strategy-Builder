@@ -1,3 +1,8 @@
+/**
+ * This file contains the API for making and returning plot of a praticular strategy whenever requested (with
+ *  strategy data) at the make plot endpoint.
+ */
+
 const express = require('express');
 const router = express.Router();
 var getDbConnection = require('../db/dbconnect');
@@ -42,9 +47,9 @@ router.post('/',async(req, res)=>{
 
     //var range = 100;
   
-    console.log(sum)
+    //console.log(sum)
     let total = req.body.listInstruments.length;
-    console.log(total)
+    //console.log(total)
     let t = Math.floor(total);
   
    //setting the starting x coordinate of combined plot
@@ -55,7 +60,7 @@ router.post('/',async(req, res)=>{
 
 
     let startCoord = average - (range/2);
-    console.log(startCoord)
+    //console.log(startCoord)
     startCoord = Math.floor(startCoord);
     range = Math.floor(range);
 
@@ -66,7 +71,7 @@ router.post('/',async(req, res)=>{
     //Making the combined plot
     var plot = await investmentStrategy.combinedPlot(startCoord, range);
   
-    var response = plot
+    var response = plot;
     console.log(response)
     res.send(response);
   

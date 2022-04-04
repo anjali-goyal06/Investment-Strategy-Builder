@@ -39,7 +39,6 @@ export default class InvestmentStrategy{
         this.strategySkeletonId = strategySkeletonId;
         this.description = description;
         this.instruments = [];
-        console.log(this.instruments)
         this.plot = new StrategyPlot_();
         this.plot.xCoords = [];
         this.plot.yCoords = [];
