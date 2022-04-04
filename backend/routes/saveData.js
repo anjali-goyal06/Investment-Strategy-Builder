@@ -22,7 +22,7 @@ const DbManager = require('../Model/DbManager');
 */
 router.post('/SaveStrategy' , async (req,res)=>{
  
-    var userId = req.body.userId;
+    var userId = (req.body.userId) ? (req.body.userId) : '2';
     
     var strategySkeletonId = req.body.InvestmentStrategySkeletonId;
 
@@ -34,7 +34,7 @@ router.post('/SaveStrategy' , async (req,res)=>{
         console.log(result1);
       }catch(err){
         console.log(err)
-        return res.status(400).send("Got Stuck at investment strategy skeleton");
+        return res.status(400).send({"err" : "Got Stuck at investment strategy skeleton"});
       }
       strategySkeletonId = await investmentStrategySkeleton.getId();
     }
@@ -46,7 +46,7 @@ router.post('/SaveStrategy' , async (req,res)=>{
       console.log(result2);
     }catch(err){
       console.log(err)
-      return res.status(400).send("Got Stuck at investment strategy");
+      return res.status(400).send({"err" : "Got Stuck at investment strategy"});
     }
   
     var strategyId = investmentStrategy.getId();
@@ -69,7 +69,7 @@ router.post('/SaveStrategy' , async (req,res)=>{
             var result2 = await instrumentSkeleton.AddDataToDb(strategySkeletonId);
           }catch(err){
             console.log(err);
-            return res.status(400).send("Got stuck at instrument skeleton");
+            return res.status(400).send({"err" : "Got stuck at instrument skeleton"});
           }
           instrumentSkeletonId = await instrumentSkeleton.getId();
         }
@@ -82,13 +82,13 @@ router.post('/SaveStrategy' , async (req,res)=>{
           console.log(result4);
         }catch(err){
           console.log(err)
-          return res.status(400).send("Got Stuck at instrument");
+          return res.status(400).send({"err" : "Got Stuck at instrument"});
         }
 
     }
 
     console.log("Added!!!!");
-    return res.send("Success!!!!");
+    return res.send({"msg" : "Success!!!!"});
 
 })
 
@@ -98,8 +98,8 @@ router.post('/SaveStrategy' , async (req,res)=>{
  */
 router.post('/SaveStrategySkeleton' ,  async (req,res)=>{
  
-    var userId = req.body.userId;
-
+  var userId = (req.body.userId) ? (req.body.userId) : '2';
+  console.log(req.body)
     //Adding Strategy Skeleton in database
     try{
       var investmentStrategySkeleton = await new InvestmentStrategySkeleton(-1, req.body.StrategyName, userId, req.body.DescriptionSkeleton);
@@ -128,7 +128,7 @@ router.post('/SaveStrategySkeleton' ,  async (req,res)=>{
     }
     
    console.log("Added!!!!")
-   return res.send("Success!!!!");
+   return res.send({"msg" : "Success!!!!"});
 
 })
 

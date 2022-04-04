@@ -133,6 +133,7 @@ export default class Options extends Instrument{
                     this.plot.xCoords.push(x);
                     var x2 = Math.min(x, this.strikePrice);
                     y = -1*this.quantity*((this.strikePrice -x2) - this.premium);
+                    this.plot.yCoords.push(y);
                     x++;
                 }
             }
