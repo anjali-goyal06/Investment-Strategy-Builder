@@ -1,4 +1,6 @@
-
+/**
+ * This file contains the definition for Instrument Skeleton Manager class.
+ */
 
 import IInstrumentSkeleton from "./IInstrumentSkeleton";
 var FutureSkeleton = require("./FutureSkeleton");
@@ -7,8 +9,8 @@ var StockSkeleton = require("./StockSkeleton");
 const Constants = require('./Constants');
 
 /**
- * Manager Class for Instrument skeletons.
- * Has been used for implementing factory design pattern for creating appropriate instrument skeleton object. 
+ * It is the Manager Class for Instrument skeletons.
+ * It has been used for implementing factory design pattern for creating appropriate instrument skeleton object. 
 **/
 
 export default class InstrumentSkeletonManager{

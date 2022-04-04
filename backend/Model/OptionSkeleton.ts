@@ -1,4 +1,6 @@
-
+/**
+ * This file contains the definition of Option Skeleton class.
+ */
 const { validationResult } = require("express-validator");
 var getDbConnection = require('../db/dbconnect');
 import InstrumentSkeleton from './InstrumentSkeleton';

@@ -1,3 +1,7 @@
+/**
+ * This file contains the definition of Instrument Manager class.
+ */
+
 var Future = require("./Future");
 import IInstrument from "./IInstrument";
 var Options  = require("./Options");
@@ -5,8 +9,8 @@ var Stock = require("./Stock");
 const Constants = require('./Constants');
 
 /**
- * Manager Class for Instruments.
- * Has been used for implementing factory design pattern for creating appropriate instrument object. 
+ * This is the Manager Class for Instruments.
+ * It has been used for implementing factory design pattern for creating appropriate instrument object. 
 **/
 
 export default class InstrumentManager{

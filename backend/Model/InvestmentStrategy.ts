@@ -1,3 +1,6 @@
+/**
+ * This file contains the definition for Investment Strategy class.
+ */
 var getDbConnection = require('../db/dbconnect');
 
 import StrategyPlot from './StrategyPlot';
@@ -11,8 +14,6 @@ var StrategyPlot_ = require('./StrategyPlot');
  * 1. Stock it is implemented on, its expiry date, name, description
  * 2. Complete details of the instruments it has (price of instrument, quantity, type, side etc) 
  */
-
-
 export default class InvestmentStrategy{
 
     id : number;

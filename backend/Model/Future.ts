@@ -1,4 +1,6 @@
-
+/**
+ * This file contains the definition of Future class.
+ */
 
 var getDbConnection = require('../db/dbconnect');
 
@@ -10,7 +12,10 @@ var Instrument = require('./Instrument');
 const Constants = require('./Constants');
 
 
-
+/**
+ * Future is one of the financial instruments being used in the application. Future class holds the information 
+ * of the future instrument in its objects. It is derived from the instrument class. 
+ */
 export default class Future extends Instrument{
     
     price : number;

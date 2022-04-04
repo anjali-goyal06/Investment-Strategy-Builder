@@ -1,3 +1,7 @@
+/**
+ * This file contains the definition of Options class.
+ */
+
 var getDbConnection = require('../db/dbconnect');
 
 import StrategyPlot from './StrategyPlot';
@@ -10,6 +14,10 @@ const DbManager = require('./DbManager');
 import DbManager_ from './DbManager';
 const Constants = require('./Constants');
 
+/**
+ * Options is one of the financial instruments being used in the application. Options class holds the information 
+ * of the options instrument in its objects. It is derived from the instrument class. 
+ */
 export default class Options extends Instrument{
 
     strikePrice : number;

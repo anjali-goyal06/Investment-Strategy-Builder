@@ -1,3 +1,7 @@
+/**
+ * This file contains the definition of Future Skeleton class.
+ */
+
 var getDbConnection = require('../db/dbconnect');
 const DbManager = require('./DbManager');
 import DbManager_ from './DbManager';

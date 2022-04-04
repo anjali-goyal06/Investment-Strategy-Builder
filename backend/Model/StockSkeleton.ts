@@ -1,4 +1,6 @@
-
+/**
+ * This file contains the definition of Stock Skeleton class.
+ */
 var getDbConnection = require('../db/dbconnect');
 import InstrumentSkeleton from './InstrumentSkeleton';
 const DbManager = require('./DbManager');

@@ -1,4 +1,6 @@
-
+/**
+ * This class contains the definition for User class.
+ */
 var getDbConnection = require('../db/dbconnect');
 const mysql = require('mysql');
 const bcrypt = require('bcryptjs');
@@ -7,7 +9,10 @@ var jwt = require('jsonwebtoken');
 
 const JWT_SECRET = 'abrakadabra';
 
-
+/**
+ * User class holds user information in its objects. It has functions like add user and login user which helps in
+ * driving the register and login logic.
+ */
 export default class User{
     static count : number = 0;
     id : number;

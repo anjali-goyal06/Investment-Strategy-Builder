@@ -1,4 +1,6 @@
-
+/**
+ * This file contains the definition of Stock class.
+ */
 var getDbConnection = require('../db/dbconnect');
 import StrategyPlot from './StrategyPlot';
 var Instrument =  require('./Instrument');
@@ -7,6 +9,10 @@ const Constants = require('./Constants');
 import DbManager_ from './DbManager';
 var StrategyPlot_ = require('./StrategyPlot')
 
+/**
+ * Stock is one of the financial instruments being used in the application. Stock class holds the information 
+ * of the Stock instrument in its objects. It is derived from the instrument class. 
+ */
 export default class Stock extends Instrument{
 
     price : number;

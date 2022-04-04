@@ -1,3 +1,7 @@
+/**
+ * This file contains the definition of DbManager Class. DbManager class manages the database operations with its functions.
+ */
+
 import { Context } from "express-validator/src/context";
 
 var getDbConnection = require('../db/dbconnect');

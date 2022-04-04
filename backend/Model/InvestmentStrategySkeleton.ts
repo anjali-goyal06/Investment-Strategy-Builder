@@ -1,4 +1,6 @@
-
+/**
+ * This file contains the definition of Instrument Skeleton class.
+ */
 import { validationResult } from "express-validator";
 var getDbConnection = require('../db/dbconnect');
 const mysql = require('mysql');

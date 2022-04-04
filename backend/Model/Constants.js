@@ -1,3 +1,6 @@
+/**
+ * This file contains the Constants class. Constants class wraps all the constant values being used in the code in it.
+ */
 class Constants{
     static Option = "option";
     static Future = "future";

@@ -1,3 +1,7 @@
+/**
+ * This file contains the definition of Instrument Skelton class. It implements Instrument Skelton inteface.
+ */
+
 import IInstrumentSkeleton from "./IInstrumentSkeleton";
 
 /**
