@@ -106,24 +106,7 @@ export default class InvestmentStrategy{
         return this.id;
     }
 
-    
-   /**
-    * Fetches current record count in investment strategy table an  d sets id of current record to current record count plus one.
-    * Parameters - None
-    * Return Value - None
-    */
-    async setId(){
 
-        try{
-            var dbManager_ = await new DbManager();
-            var response = await dbManager_.GetCountOfRecordsInDb('InvestmentStrategy');
-        
-            var current_count = response[0].count;
-            this.id = current_count + 1;
-        }catch(err){
-            console.log(err);
-        }
-    }
     
   /**
    * Inserts the investment strategy object in investment strategy table.
@@ -132,17 +115,13 @@ export default class InvestmentStrategy{
    */
     async AddDataToDb(){
         
-        //sets id before inserting in db
-        if(this.id == -1){
-            await this.setId();
-        }
-        
-        var sql = "INSERT INTO InvestmentStrategy (Id, Name , StockName, Ticker, ExpiryDate, UserId, Description, InvestmentStrategySkeletonId) VALUES (?,?,?,?,?,?,?,?)";
+        var sql = "INSERT INTO InvestmentStrategy (Name , StockName, Ticker, ExpiryDate, UserId, Description, InvestmentStrategySkeletonId) VALUES (?,?,?,?,?,?,?)";
        
         try{
             const connection = await getDbConnection()
-            var response = await connection.query(sql, [this.id ,this.name, this.stockName, this.ticker, this.expiryDate, this.userId, this.description, this.strategySkeletonId]); 
+            var response = await connection.query(sql, [this.name, this.stockName, this.ticker, this.expiryDate, this.userId, this.description, this.strategySkeletonId]); 
             connection.end()
+            this.id = response.insertId;
             return response;
 
         }catch(err){

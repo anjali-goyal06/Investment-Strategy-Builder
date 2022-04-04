@@ -20,24 +20,6 @@ export default class Stock extends Instrument{
         this.side = side;
     }
 
-    
-    /**
-     * Fetches current record count in stock table and sets id of current record to current record count plus one.
-     * Parameters - None
-     * Return Value - None
-     */
-    async setId(){
-        try{
-            var dbManager_ = await new DbManager();
-            var response = await dbManager_.GetCountOfRecordsInDb('Stock');
-        
-            var current_count = response[0].count;
-            this.id = current_count + 1;
-        }catch(err){
-            console.log(err);
-        }
-    }
-
      
   /**
    * Inserts the stock object in stock table.
@@ -46,19 +28,15 @@ export default class Stock extends Instrument{
    * @returns sql query response on successful insertion. In case of any errors, returns the error.
    */
     async AddDataToDb(instrumentSkeletonId: number, strategyId: number){
-
-        //sets id before inserting in table
-        if(this.id == -1){
-            await this.setId();
-        }
         
         
-        var sql = "INSERT INTO Stock (Id, Price, Quantity, StockSkeletonId, InvestmentStrategyId) VALUES (?,?,?,?,?)";
+        var sql = "INSERT INTO Stock (Price, Quantity, StockSkeletonId, InvestmentStrategyId) VALUES (?,?,?,?)";
 
         try{
             const connection = await getDbConnection()
-            var response = await connection.query(sql, [this.id ,this.price, this.quantity, instrumentSkeletonId, strategyId]); 
+            var response = await connection.query(sql, [this.price, this.quantity, instrumentSkeletonId, strategyId]); 
             connection.end()
+            this.id = response.insertId;
             return response;
 
         }catch(err){

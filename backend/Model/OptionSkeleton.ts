@@ -33,25 +33,6 @@ export default class OptionSkeleton extends InstrumentSkeleton{
     getId() : number {
         return this.id;
     }
-
-    /*
-    Fetches current record count in option skeleton table and sets id of current record to current record count plus one.
-    Parameters - None
-    Return Value - None
-    */
-    async setId(){
-
-        try{
-            var dbManager_ = await new DbManager();
-            var response = await dbManager_.GetCountOfRecordsInDb('OptionSkeleton');
-        
-            var current_count = response[0].count;
-            this.id = current_count + 1;
-        }catch(err){
-            console.log(err);
-        }
-       
-    }
     
   
   /**
@@ -61,18 +42,14 @@ export default class OptionSkeleton extends InstrumentSkeleton{
    */
     async AddDataToDb(StrategySkeletonId:number){
 
-        //sets id before inserting in db
-        if(this.id == -1){
-            await this.setId();
-        }
          
-        var sql = "INSERT INTO OptionSkeleton (Id, Type , Side, InvestmentStrategySkeletonId) VALUES (?,?,?,?)";
+        var sql = "INSERT INTO OptionSkeleton (Type , Side, InvestmentStrategySkeletonId) VALUES (?,?,?)";
        
         try{
             const connection = await getDbConnection()
-            var response = await connection.query(sql, [this.id ,this.type, this.side, StrategySkeletonId]); 
+            var response = await connection.query(sql, [this.type, this.side, StrategySkeletonId]); 
             connection.end()
-
+            this.id = response.insertId;
             return response;
         }catch(err){
             console.log(err);

@@ -45,23 +45,6 @@ export default class InvestmentStrategySkeleton{
         return this.id;
     }
 
-    /*
-    Fetches current record count in investment strategy skeleton table and sets id of current record to current record count plus one.
-    Parameters - None
-    Return Value - None
-    */
-    async setId(){
-
-        try{
-            var dbManager_ = await new DbManager();
-            var response = await dbManager_.GetCountOfRecordsInDb('InvestmentStrategySkeleton');
-        
-            var current_count = response[0].count;
-            this.id = current_count + 1;
-        }catch(err){
-            console.log(err);
-        }
-    }
 
     /** 
    * Inserts the investment strategy skeleton object in investment strategy skeleton table.
@@ -70,17 +53,13 @@ export default class InvestmentStrategySkeleton{
    */
     async AddDataToDb(){
         
-        //sets id before insertion
-        if(this.id == -1){
-            await this.setId();
-        }
+        var sql = "INSERT INTO InvestmentStrategySkeleton (StrategyName , Description, UserId) VALUES (?,?,?)";
         
-        var sql = "INSERT INTO InvestmentStrategySkeleton (Id, StrategyName , Description, UserId) VALUES (?,?,?,?)";
-
         try{
             const connection = await getDbConnection()
-            var response = await connection.query(sql, [this.id ,this.strategyName, this.description, this.userId]); 
+            var response = await connection.query(sql, [this.strategyName, this.description, this.userId]); 
             connection.end()
+            this.id = response.insertId;
             return response;
 
         }catch(err){
@@ -89,5 +68,9 @@ export default class InvestmentStrategySkeleton{
         }
     }
 }
+
+//var i = new InvestmentStrategySkeleton(-1, "strategyyyyyyy", 1, "desc");
+//var res = i.AddDataToDb();
+//console.log(res);
 
 module.exports = InvestmentStrategySkeleton;

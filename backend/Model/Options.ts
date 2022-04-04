@@ -32,23 +32,6 @@ export default class Options extends Instrument{
         this.instrumentSkeletonId = obj.id;
     }
 
-    /*
-    Fetches current record count in options table and sets id of current record to current record count plus one.
-    Parameters - None
-    Return Value - None
-    */
-    async setId(){
-
-        try{
-            var dbManager_ = await new DbManager();
-            var response = await dbManager_.GetCountOfRecordsInDb('Options');
-        
-            var current_count = response[0].count;
-            this.id = current_count + 1;
-        }catch(err){
-            console.log(err);
-        }
-    }
     
    
   /**
@@ -59,17 +42,14 @@ export default class Options extends Instrument{
    */
     async AddDataToDb(instrumentSkeletonId: number, strategyId: number){
 
-        //sets id before inserting in db
-        if(this.id == -1){
-            await this.setId();
-        }
             
-        var sql = "INSERT INTO Options (Id, StrikePrice , Premium, Quantity, OptionSkeletonId, InvestmentStrategyId) VALUES (?,?,?,?,?,?)";
+        var sql = "INSERT INTO Options (StrikePrice , Premium, Quantity, OptionSkeletonId, InvestmentStrategyId) VALUES (?,?,?,?,?)";
 
         try{
             const connection = await getDbConnection()
-            var response = await connection.query(sql, [this.id ,this.strikePrice, this.premium, this.quantity, instrumentSkeletonId, strategyId]); 
+            var response = await connection.query(sql, [this.strikePrice, this.premium, this.quantity, instrumentSkeletonId, strategyId]); 
             connection.end()
+            this.id = response.insertId;
             return response;
 
         }catch(err){
