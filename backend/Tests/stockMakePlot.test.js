@@ -1,5 +1,5 @@
 /**
- * This file contains the test cases for Make Plot function of stock class. 
+ * This file contains the test cases for Make Plot function of Stock class. 
  */
 
 const Constants = require('../Model/Constants');

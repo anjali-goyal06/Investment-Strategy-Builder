@@ -1,5 +1,5 @@
 /**
- * This file contains the test cases for Make Plot function of options class. 
+ * This file contains the test cases for Make Plot function of Options class. 
  */
 
 

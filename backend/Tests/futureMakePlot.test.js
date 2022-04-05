@@ -1,5 +1,5 @@
 /**
- * This file contains the test cases for Make Plot function of future class. 
+ * This file contains the test cases for Make Plot function of Future class. 
  */
 
 
