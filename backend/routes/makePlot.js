@@ -26,19 +26,11 @@ router.post('/',async(req, res)=>{
 });
 
 
-<<<<<<< HEAD
   router.post('/id' , async (req,res) =>{
     var id = (req.body.id) ? (req.body.id) : 2;
     var investmentStrategy1 = new InvestmentStrategy();
     var response = await investmentStrategy1.fetchDetailedStrategyImplementationFromDbForUser(id);
     var result =await makePlot(response);
-=======
-router.post('/id' , async (req,res) =>{
-  var id = (req.body.id) ? (req.body.id) : 1;
-  var investmentStrategy1 = new InvestmentStrategy();
-  var response = await investmentStrategy1.fetchDetailedStrategyImplementationFromDbForUser(id);
-  var result =await makePlot(response);
->>>>>>> 30413e4e602e5d7e5193bca8252c368c1ca4ae24
 
   var r = {
     "values" : response,
