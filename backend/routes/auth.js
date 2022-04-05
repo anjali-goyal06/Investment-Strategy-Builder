@@ -1,3 +1,7 @@
+/**
+ * This file contains APIs for authenticating the user.  
+ */
+
 const express = require('express');
 const router = express.Router();
 var getDbConnection = require('../db/dbconnect');

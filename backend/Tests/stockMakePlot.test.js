@@ -1,10 +1,12 @@
-var InvestmentStrategy  = require('../Model/InstrumentSkeleton');
+/**
+ * This file contains the test cases for Make Plot function of stock class. 
+ */
+
+const Constants = require('../Model/Constants');
 var Stock = require('../Model/Stock')
-var StrategyPlot = require('../Model/StrategyPlot')
 
-var len =100;
 
-test('Buy Stock',async () => {
+test(Constants.BuyStock,async () => {
 
     var id = -1;
     var quantity = 1;
@@ -12,7 +14,7 @@ test('Buy Stock',async () => {
     var side = "BUY";
   
     var stock = new Stock(id,quantity,price,side);
-    stock.makePlot(price-50);
+    await stock.makePlot(price-50, 100);
     var plot = stock.getPlot();
     
     var tempArr = {
@@ -21,9 +23,8 @@ test('Buy Stock',async () => {
     }
     var index=0;
 
-    expect(plot.xCoords.length).toBe(len);
-    expect(plot.yCoords.length).toBe(len);
-
+    expect(plot.xCoords.length).toBe(plot.yCoords.length);
+  
     for(let i in plot.xCoords){
         if(plot.xCoords[i]==tempArr.x[index]){
           expect(plot.yCoords[i]).toBe(tempArr.y[index])
@@ -31,3 +32,6 @@ test('Buy Stock',async () => {
         }
     }
   });
+
+
+  

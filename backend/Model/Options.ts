@@ -1,3 +1,7 @@
+/**
+ * This file contains the definition of Options class.
+ */
+
 var getDbConnection = require('../db/dbconnect');
 
 import StrategyPlot from './StrategyPlot';
@@ -10,6 +14,10 @@ const DbManager = require('./DbManager');
 import DbManager_ from './DbManager';
 const Constants = require('./Constants');
 
+/**
+ * Options is one of the financial instruments being used in the application. Options class holds the information 
+ * of the options instrument in its objects. It is derived from the instrument class. 
+ */
 export default class Options extends Instrument{
 
     strikePrice : number;
@@ -32,23 +40,6 @@ export default class Options extends Instrument{
         this.instrumentSkeletonId = obj.id;
     }
 
-    /*
-    Fetches current record count in options table and sets id of current record to current record count plus one.
-    Parameters - None
-    Return Value - None
-    */
-    async setId(){
-
-        try{
-            var dbManager_ = await new DbManager();
-            var response = await dbManager_.GetCountOfRecordsInDb('Options');
-        
-            var current_count = response[0].count;
-            this.id = current_count + 1;
-        }catch(err){
-            console.log(err);
-        }
-    }
     
    
   /**
@@ -59,17 +50,14 @@ export default class Options extends Instrument{
    */
     async AddDataToDb(instrumentSkeletonId: number, strategyId: number){
 
-        //sets id before inserting in db
-        if(this.id == -1){
-            await this.setId();
-        }
             
-        var sql = "INSERT INTO Options (Id, StrikePrice , Premium, Quantity, OptionSkeletonId, InvestmentStrategyId) VALUES (?,?,?,?,?,?)";
+        var sql = "INSERT INTO Options (StrikePrice , Premium, Quantity, OptionSkeletonId, InvestmentStrategyId) VALUES (?,?,?,?,?)";
 
         try{
             const connection = await getDbConnection()
-            var response = await connection.query(sql, [this.id ,this.strikePrice, this.premium, this.quantity, instrumentSkeletonId, strategyId]); 
+            var response = await connection.query(sql, [this.strikePrice, this.premium, this.quantity, instrumentSkeletonId, strategyId]); 
             connection.end()
+            this.id = response.insertId;
             return response;
 
         }catch(err){
@@ -83,10 +71,9 @@ export default class Options extends Instrument{
    /**
      * To make plot for option instrument and store the respective x & y coordinates in plot data member. 
      * @param xStart Starting x coordinate of plot
-     * @param ticker - string type
-     * @param expiryDate - date type
+     * @param range - range of plot coordinates
      */
-    makePlot(xStart, ticker, expiryDate){
+    makePlot(xStart, range){
 
       //sets starting x coordinate of plot
         var x = Math.floor(xStart);
@@ -96,9 +83,6 @@ export default class Options extends Instrument{
 
         var str = this.side.toLowerCase() + " " + this.type.toLowerCase();
        
-        //setting premium before plot calculation
-       // this.setPremium(ticker, expiryDate);
-        console.log("premium = " + this.premium);
       
         //handles 4 cases - BUY CALL, SELL CALL, BUY PUT , SELL PUT
         switch(str){
@@ -106,7 +90,7 @@ export default class Options extends Instrument{
             case Constants.BuyCall : {
 
                 //loop over the range and calculate y coordinate for every x in range
-                for(var i=0;i<100;i++){
+                for(var i=0;i<range;i++){
 
                     this.plot.xCoords.push(x);
                     var x2 = Math.max(x, this.strikePrice);
@@ -120,7 +104,7 @@ export default class Options extends Instrument{
             case Constants.BuyPut : {
 
                 //loop over the range and calculate y coordinate for every x in range
-                for(var i=0;i<100;i++){
+                for(var i=0;i<range;i++){
 
                     this.plot.xCoords.push(x);
                     var x2 = Math.min(x, this.strikePrice);
@@ -134,7 +118,7 @@ export default class Options extends Instrument{
             case Constants.SellCall : {
 
                 //loop over the range and calculate y coordinate for every x in range
-                for(var i=0;i<100;i++){
+                for(var i=0;i<range;i++){
 
                     this.plot.xCoords.push(x);
                     var x2 = Math.max(x, this.strikePrice);
@@ -148,7 +132,7 @@ export default class Options extends Instrument{
             case Constants.SellPut :{
 
                 //loop over the range and calculate y coordinate for every x in range
-                for(var i=0;i<100;i++){
+                for(var i=0;i<range;i++){
 
                     this.plot.xCoords.push(x);
                     var x2 = Math.min(x, this.strikePrice);
@@ -173,13 +157,6 @@ export default class Options extends Instrument{
 
 }
 
-//var op = new Options(-1, 1, 198, "Put", "buy", 20);
-//let d:Date = new Date("2022/5/3");
-//op.fetchCurrentPriceFromMarketData("AAPL");
-//op.setPremium("AAPL", d);
-//op.makePlot(135,"AAPL", "2022-05-15");
-//var plot = op.getPlot();
-//console.log(plot);
 
 module.exports = Options;
 

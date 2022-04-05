@@ -1,4 +1,6 @@
-
+/**
+ * This file contains the definition of Future class.
+ */
 
 var getDbConnection = require('../db/dbconnect');
 
@@ -10,7 +12,10 @@ var Instrument = require('./Instrument');
 const Constants = require('./Constants');
 
 
-
+/**
+ * Future is one of the financial instruments being used in the application. Future class holds the information 
+ * of the future instrument in its objects. It is derived from the instrument class. 
+ */
 export default class Future extends Instrument{
     
     price : number;
@@ -23,25 +28,6 @@ export default class Future extends Instrument{
         this.price = price;
         this.side = side;
     }
-
-    /*
-    Fetches current record count in the table and sets id of current record to current record count plus one.
-    Parameters - None
-    Return Value - None
-    */
-    async setId(){
-
-        try{
-            var dbManager_ = await new DbManager();
-            var response = await dbManager_.GetCountOfRecordsInDb('Future');
-        
-            var current_count = response[0].count;
-            this.id = current_count + 1;
-        }catch(err){
-            console.log(err);
-        }
-        
-    }
     
   
   /**
@@ -52,16 +38,15 @@ export default class Future extends Instrument{
    */
     async AddDataToDb(instrumentSkeletonId: number, strategyId: number){
 
-        if(this.id == -1){
-            await this.setId();
-        }
                 
-        var sql = "INSERT INTO Future (Id, Price, Quantity, FutureSkeletonId, InvestmentStrategyId) VALUES (?,?,?,?,?)";
+        var sql = "INSERT INTO Future (Price, Quantity, FutureSkeletonId, InvestmentStrategyId) VALUES (?,?,?,?)";
        
         try{
             const connection = await getDbConnection()
-            var response = await connection.query(sql, [this.id ,this.price, this.quantity, instrumentSkeletonId, strategyId]); 
+            var response = await connection.query(sql, [this.price, this.quantity, instrumentSkeletonId, strategyId]); 
             connection.end()
+            this.id = response.insertId;
+            //console.log(response.insertId);
             return response;
 
         }catch(err){
@@ -73,11 +58,9 @@ export default class Future extends Instrument{
     /**
      * To make plot for future instrument and store the respective x & y coordinates in plot data member. 
      * @param xStart Starting x coordinate of plot
-     * @param ticker - string type
-     * @param expiryDate - date type
+     * @param range - range of plot coordinates
      */
-    
-    makePlot(xStart, ticker, expiryDate) {
+    makePlot(xStart, range) {
 
         //sets the start x coordinate
         var x = Math.floor(xStart);
@@ -98,7 +81,7 @@ export default class Future extends Instrument{
         }
 
         //loop over the range and calculate y coordinates
-        for(var i=0;i<100;i++){
+        for(var i=0;i<range;i++){
 
             this.plot.xCoords.push(x);
             y = (multiplier) * (this.quantity*(x - this.price));
@@ -118,11 +101,9 @@ export default class Future extends Instrument{
     }
 }
 
-//var f = new Future(-1, 1, 70, "buy");
-//f.setId();
-//f.makePlot(20, "AAPL", "2022-03-01");
-//var plot = f.getPlot();
-//console.log(plot);
 
+//var res = f.AddDataToDb(null, null);
+//console.log(res.insertId);
+//console.log(res);
 
 module.exports = Future

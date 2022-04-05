@@ -1,3 +1,7 @@
+/**
+ * This file contains APIs for fetching the requested data from the database and sending it as response to the user. 
+ */
+
 const express = require('express');
 const router = express.Router();
 var getDbConnection = require('../db/dbconnect');

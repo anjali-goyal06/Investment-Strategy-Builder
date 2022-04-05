@@ -1,4 +1,6 @@
-
+/**
+ * This file contains the definition of Stock Skeleton class.
+ */
 var getDbConnection = require('../db/dbconnect');
 import InstrumentSkeleton from './InstrumentSkeleton';
 const DbManager = require('./DbManager');
@@ -27,22 +29,6 @@ export default class StockSkeleton extends InstrumentSkeleton{
         return this.id;
     }
 
-   /**
-    * Fetches current record count in stock skeleton table and sets id of current record to current record count plus one.
-    * Parameters - None
-    * Return Value - None
-    */
-    async setId(){
-        try{
-            var dbManager_ = await new DbManager();
-            var response = await dbManager_.GetCountOfRecordsInDb('StockSkeleton');
-        
-            var current_count = response[0].count;
-            this.id = current_count + 1;
-        }catch(err){
-            console.log(err);
-        }
-    }
 
   /**
    * Inserts the stock skeleton object in stock skeleton table.
@@ -51,17 +37,14 @@ export default class StockSkeleton extends InstrumentSkeleton{
    */
     async AddDataToDb(StrategySkeletonId:number){
 
-        //sets the id before inserting in database
-        if(this.id == -1){
-            await this.setId();
-        }
     
         
-        var sql = "INSERT INTO StockSkeleton (Id, Side, InvestmentStrategySkeletonId) VALUES (?,?,?)";
+        var sql = "INSERT INTO StockSkeleton (Side, InvestmentStrategySkeletonId) VALUES (?,?)";
 
         try{
             const connection = await getDbConnection()
-            var response = await connection.query(sql, [this.id, this.side, StrategySkeletonId]) ; 
+            var response = await connection.query(sql, [this.side, StrategySkeletonId]);
+            this.id = response.insertId; 
             connection.end()
 
             return response;

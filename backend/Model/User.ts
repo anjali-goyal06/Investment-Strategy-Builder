@@ -1,4 +1,6 @@
-
+/**
+ * This class contains the definition for User class.
+ */
 var getDbConnection = require('../db/dbconnect');
 const mysql = require('mysql');
 const bcrypt = require('bcryptjs');
@@ -7,8 +9,10 @@ var jwt = require('jsonwebtoken');
 
 const JWT_SECRET = 'abrakadabra';
 
-
-
+/**
+ * User class holds user information in its objects. It has functions like add user and login user which helps in
+ * driving the register and login logic.
+ */
 export default class User{
     static count : number = 0;
     id : number;
@@ -24,50 +28,29 @@ export default class User{
         this.password = password;
     }
 
-    /**
-     * Fetches current record count in user table and sets id of current record to current record count plus one.
-     * Parameters - None
-     * Return Value - None
-     */
-    async setId(){
-
-        try{
-            const DbManager_ = await new DbManager();
-            var response = await DbManager_.GetCountOfRecordsInDb('user');
-        
-            var current_count = response[0].count;
-            this.id = current_count + 1;
-        }catch(err){
-            console.log(err);
-        }
-    }
-
+    
     /**
      * Adds user record in user table
      * @returns sql query response in case of successful insertion. 
      */
     async AddUser(){
-
-        if(this.id == -1){
-            await this.setId();
-        }
-          
-        var sql = "INSERT INTO user (id,name,email,password) VALUES (?,?,?,?)";
+  
+        var sql = "INSERT INTO user (name,email,password) VALUES (?,?,?)";
     
         //Password Encrypted before adding in db
         const salt = await bcrypt.genSalt(10);
         var secPass = await bcrypt.hash(this.password, salt);
 
-        const authtoken = jwt.sign({_id : this.id}, JWT_SECRET);
-
-
+        
         try{
             const connection = await getDbConnection()
-            var response = await connection.query(sql, [this.id , this.name , this.email , secPass] ) ; //,  function (err, result) {
+            var response = await connection.query(sql, [this.name , this.email , secPass] ) ; //,  function (err, result) {
             connection.end()
-            
+            this.id = response.insertId;
+            const authtoken = jwt.sign({_id : this.id}, JWT_SECRET);
             response.authtoken = authtoken;
             return response;
+
         }catch(err){
             return err;
         }

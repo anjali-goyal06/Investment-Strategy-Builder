@@ -1,3 +1,11 @@
+/**
+ * This file contains the APIs for saving the data of a praticular strategy in the database whenever requested (with
+ * strategy data) at the make save endpoint.
+ * Save Skeleton endpoint saves the skeleton only. While Save Strategy endpoint saves either strategy only or both 
+ * as per requirement.
+ */
+
+
 const express = require('express');
 const router = express.Router();
 var getDbConnection = require('../db/dbconnect');

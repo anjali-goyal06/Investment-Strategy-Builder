@@ -1,3 +1,6 @@
+/**
+ * This file contains the definition for Investment Strategy class.
+ */
 var getDbConnection = require('../db/dbconnect');
 
 import StrategyPlot from './StrategyPlot';
@@ -11,8 +14,6 @@ var StrategyPlot_ = require('./StrategyPlot');
  * 1. Stock it is implemented on, its expiry date, name, description
  * 2. Complete details of the instruments it has (price of instrument, quantity, type, side etc) 
  */
-
-
 export default class InvestmentStrategy{
 
     id : number;
@@ -38,7 +39,6 @@ export default class InvestmentStrategy{
         this.strategySkeletonId = strategySkeletonId;
         this.description = description;
         this.instruments = [];
-        console.log(this.instruments)
         this.plot = new StrategyPlot_();
         this.plot.xCoords = [];
         this.plot.yCoords = [];
@@ -60,9 +60,10 @@ export default class InvestmentStrategy{
    /**
     * Makes the combined plot of the strategy from the plots of the instruments it has.
     * @param startCoord - Starting x coordinate of the plot, type - number
+    * @param range - range of plot coordinates
     * @returns combined plot
     */
-    async combinedPlot(startCoord){
+    async combinedPlot(startCoord, range){
 
        //setting starting coordinate
        this.xStart = startCoord;
@@ -75,7 +76,7 @@ export default class InvestmentStrategy{
             //console.log(this.instruments[k]);
             
             //calculate the instrument plot
-            await this.instruments[k].makePlot(this.xStart, this.ticker, this.expiryDate);
+            await this.instruments[k].makePlot(this.xStart, range);
             let tempPlot = await this.instruments[k].getPlot();
 
             //If this is the first iteration of loop, then set combined plot's coordinate values to zero
@@ -106,24 +107,7 @@ export default class InvestmentStrategy{
         return this.id;
     }
 
-    
-   /**
-    * Fetches current record count in investment strategy table an  d sets id of current record to current record count plus one.
-    * Parameters - None
-    * Return Value - None
-    */
-    async setId(){
 
-        try{
-            var dbManager_ = await new DbManager();
-            var response = await dbManager_.GetCountOfRecordsInDb('InvestmentStrategy');
-        
-            var current_count = response[0].count;
-            this.id = current_count + 1;
-        }catch(err){
-            console.log(err);
-        }
-    }
     
   /**
    * Inserts the investment strategy object in investment strategy table.
@@ -132,17 +116,13 @@ export default class InvestmentStrategy{
    */
     async AddDataToDb(){
         
-        //sets id before inserting in db
-        if(this.id == -1){
-            await this.setId();
-        }
-        
-        var sql = "INSERT INTO InvestmentStrategy (Id, Name , StockName, Ticker, ExpiryDate, UserId, Description, InvestmentStrategySkeletonId) VALUES (?,?,?,?,?,?,?,?)";
+        var sql = "INSERT INTO InvestmentStrategy (Name , StockName, Ticker, ExpiryDate, UserId, Description, InvestmentStrategySkeletonId) VALUES (?,?,?,?,?,?,?)";
        
         try{
             const connection = await getDbConnection()
-            var response = await connection.query(sql, [this.id ,this.name, this.stockName, this.ticker, this.expiryDate, this.userId, this.description, this.strategySkeletonId]); 
+            var response = await connection.query(sql, [this.name, this.stockName, this.ticker, this.expiryDate, this.userId, this.description, this.strategySkeletonId]); 
             connection.end()
+            this.id = response.insertId;
             return response;
 
         }catch(err){

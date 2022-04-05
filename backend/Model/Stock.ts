@@ -1,4 +1,6 @@
-
+/**
+ * This file contains the definition of Stock class.
+ */
 var getDbConnection = require('../db/dbconnect');
 import StrategyPlot from './StrategyPlot';
 var Instrument =  require('./Instrument');
@@ -7,6 +9,10 @@ const Constants = require('./Constants');
 import DbManager_ from './DbManager';
 var StrategyPlot_ = require('./StrategyPlot')
 
+/**
+ * Stock is one of the financial instruments being used in the application. Stock class holds the information 
+ * of the Stock instrument in its objects. It is derived from the instrument class. 
+ */
 export default class Stock extends Instrument{
 
     price : number;
@@ -20,24 +26,6 @@ export default class Stock extends Instrument{
         this.side = side;
     }
 
-    
-    /**
-     * Fetches current record count in stock table and sets id of current record to current record count plus one.
-     * Parameters - None
-     * Return Value - None
-     */
-    async setId(){
-        try{
-            var dbManager_ = await new DbManager();
-            var response = await dbManager_.GetCountOfRecordsInDb('Stock');
-        
-            var current_count = response[0].count;
-            this.id = current_count + 1;
-        }catch(err){
-            console.log(err);
-        }
-    }
-
      
   /**
    * Inserts the stock object in stock table.
@@ -46,19 +34,15 @@ export default class Stock extends Instrument{
    * @returns sql query response on successful insertion. In case of any errors, returns the error.
    */
     async AddDataToDb(instrumentSkeletonId: number, strategyId: number){
-
-        //sets id before inserting in table
-        if(this.id == -1){
-            await this.setId();
-        }
         
         
-        var sql = "INSERT INTO Stock (Id, Price, Quantity, StockSkeletonId, InvestmentStrategyId) VALUES (?,?,?,?,?)";
+        var sql = "INSERT INTO Stock (Price, Quantity, StockSkeletonId, InvestmentStrategyId) VALUES (?,?,?,?)";
 
         try{
             const connection = await getDbConnection()
-            var response = await connection.query(sql, [this.id ,this.price, this.quantity, instrumentSkeletonId, strategyId]); 
+            var response = await connection.query(sql, [this.price, this.quantity, instrumentSkeletonId, strategyId]); 
             connection.end()
+            this.id = response.insertId;
             return response;
 
         }catch(err){
@@ -70,10 +54,9 @@ export default class Stock extends Instrument{
     /**
      * To make plot for stock instrument and store the respective x & y coordinates in plot data member. 
      * @param xStart Starting x coordinate of plot
-     * @param ticker - string type
-     * @param expiryDate - date type
+     * @param range - range of plot coordinates
      */
-    makePlot(xStart, ticker, expiryDate) {
+    makePlot(xStart, range) {
       
         //set the start coordinate of x
         var x = Math.floor(xStart);
@@ -95,7 +78,7 @@ export default class Stock extends Instrument{
         }
 
         //loop over the range and calculate y coordinate 
-        for(var i=0;i<100;i++){
+        for(var i=0;i<range;i++){
 
             this.plot.xCoords.push(x);
             y = (multiplier)*(this.quantity*(x - this.price));

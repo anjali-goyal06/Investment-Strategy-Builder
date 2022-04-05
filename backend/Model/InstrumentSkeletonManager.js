@@ -1,12 +1,15 @@
 "use strict";
+/**
+ * This file contains the definition for Instrument Skeleton Manager class.
+ */
 exports.__esModule = true;
 var FutureSkeleton = require("./FutureSkeleton");
 var OptionSkeleton = require("./OptionSkeleton");
 var StockSkeleton = require("./StockSkeleton");
 var Constants = require('./Constants');
 /**
- * Manager Class for Instrument skeletons.
- * Has been used for implementing factory design pattern for creating appropriate instrument skeleton object.
+ * It is the Manager Class for Instrument skeletons.
+ * It has been used for implementing factory design pattern for creating appropriate instrument skeleton object.
 **/
 var InstrumentSkeletonManager = /** @class */ (function () {
     function InstrumentSkeletonManager() {
