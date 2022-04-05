@@ -189,6 +189,8 @@ export default class InvestmentStrategy{
             var strategy = await db.fetchStrategyFromStrategyId(strategyId);
             console.log("line 202" + strategy);
         
+            
+            var strategySkeletonData = await db.GetStrategySkeletonsFromSkeletonId(strategy[0].InvestmentStrategySkeletonId)
             //fetch list of instrument skeletons of given strategy
             var listInstrumentSkeleton = await db.GetInstrumentsFromStrategySkeletonId(strategy[0].InvestmentStrategySkeletonId);
             console.log(listInstrumentSkeleton);
@@ -209,6 +211,8 @@ export default class InvestmentStrategy{
             console.log(listInstrument);
 
             var result = strategy[0];
+            result.StrategyName = strategySkeletonData.StrategyName ;
+            result.DescriptionSkeleton = strategySkeletonData.Description;
             result.listInstruments = listInstrument;
             console.log(result);
             return result;

@@ -1,7 +1,7 @@
 /**
  * This file is for creating connection to the database before being able to run any commands.
  */
-
+ require("dotenv").config();
 const { sanitize } = require('express-validator');
 var mysql = require('promise-mysql');
 
@@ -17,11 +17,11 @@ var config = {
 /*
 //connection configuration
 var config = {
-  host: "database-1.ctvblfobct2i.ap-south-1.rds.amazonaws.com",
-  user: "admin",
-  password: "strategy",
-  port : "3306",
-  database : "InvestmentStrategyBuilder"
+  host: process.env.HOST,
+  user: process.env.USER,
+  password: process.env.PASSWORD,
+  port : process.env.PORT,
+  database : process.env.DATABASE
 }*/
 
 //creating the connection with the set configuration

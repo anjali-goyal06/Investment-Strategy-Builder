@@ -3,8 +3,8 @@
  */
 
 
-const Constants = require('../Model/Constants');
-var Future = require('../Model/Future')
+const Constants = require('../model/Constants');
+var Future = require('../model/Future')
 
 
 /**

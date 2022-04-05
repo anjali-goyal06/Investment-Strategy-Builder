@@ -3,6 +3,8 @@ const app = express()
 const port = process.env.PORT ||  8000
 require('./db/dbconnect.js');
 
+var cookieParser = require('cookie-parser');
+app.use(cookieParser());
 
 const http = require('http')
 const server = http.createServer(app)

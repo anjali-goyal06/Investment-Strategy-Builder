@@ -33,7 +33,7 @@ const DbManager = require('../model/DbManager');
 */
 router.post('/SaveStrategy' , async (req,res)=>{
  
-    var userId = (req.body.userId) ? (req.body.userId) : '2';
+    var userId = (req.body.userId) ? (req.body.userId) : '2'
     
     //set the strategy skeleton id to the id in request body
     var strategySkeletonId = req.body.InvestmentStrategySkeletonId;

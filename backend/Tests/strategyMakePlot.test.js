@@ -2,11 +2,11 @@
  * This file contains the test cases for Make Plot function of InvestmentStrategy class. 
  */
 
-const Constants = require('../Model/Constants');
-var InvestmentStrategy = require('../Model/InvestmentStrategy');
-var Stock = require('../Model/Stock');
-var Options = require('../Model/Options');
-var Future = require('../Model/Future');
+const Constants = require('../model/Constants');
+var InvestmentStrategy = require('../model/InvestmentStrategy');
+var Stock = require('../model/Stock');
+var Options = require('../model/Options');
+var Future = require('../model/Future');
 
 /**
  * It has been tested by creating an Investment Strategy containing one call option and one put option.

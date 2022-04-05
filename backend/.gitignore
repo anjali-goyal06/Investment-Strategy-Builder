@@ -1,20 +1,20 @@
 node_modules/
 /.env
-Model/Future.js
-Model/FutureSkeleton.js
-Model/IInstrument.js
-Model/IInstrumentSkeleton.js
-Model/InvestmentStrategy.js
-Model/InvestmentStrategySkeleton.js
-Model/OptionSkeleton.js
-Model/Options.js
-Model/Stock.js
-Model/StockSkeleton.js
-Model/StrategyPlot.js
-Model/User.js
-Model/DbManager.js
-Model/Instrument.js
-Model/InstrumentManager.js
+model/Future.js
+model/FutureSkeleton.js
+model/IInstrument.js
+model/IInstrumentSkeleton.js
+model/InvestmentStrategy.js
+model/InvestmentStrategySkeleton.js
+model/OptionSkeleton.js
+model/Options.js
+model/Stock.js
+model/StockSkeleton.js
+model/StrategyPlot.js
+model/User.js
+model/DbManager.js
+model/Instrument.js
+model/InstrumentManager.js
 
 
 

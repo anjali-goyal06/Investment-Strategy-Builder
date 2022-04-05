@@ -6,8 +6,8 @@ const express = require('express');
 const router = express.Router();
 var getDbConnection = require('../db/dbconnect');
 const { body, validationResult } = require('express-validator');
-const InvestmentStrategy = require('../Model/InvestmentStrategy');
-const DbManager = require('../Model/DbManager');
+const InvestmentStrategy = require('../model/InvestmentStrategy');
+const DbManager = require('../model/DbManager');
 const fetchuser = require('../middleware/fetchUser')
 
 
@@ -28,7 +28,7 @@ router.post("/savedImplementation" ,fetchuser, async (req,res) => {
    * @returns strategy skeleton details and list of all the instrument skeletons it has as response
    */
   router.post("/savedSkeleton" ,fetchuser, async (req,res) => {
-    var skeletonId = (req.body.skeletonId) ? req.body.skeletonId : 5;
+    var skeletonId = (req.body.skeletonId) ? req.body.skeletonId : 2;
     var investmentStrategy = await new InvestmentStrategy();
     var response = await investmentStrategy.fetchDetailedStrategySkeletonFromDbForUser(skeletonId);
     res.send(response);
@@ -50,7 +50,7 @@ router.post("/savedImplementation" ,fetchuser, async (req,res) => {
    * @returns strategy skeleton records as response
    */
   router.get("/customStrategy" ,fetchuser, async(req,res) =>{
-    var userId = (req.body.userId) ? req.body.userId : '8';
+    var userId = (req.body.userId) ? req.body.userId : '2';
     var db = await new DbManager();
     var customStrategies = await db.GetStrategySkeletonsFromUserId(userId);
     res.send(customStrategies);
@@ -62,7 +62,7 @@ router.post("/savedImplementation" ,fetchuser, async (req,res) => {
    * @returns fetched strategies as response
    */
    router.get("/allSavedImplemenations" ,fetchuser, async (req,res) =>{
-    var userId = (req.body.userId) ? req.body.userId : 8;
+    var userId = (req.body.userId) ? req.body.userId : 2;
       var db = await new DbManager();
       var response = await db.GetSavedStrategiesFromUserId(userId);
 
