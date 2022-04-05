@@ -43,13 +43,20 @@ export default class StockSkeleton extends InstrumentSkeleton{
     async AddDataToDb(StrategySkeletonId:number){
 
     
-        
+        //sql query for insertion
         var sql = "INSERT INTO StockSkeleton (Side, InvestmentStrategySkeletonId) VALUES (?,?)";
 
         try{
+            //get connection to database
             const connection = await getDbConnection()
+
+            //run the query and get the response
             var response = await connection.query(sql, [this.side, StrategySkeletonId]);
+
+            //set the id to the one in database 
             this.id = response.insertId; 
+
+            //close the connection
             connection.end()
 
             return response;

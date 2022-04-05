@@ -63,6 +63,8 @@ export default class Options extends Instrument{
         var sql = "INSERT INTO Options (StrikePrice , Premium, Quantity, OptionSkeletonId, InvestmentStrategyId) VALUES (?,?,?,?,?)";
 
         try{
+
+            //connect to db, run the query and set the id of object to its id in database
             const connection = await getDbConnection()
             var response = await connection.query(sql, [this.strikePrice, this.premium, this.quantity, instrumentSkeletonId, strategyId]); 
             connection.end()

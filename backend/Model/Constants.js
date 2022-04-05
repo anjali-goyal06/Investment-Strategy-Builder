@@ -20,9 +20,7 @@ class Constants{
     static BuyPutOptions = "Buy Put Options";
     static SellCallOptions = "Sell Call Options";
     static SellPutOptions = "Sell Put Options";
-    static StrategyGraph = "Combined Plot of Investment Strategy";
-
-    
+    static StrategyGraph = "Combined Plot of Investment Strategy";    
 }
 
 

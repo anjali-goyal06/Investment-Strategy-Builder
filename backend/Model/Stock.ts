@@ -45,9 +45,16 @@ export default class Stock extends Instrument{
         var sql = "INSERT INTO Stock (Price, Quantity, StockSkeletonId, InvestmentStrategyId) VALUES (?,?,?,?)";
 
         try{
+
+            //get the connection to database
             const connection = await getDbConnection()
-            var response = await connection.query(sql, [this.price, this.quantity, instrumentSkeletonId, strategyId]); 
+
+            //run the query and get the response
+            var response = await connection.query(sql, [this.price, this.quantity, instrumentSkeletonId, strategyId]);
+            
+            //close the connection
             connection.end()
+            //set the id to object to its id in database
             this.id = response.insertId;
             return response;
 

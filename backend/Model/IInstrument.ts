@@ -18,4 +18,3 @@ export default interface IInstrument{
     getPlot() :  StrategyPlot;
 }
 
-//module.exports = IInstrument

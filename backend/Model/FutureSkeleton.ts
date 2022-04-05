@@ -47,6 +47,7 @@ export default class FutureSkeleton extends InstrumentSkeleton{
         var sql = "INSERT INTO FutureSkeleton (Side, InvestmentStrategySkeletonId) VALUES (?,?)";
 
         try{
+            //connect to db, run the query and set the id of object to its id in database
             const connection = await getDbConnection()
             var response = await connection.query(sql, [this.side, StrategySkeletonId]) ; 
             connection.end()
