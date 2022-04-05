@@ -11,10 +11,13 @@ const fetchuser = require('../middleware/fetchUser')
   *  Given a strategy id, it fetches its implementation 
   * @returns strategy details and list of all the instruments it has as response in json format
   */
-router.get("/savedImplementation" ,fetchuser, async (req,res) => {
+router.post("/savedImplementation" ,fetchuser, async (req,res) => {
     // var user = new User();
+    var id= req.body.id;
+    console.log(req.body)
+    console.log(id)
     var investmentStrategy = new InvestmentStrategy();
-    var response = await investmentStrategy.fetchDetailedStrategyImplementationFromDbForUser(3);
+    var response = await investmentStrategy.fetchDetailedStrategyImplementationFromDbForUser(id);
      res.send(response);
   })
 
@@ -46,7 +49,7 @@ router.get("/savedImplementation" ,fetchuser, async (req,res) => {
    * @returns strategy skeleton records as response
    */
   router.get("/customStrategy" ,fetchuser, async(req,res) =>{
-    var userId = (req.body.userId) ? req.body.userId : '2';
+    var userId = (req.body.userId) ? req.body.userId : '8';
     var db = await new DbManager();
     var customStrategies = await db.GetStrategySkeletonsFromUserId(userId);
     res.send(customStrategies);
@@ -58,7 +61,7 @@ router.get("/savedImplementation" ,fetchuser, async (req,res) => {
    * @returns fetched strategies as response
    */
    router.get("/allSavedImplemenations" ,fetchuser, async (req,res) =>{
-    var userId = (req.body.userId) ? req.body.userId : 2;
+    var userId = (req.body.userId) ? req.body.userId : 8;
       var db = await new DbManager();
       var response = await db.GetSavedStrategiesFromUserId(userId);
 
