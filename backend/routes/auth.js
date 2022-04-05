@@ -9,7 +9,7 @@ const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 //const fetchuser = require('../middleware/fetchUser')
 
-const User = require('../Model/User');
+const User = require('../model/User');
 
 router.get('/' , (req,res)=>{
     console.log("Hello World||");

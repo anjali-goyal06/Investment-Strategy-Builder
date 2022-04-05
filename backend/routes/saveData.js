@@ -13,11 +13,11 @@ const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 //const fetchuser = require('../middleware/fetchUser')
 
-const InvestmentStrategySkeleton = require('../Model/InvestmentStrategySkeleton');
-const InvestmentStrategy = require('../Model/InvestmentStrategy');
-const InstrumentSkeletonManager = require('../Model/InstrumentSkeletonManager');
-const InstrumentManager = require('../Model/InstrumentManager');
-const DbManager = require('../Model/DbManager');
+const InvestmentStrategySkeleton = require('../model/InvestmentStrategySkeleton');
+const InvestmentStrategy = require('../model/InvestmentStrategy');
+const InstrumentSkeletonManager = require('../model/InstrumentSkeletonManager');
+const InstrumentManager = require('../model/InstrumentManager');
+const DbManager = require('../model/DbManager');
 
 /**
  * Inserts the strategy (with all the instruments and their values) in database by fetching values from request body.
