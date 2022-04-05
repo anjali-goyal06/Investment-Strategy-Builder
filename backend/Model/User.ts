@@ -1,13 +1,14 @@
 /**
  * This class contains the definition for User class.
  */
+ require("dotenv").config();
 var getDbConnection = require('../db/dbconnect');
 const mysql = require('mysql');
 const bcrypt = require('bcryptjs');
 var DbManager = require('./DbManager');
 var jwt = require('jsonwebtoken');
 
-const JWT_SECRET = 'abrakadabra';
+const JWT_SECRET = process.env.JWTSECRET;
 
 /**
  * User class holds user information in its objects. It has functions like add user and login user which helps in

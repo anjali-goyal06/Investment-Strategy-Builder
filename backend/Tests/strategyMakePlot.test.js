@@ -1,8 +1,8 @@
-const Constants = require('../Model/Constants');
-var InvestmentStrategy = require('../Model/InvestmentStrategy');
-var Stock = require('../Model/Stock');
-var Options = require('../Model/Options');
-var Future = require('../Model/Future');
+const Constants = require('../model/Constants');
+var InvestmentStrategy = require('../model/InvestmentStrategy');
+var Stock = require('../model/Stock');
+var Options = require('../model/Options');
+var Future = require('../model/Future');
 
 test(Constants.StrategyGraph, async () => {
 

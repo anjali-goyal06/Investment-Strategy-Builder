@@ -3,8 +3,8 @@
  */
 
 
-const Constants = require('../Model/Constants');
-var Options = require('../Model/Options');
+const Constants = require('../model/Constants');
+var Options = require('../model/Options');
 
 
 /**

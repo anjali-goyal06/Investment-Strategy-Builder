@@ -1,7 +1,7 @@
 /**
  * This file contains APIs for authenticating the user.  
  */
-
+ require("dotenv").config();
 const express = require('express');
 const router = express.Router();
 var getDbConnection = require('../db/dbconnect');
@@ -56,19 +56,20 @@ router.post('/login', [
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    
+    console.log("req.cookies=")
+    console.log(req.cookies)
     try{
         const user = req.body;
         var newuser = new User(user.id,user.name,user.email,user.password);
         var result = await newuser.LoginUser() ;
         console.log(result)
         if(!result.error){
-     //       res.cookie("jwt",result.authtoken)
+            res.cookie("jwt",result.authtoken,{httpOnly : false})
             res.status(200).send({"msg" : "Login succesful !!"}); 
         }       
       }catch (error) {
           console.error(error.message);
-          res.status(500).send("Internal Server Error");
+          res.status(500).send({"err" : "Login with correct Credentials"});
     }
   
   });

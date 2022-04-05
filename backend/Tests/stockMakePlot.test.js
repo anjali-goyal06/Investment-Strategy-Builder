@@ -2,8 +2,8 @@
  * This file contains the test cases for Make Plot function of stock class. 
  */
 
-const Constants = require('../Model/Constants');
-var Stock = require('../Model/Stock')
+const Constants = require('../model/Constants');
+var Stock = require('../model/Stock')
 
 
 test(Constants.BuyStock,async () => {

@@ -30,7 +30,7 @@ const DbManager = require('../model/DbManager');
 */
 router.post('/SaveStrategy' , async (req,res)=>{
  
-    var userId = (req.body.userId) ? (req.body.userId) : '8';
+    var userId = (req.body.userId) ? (req.body.userId) : '2'
     
     var strategySkeletonId = req.body.InvestmentStrategySkeletonId;
 
@@ -106,7 +106,7 @@ router.post('/SaveStrategy' , async (req,res)=>{
  */
 router.post('/SaveStrategySkeleton' ,  async (req,res)=>{
  
-  var userId = (req.body.userId) ? (req.body.userId) : '8';
+  var userId = (req.body.userId) ? (req.body.userId) : '2';
   console.log(req.body)
     //Adding Strategy Skeleton in database
     try{
