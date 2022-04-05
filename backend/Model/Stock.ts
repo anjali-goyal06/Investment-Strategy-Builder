@@ -16,7 +16,6 @@ var StrategyPlot_ = require('./StrategyPlot')
 export default class Stock extends Instrument{
 
     price : number;
-    currentPrice:number
 
     constructor(id:number, quantity:number, price:number, side:string){
         super()

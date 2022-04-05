@@ -14,12 +14,19 @@ const JWT_SECRET = 'abrakadabra';
  * driving the register and login logic.
  */
 export default class User{
-    static count : number = 0;
+    
     id : number;
     name : string;
     email : string;
     password : string;
 
+    /**
+     * This is the constructor for User Class. It takes in the following params and sets the members of the object.
+     * @param id 
+     * @param name 
+     * @param email 
+     * @param password 
+     */
     constructor(id:number, name: string , email : string , password : string){
 
         this.id = id;
