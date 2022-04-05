@@ -9,7 +9,7 @@ const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 //const fetchuser = require('../middleware/fetchUser')
 
-const User = require('../Model/User');
+const User = require('../model/User');
 
 router.get('/' , (req,res)=>{
     console.log("Hello World||");
@@ -50,7 +50,7 @@ router.post('/login', [
     body('email', 'Enter a valid email').isEmail(),
     body('password', 'Password cannot be blank').exists(),
   ], async (req, res) => {
-    
+    console.log("login")
     // If there are errors, return Bad request and the errors
      const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -61,9 +61,10 @@ router.post('/login', [
         const user = req.body;
         var newuser = new User(user.id,user.name,user.email,user.password);
         var result = await newuser.LoginUser() ;
+        console.log(result)
         if(!result.error){
      //       res.cookie("jwt",result.authtoken)
-            res.status(200).send("Login succesful !!"); 
+            res.status(200).send({"msg" : "Login succesful !!"}); 
         }       
       }catch (error) {
           console.error(error.message);
