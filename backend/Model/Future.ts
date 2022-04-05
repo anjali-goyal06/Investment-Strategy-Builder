@@ -19,8 +19,14 @@ const Constants = require('./Constants');
 export default class Future extends Instrument{
     
     price : number;
-    currentPrice : number;
 
+    /**
+     * This is the constructor for Future class. It takes in the following params and sets the data members of class.
+     * @param id 
+     * @param quantity 
+     * @param price 
+     * @param side 
+     */
     constructor(id:number, quantity:number, price:number, side:string){
         super()
         this.id = id;
@@ -42,6 +48,7 @@ export default class Future extends Instrument{
         var sql = "INSERT INTO Future (Price, Quantity, FutureSkeletonId, InvestmentStrategyId) VALUES (?,?,?,?)";
        
         try{
+            //connect to db, run the query and set the id of object to its id in database
             const connection = await getDbConnection()
             var response = await connection.query(sql, [this.price, this.quantity, instrumentSkeletonId, strategyId]); 
             connection.end()
@@ -100,10 +107,5 @@ export default class Future extends Instrument{
         return this.plot;
     }
 }
-
-
-//var res = f.AddDataToDb(null, null);
-//console.log(res.insertId);
-//console.log(res);
 
 module.exports = Future

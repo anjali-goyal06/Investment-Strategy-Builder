@@ -2,13 +2,14 @@ const express = require('express')
 const app = express()
 const port = process.env.PORT ||  8000
 require('./db/dbconnect.js');
-//require('./db/createDatabase.js')
-require('./db/tables/tables.js')
 
+<<<<<<< HEAD
 const DbManager = require('./model/DbManager'); //Testing Purpose
 
 //require('./db/InsertData/user.js')
 //require('./db/RetrieveData/user.js')
+=======
+>>>>>>> 30413e4e602e5d7e5193bca8252c368c1ca4ae24
 
 var cookieParser = require('cookie-parser');
 app.use(cookieParser());

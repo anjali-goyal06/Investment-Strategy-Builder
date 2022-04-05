@@ -16,8 +16,14 @@ var StrategyPlot_ = require('./StrategyPlot')
 export default class Stock extends Instrument{
 
     price : number;
-    currentPrice:number
 
+    /**
+     * This is the constructor for Stock class. It takes in the following params and sets the data members of class.
+     * @param id 
+     * @param quantity 
+     * @param price 
+     * @param side 
+     */
     constructor(id:number, quantity:number, price:number, side:string){
         super()
         this.id = id;
@@ -39,9 +45,16 @@ export default class Stock extends Instrument{
         var sql = "INSERT INTO Stock (Price, Quantity, StockSkeletonId, InvestmentStrategyId) VALUES (?,?,?,?)";
 
         try{
+
+            //get the connection to database
             const connection = await getDbConnection()
-            var response = await connection.query(sql, [this.price, this.quantity, instrumentSkeletonId, strategyId]); 
+
+            //run the query and get the response
+            var response = await connection.query(sql, [this.price, this.quantity, instrumentSkeletonId, strategyId]);
+            
+            //close the connection
             connection.end()
+            //set the id to object to its id in database
             this.id = response.insertId;
             return response;
 

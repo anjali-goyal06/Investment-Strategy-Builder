@@ -59,7 +59,7 @@ export default class DbManager{
         var arr;
         const connection = await getDbConnection()
         
-        //Combine the results from the tables into an array
+        //Add the results from the option skeleton table into response array
         arr = await connection.query(sqlOptions) ; 
         console.log(sqlOptions);
         console.log(arr);
@@ -68,12 +68,14 @@ export default class DbManager{
              response.push(arr[i]);             
         }
 
+         //Add the results from the future skeleton table into response array
         arr = await connection.query(sqlFutures) ; 
         for(let i in arr){
             arr[i].segment = Constants.Future;
             response.push(arr[i]);
         }
 
+         //Add the results from the stock skeleton table into response array
         arr = await connection.query(sqlStocks) ; 
         for(let i in arr){
             arr[i].segment = Constants.Stock;
@@ -106,9 +108,9 @@ export default class DbManager{
          
         console.log(sql);
         try{
+            //connect to db, run the query and return the response received
             const connection = await getDbConnection()
             var response = await connection.query(sql) ; 
-            console.log(response)
             connection.end()
             return response;
         }catch(err){
@@ -214,11 +216,6 @@ export default class DbManager{
     }
     
 }
-
-
-    //var DbManager_ = new DbManager();
-    //var response = DbManager_.GetUserDetailsFromUserId(1);
-    //console.log(response);
 
 
 module.exports = DbManager;

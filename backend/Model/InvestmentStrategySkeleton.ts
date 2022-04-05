@@ -29,6 +29,13 @@ export default class InvestmentStrategySkeleton{
     userId : number;
     description : string;
 
+    /**
+     * This is the constructor for InvestmentStrategySkeleton class. It takes in the following params and sets the data members of class.
+     * @param id 
+     * @param strategyName 
+     * @param userId 
+     * @param description 
+     */
     constructor(id:number, strategyName:string, userId:number, description:string){
        
        this.id = id;
@@ -58,6 +65,7 @@ export default class InvestmentStrategySkeleton{
         var sql = "INSERT INTO InvestmentStrategySkeleton (StrategyName , Description, UserId) VALUES (?,?,?)";
         
         try{
+            //connect to db, run the query and set the id of object to its id in database
             const connection = await getDbConnection()
             var response = await connection.query(sql, [this.strategyName, this.description, this.userId]); 
             connection.end()
@@ -70,9 +78,5 @@ export default class InvestmentStrategySkeleton{
         }
     }
 }
-
-//var i = new InvestmentStrategySkeleton(-1, "strategyyyyyyy", 1, "desc");
-//var res = i.AddDataToDb();
-//console.log(res);
 
 module.exports = InvestmentStrategySkeleton;

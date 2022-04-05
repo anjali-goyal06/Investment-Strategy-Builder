@@ -15,6 +15,11 @@ import DbManager_ from './DbManager';
  */
 export default class StockSkeleton extends InstrumentSkeleton{
 
+    /**
+     * This is the constructor for StockSkeleton class. It takes in the following params and sets the data members of class.
+     * @param id 
+     * @param side 
+     */
     constructor(id:number, side:string){
         super();
         this.id = id;
@@ -38,13 +43,20 @@ export default class StockSkeleton extends InstrumentSkeleton{
     async AddDataToDb(StrategySkeletonId:number){
 
     
-        
+        //sql query for insertion
         var sql = "INSERT INTO StockSkeleton (Side, InvestmentStrategySkeletonId) VALUES (?,?)";
 
         try{
+            //get connection to database
             const connection = await getDbConnection()
+
+            //run the query and get the response
             var response = await connection.query(sql, [this.side, StrategySkeletonId]);
+
+            //set the id to the one in database 
             this.id = response.insertId; 
+
+            //close the connection
             connection.end()
 
             return response;

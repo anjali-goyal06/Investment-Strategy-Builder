@@ -18,8 +18,6 @@ const fetchuser = require('../middleware/fetchUser')
 router.post("/savedImplementation" ,fetchuser, async (req,res) => {
     // var user = new User();
     var id= req.body.id;
-    console.log(req.body)
-    console.log(id)
     var investmentStrategy = new InvestmentStrategy();
     var response = await investmentStrategy.fetchDetailedStrategyImplementationFromDbForUser(id);
      res.send(response);
@@ -30,7 +28,6 @@ router.post("/savedImplementation" ,fetchuser, async (req,res) => {
    * @returns strategy skeleton details and list of all the instrument skeletons it has as response
    */
   router.post("/savedSkeleton" ,fetchuser, async (req,res) => {
-    console.log("call..")
     var skeletonId = (req.body.skeletonId) ? req.body.skeletonId : 2;
     var investmentStrategy = await new InvestmentStrategy();
     var response = await investmentStrategy.fetchDetailedStrategySkeletonFromDbForUser(skeletonId);

@@ -23,15 +23,19 @@ const DbManager = require('../model/DbManager');
  * Inserts the strategy (with all the instruments and their values) in database by fetching values from request body.
  * 
  * Explanation-
- * Request Body has a variable 'isSkeletonSaved' in it. This variable governs whether strategy skeleton will be added or not in the database.
- * If isSkeletonSaved is true then skeleton is already in database. In this case, request body provides the necessary skeleton ids for strategy insertion.
- * If isSkeletonSaved is false then skeleton is not saved in database. In this case, skeleton is first inserted in database and then it's id is used for strategy insertion.
+ * Request Body has a variable 'isSkeletonSaved' in it. This variable governs whether strategy skeleton will be added 
+ * or not in the database.
+ * If isSkeletonSaved is true then skeleton is already in database. In this case, request body provides the necessary 
+ * skeleton ids for strategy insertion.
+ * If isSkeletonSaved is false then skeleton is not saved in database. In this case, skeleton is first inserted in 
+ * database and then it's id is used for strategy insertion.
  *  
 */
 router.post('/SaveStrategy' , async (req,res)=>{
  
     var userId = (req.body.userId) ? (req.body.userId) : '2'
     
+    //set the strategy skeleton id to the id in request body
     var strategySkeletonId = req.body.InvestmentStrategySkeletonId;
 
     //If strategy skeleton is not in database, add it first
@@ -44,6 +48,7 @@ router.post('/SaveStrategy' , async (req,res)=>{
         console.log(err)
         return res.status(400).send({"err" : "Got Stuck at investment strategy skeleton"});
       }
+      //if skeleton was not saved already, then update strategy skeleton id from request body's id value to id of inserted record
       strategySkeletonId = await investmentStrategySkeleton.getId();
     }
 
@@ -66,6 +71,7 @@ router.post('/SaveStrategy' , async (req,res)=>{
       //Loop for adding all the instruments of strategy in database
       for(var i=0; i<req.body.listInstruments.length; i++){
 
+        
         var instrument = req.body.listInstruments[i];
         var instrumentSkeletonId = instrument.SkeletonId;
         
@@ -86,6 +92,8 @@ router.post('/SaveStrategy' , async (req,res)=>{
         try{
            //instrument manager returns the object of the appropriate instrument
           var _instrument = await instrumentManager.createInstrument(instrument.segment, instrument.Quantity, instrument.StrikePrice, instrument.Price, instrument.Type, instrument.Side, instrument.Premium);
+          
+          //adding instrument to database
           var result4 = await _instrument.AddDataToDb(instrumentSkeletonId, strategyId);
           console.log(result4);
         }catch(err){
@@ -107,8 +115,8 @@ router.post('/SaveStrategy' , async (req,res)=>{
 router.post('/SaveStrategySkeleton' ,  async (req,res)=>{
  
   var userId = (req.body.userId) ? (req.body.userId) : '2';
-  console.log(req.body)
-    //Adding Strategy Skeleton in database
+  
+    //Adding Strategy Skeleton in database by creating Investment Strategy Skeleton Object
     try{
       var investmentStrategySkeleton = await new InvestmentStrategySkeleton(-1, req.body.StrategyName, userId, req.body.DescriptionSkeleton);
       var result1 = await investmentStrategySkeleton.AddDataToDb();
@@ -118,7 +126,10 @@ router.post('/SaveStrategySkeleton' ,  async (req,res)=>{
       return res.status(400).send("Got stuck at investment strategy skeleton");
     }
   
+    //setting the strategy id to the id of inserted record
     var strategySkeletonId = investmentStrategySkeleton.getId();
+
+    //making manager object for creating appropriate instrument skeleton objects
     var instrumentSkeletonManager = await new InstrumentSkeletonManager();
 
     //Loop for adding all the instrument skeletons in database
@@ -128,6 +139,8 @@ router.post('/SaveStrategySkeleton' ,  async (req,res)=>{
       try{
         //instrument skeleton manager returns the object of the appropriate instrument skeleton
         var _instrument = await instrumentSkeletonManager.createInstrument(instrument.segment, instrument.Type, instrument.Side);
+        
+        //adding instrument skeleton to database
         var result2 = await _instrument.AddDataToDb(strategySkeletonId);
       }catch(err){
         console.log(err);

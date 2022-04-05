@@ -21,6 +21,12 @@ export default class OptionSkeleton extends InstrumentSkeleton{
    
     type : string;
 
+    /**
+     * This is the constructor for OptionSkeleton class. It takes in the following params and sets the data members of class.
+     * @param id 
+     * @param side 
+     * @param type 
+     */
     constructor(id:number, side:string, type:string){
         super();
         this.id = id;
@@ -48,6 +54,8 @@ export default class OptionSkeleton extends InstrumentSkeleton{
         var sql = "INSERT INTO OptionSkeleton (Type , Side, InvestmentStrategySkeletonId) VALUES (?,?,?)";
        
         try{
+
+            //connect to db, run the query and set the id of object to its id in database 
             const connection = await getDbConnection()
             var response = await connection.query(sql, [this.type, this.side, StrategySkeletonId]); 
             connection.end()

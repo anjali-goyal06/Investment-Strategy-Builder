@@ -29,6 +29,17 @@ export default class InvestmentStrategy{
     instruments : IInstrument[];
     xStart : number;
 
+    /**
+     * This is the constructor for Investment Strategy class. It takes in the following params and sets the data members of class.
+     * @param id 
+     * @param stockName 
+     * @param ticker 
+     * @param userId 
+     * @param expiryDate 
+     * @param name 
+     * @param strategySkeletonId 
+     * @param description 
+     */
     constructor(id:number, stockName:string, ticker:string, userId:number, expiryDate:Date, name:string, strategySkeletonId:number, description:string){
         this.id = id;
         this.stockName = stockName;
@@ -42,8 +53,7 @@ export default class InvestmentStrategy{
         this.plot = new StrategyPlot_();
         this.plot.xCoords = [];
         this.plot.yCoords = [];
-
-        this.xStart = (20);
+        this.xStart = 0;
     }
   
 
@@ -73,7 +83,6 @@ export default class InvestmentStrategy{
        //for each instrument in the strategy
         for(let k in this.instruments){
             
-            //console.log(this.instruments[k]);
             
             //calculate the instrument plot
             await this.instruments[k].makePlot(this.xStart, range);
@@ -119,6 +128,7 @@ export default class InvestmentStrategy{
         var sql = "INSERT INTO InvestmentStrategy (Name , StockName, Ticker, ExpiryDate, UserId, Description, InvestmentStrategySkeletonId) VALUES (?,?,?,?,?,?,?)";
        
         try{
+            //connect to db, run the query and set the id of object to its id in database
             const connection = await getDbConnection()
             var response = await connection.query(sql, [this.name, this.stockName, this.ticker, this.expiryDate, this.userId, this.description, this.strategySkeletonId]); 
             connection.end()
@@ -133,7 +143,7 @@ export default class InvestmentStrategy{
 
     
    /**
-    * Fetches all the saved strategies for a given user id from investment strategy table.
+    * Fetches all the saved strategies for a given user id from investment strategy table. 
     * @param userId 
     * @returns Query Response containing the saved strategies record in json object
     */
@@ -179,19 +189,20 @@ export default class InvestmentStrategy{
             var strategy = await db.fetchStrategyFromStrategyId(strategyId);
             console.log("line 202" + strategy);
         
-            //fetch instrument skeletons of given strategy
+            
             var strategySkeletonData = await db.GetStrategySkeletonsFromSkeletonId(strategy[0].InvestmentStrategySkeletonId)
+            //fetch list of instrument skeletons of given strategy
             var listInstrumentSkeleton = await db.GetInstrumentsFromStrategySkeletonId(strategy[0].InvestmentStrategySkeletonId);
             console.log(listInstrumentSkeleton);
 
             var listInstrument = [];
+
+            //for each instrument skeleton in the list
             for(let j in listInstrumentSkeleton){
                 
                 //fetch instrument record from database
                 var input = await db.getUserInputFromStrategySkeletonIdAndStrategyId(listInstrumentSkeleton[j].segment,listInstrumentSkeleton[j].Id,strategyId)
-                console.log(input[0]);
-                console.log(listInstrumentSkeleton[j])
-
+        
                 //adding skeleton information to instrument record and pushing it to instrument array
                 listInstrument.push(this.AddSkeleton(input[0],listInstrumentSkeleton[j]));
             }

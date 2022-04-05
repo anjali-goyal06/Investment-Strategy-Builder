@@ -25,6 +25,15 @@ export default class Options extends Instrument{
     currentPriceStock: number;
     type : string;
 
+    /**
+     * This is the constructor for Options class. It takes in the following params and sets the data members of class.
+     * @param id 
+     * @param quantity 
+     * @param strikePrice 
+     * @param type 
+     * @param side 
+     * @param premium 
+     */
     constructor(id:number, quantity:number, strikePrice:number,  type:string, side:string, premium:number){
         super()
         this.id = id;
@@ -54,6 +63,8 @@ export default class Options extends Instrument{
         var sql = "INSERT INTO Options (StrikePrice , Premium, Quantity, OptionSkeletonId, InvestmentStrategyId) VALUES (?,?,?,?,?)";
 
         try{
+
+            //connect to db, run the query and set the id of object to its id in database
             const connection = await getDbConnection()
             var response = await connection.query(sql, [this.strikePrice, this.premium, this.quantity, instrumentSkeletonId, strategyId]); 
             connection.end()

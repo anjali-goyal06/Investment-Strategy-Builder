@@ -13,6 +13,9 @@ export default class StrategyPlot{
     xCoords : number[];
     yCoords : number[];
 
+    /**
+     * This is the constructor for StrategyPLot Class. It initialises the x and y coords with empty arrays.
+     */
     constructor(){
         this.xCoords = [];
         this.yCoords = [];
