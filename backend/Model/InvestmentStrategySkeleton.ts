@@ -29,6 +29,13 @@ export default class InvestmentStrategySkeleton{
     userId : number;
     description : string;
 
+    /**
+     * This is the constructor for InvestmentStrategySkeleton class. It takes in the following params and sets the data members of class.
+     * @param id 
+     * @param strategyName 
+     * @param userId 
+     * @param description 
+     */
     constructor(id:number, strategyName:string, userId:number, description:string){
        
        this.id = id;

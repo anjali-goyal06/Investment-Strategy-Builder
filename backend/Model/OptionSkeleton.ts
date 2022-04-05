@@ -21,6 +21,12 @@ export default class OptionSkeleton extends InstrumentSkeleton{
    
     type : string;
 
+    /**
+     * This is the constructor for OptionSkeleton class. It takes in the following params and sets the data members of class.
+     * @param id 
+     * @param side 
+     * @param type 
+     */
     constructor(id:number, side:string, type:string){
         super();
         this.id = id;

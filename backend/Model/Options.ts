@@ -25,6 +25,15 @@ export default class Options extends Instrument{
     currentPriceStock: number;
     type : string;
 
+    /**
+     * This is the constructor for Options class. It takes in the following params and sets the data members of class.
+     * @param id 
+     * @param quantity 
+     * @param strikePrice 
+     * @param type 
+     * @param side 
+     * @param premium 
+     */
     constructor(id:number, quantity:number, strikePrice:number,  type:string, side:string, premium:number){
         super()
         this.id = id;

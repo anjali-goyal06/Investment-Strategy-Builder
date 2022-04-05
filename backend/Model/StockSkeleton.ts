@@ -15,6 +15,11 @@ import DbManager_ from './DbManager';
  */
 export default class StockSkeleton extends InstrumentSkeleton{
 
+    /**
+     * This is the constructor for StockSkeleton class. It takes in the following params and sets the data members of class.
+     * @param id 
+     * @param side 
+     */
     constructor(id:number, side:string){
         super();
         this.id = id;

@@ -17,6 +17,13 @@ export default class Stock extends Instrument{
 
     price : number;
 
+    /**
+     * This is the constructor for Stock class. It takes in the following params and sets the data members of class.
+     * @param id 
+     * @param quantity 
+     * @param price 
+     * @param side 
+     */
     constructor(id:number, quantity:number, price:number, side:string){
         super()
         this.id = id;

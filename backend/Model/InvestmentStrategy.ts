@@ -29,6 +29,17 @@ export default class InvestmentStrategy{
     instruments : IInstrument[];
     xStart : number;
 
+    /**
+     * This is the constructor for Investment Strategy class. It takes in the following params and sets the data members of class.
+     * @param id 
+     * @param stockName 
+     * @param ticker 
+     * @param userId 
+     * @param expiryDate 
+     * @param name 
+     * @param strategySkeletonId 
+     * @param description 
+     */
     constructor(id:number, stockName:string, ticker:string, userId:number, expiryDate:Date, name:string, strategySkeletonId:number, description:string){
         this.id = id;
         this.stockName = stockName;
@@ -42,8 +53,7 @@ export default class InvestmentStrategy{
         this.plot = new StrategyPlot_();
         this.plot.xCoords = [];
         this.plot.yCoords = [];
-
-        this.xStart = (20);
+        this.xStart = 0;
     }
   
 

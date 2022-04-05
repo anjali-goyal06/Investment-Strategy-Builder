@@ -16,6 +16,12 @@ import InstrumentSkeleton from './InstrumentSkeleton';
  */
 export default class FutureSkeleton extends InstrumentSkeleton{
 
+
+    /**
+     * This is the constructor for FutureSkeleton class. It takes in the following params and sets the data members of class.
+     * @param id 
+     * @param side 
+     */
     constructor(id:number, side:string){
         super();
         this.id = id;

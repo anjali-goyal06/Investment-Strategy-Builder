@@ -14,7 +14,6 @@ export default interface IInstrument{
     quantity : number;
     side : string
     plot :  StrategyPlot;
-    instrumentSkeleton :  IInstrumentSkeleton;
     makePlot(x:number, range:number);
     getPlot() :  StrategyPlot;
 }

@@ -19,8 +19,14 @@ const Constants = require('./Constants');
 export default class Future extends Instrument{
     
     price : number;
-    currentPrice : number;
 
+    /**
+     * This is the constructor for Future class. It takes in the following params and sets the data members of class.
+     * @param id 
+     * @param quantity 
+     * @param price 
+     * @param side 
+     */
     constructor(id:number, quantity:number, price:number, side:string){
         super()
         this.id = id;

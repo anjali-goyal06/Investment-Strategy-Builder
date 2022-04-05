@@ -18,7 +18,6 @@ export default class Instrument implements IInstrument{
     quantity;
     side;
     plot;
-    instrumentSkeleton;
     makePlot(x, range) {}
     getPlot() :  StrategyPlot {return this.plot;};
 }
